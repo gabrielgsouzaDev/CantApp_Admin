@@ -193,7 +193,7 @@ export default function LandingPage() {
 
       </main>
       <footer className="border-t">
-        <div className="container py-8 text-center text-sm text-muted-foreground px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto py-8 text-center text-sm text-muted-foreground px-4 sm:px-6 lg:px-8">
           © {new Date().getFullYear()} CTNAPP. Todos os direitos reservados.
         </div>
       </footer>
