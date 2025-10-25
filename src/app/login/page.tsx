@@ -55,7 +55,7 @@ export default function LoginPage() {
                 placeholder="m@example.com"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.change_me.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
               />
             </div>

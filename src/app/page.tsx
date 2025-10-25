@@ -66,8 +66,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="features" className="w-full bg-secondary/50">
-            <div className="container grid md:grid-cols-2 gap-12 items-center py-20 md:py-24">
+        <section id="features" className="w-full bg-secondary/50 py-20 md:py-24">
+            <div className="container grid md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
                 <p className="text-muted-foreground text-lg">Com o CTNADMIN, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
