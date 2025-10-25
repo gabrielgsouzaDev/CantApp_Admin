@@ -6,9 +6,10 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store } from "lucide-react";
+import { ArrowRight, Wallet, School, Utensils, Zap } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Users, Store } from "lucide-react";
 
 export default function LandingPage() {
   const { login } = useAuth();
@@ -145,14 +146,14 @@ export default function LandingPage() {
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full">
                     <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                        <svg className="mr-3 h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4.4 3.425L14.45 12 4.4 20.575V3.425ZM5.8 5.85v12.3L12.025 12 5.8 5.85Zm9.9 0v12.3H17.1V5.85h-1.4Z"/></svg>
+                        <svg className="mr-3 h-8 w-8" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M215.1,113.3l-96-56a16,16,0,0,0-16.2,0l-96,56A16,16,0,0,0,0,128V192a16,16,0,0,0,16,16H240a16,16,0,0,0,16-16V128A16,16,0,0,0,215.1,113.3ZM16,132.9l91.2-53.2,74.4,43.4H16ZM240,192H16V144H192v24a8,8,0,0,0,16,0V144h32Z"/><path d="M112,56a16,16,0,0,0,16,16h96a16,16,0,0,0,16-16V48a16,16,0,0,0-16-16H128a16,16,0,0,0-16,16Zm16-8h96V56H128Z"/></svg>
                         <div className="text-left">
                             <span className="text-xs">Disponível no</span>
                             <p className="font-bold text-base">Google Play</p>
                         </div>
                     </Button>
                     <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                         <svg className="mr-3 h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.802 18.064c.297-.433.43-1.002.43-1.572 0-.64-.176-1.185-.53-1.638-.352-.454-.833-.68-1.442-.68-.61 0-1.08.226-1.413.68-.335.453-.502 1-.502 1.638 0 .57.135 1.135.405 1.695.27.56.635.98 1.094 1.258.46.28.97.42 1.53.42.597 0 1.1-.153 1.516-.46.417-.306.74-.716.97-1.221H18.8l.002.004ZM14.93 5.467c.725-1.015 1.72-1.522 2.985-1.522 1.11 0 1.95.223 2.52.668.57.446.855 1.106.855 1.983 0 .42-.08.776-.238 1.07-.158.293-.365.52-.62.68-.255.16-.543.24-.863.24-.48 0-.895-.14-1.245-.42-.35-.28-.58-.64-.69-1.08h-3.3c-.024.46-.144.87-.36 1.23-.215.36-.506.66-.87.9-.364.24-.793.36-1.288.36-.71 0-1.28-.24-1.71-.72-.43-.48-.645-1.11-.645-1.89 0-1.08.385-1.92 1.155-2.52.77-.6 1.815-.9 3.135-.9.465 0 .9.06 1.305.18l.045.03Zm-1.125 1.83c.315-.225.56-.54.735-.945.175-.405.263-.87.263-1.395 0-.585-.16-1.04-.48-1.365-.32-.325-.79-.488-1.41-.488-.81 0-1.425.26-1.845.78-.42.52-.63 1.245-.63 2.175 0 .525.135.945.405 1.26.27.315.63.473 1.08.473.495 0 .89-.15 1.185-.45Z"/></svg>
+                         <svg className="mr-3 h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6,3.4c-1.9-2-4.8-2.6-7.1-1.8c-2.3,0.8-4.2,2.9-4.8,5.4c-0.7,2.5-0.1,5.2,1.5,7.2c0.8,1,1.9,1.9,3.1,2.5 c1.2,0.6,2.5,0.8,3.8,0.7c0.2,0,0.3,0,0.5,0c1.2,0,2.4-0.3,3.5-0.8c0.1,0,0.1-0.1,0.2-0.1c1-0.5,1.9-1.2,2.7-2 c-1.3,0-2.6-0.5-3.5-1.5c-1-1-1.5-2.3-1.5-3.6c0-1.4,0.5-2.7,1.4-3.7c-0.1-0.1-0.3-0.2-0.4-0.3c-1.2-0.9-2.7-1.4-4.3-1.4 c-0.8,0-1.5,0.1-2.2,0.4c-0.2-1.3,0.2-2.6,1.1-3.6c0.9-1,2.2-1.6,3.6-1.6c0.5,0,1,0.1,1.5,0.3C18.1,3.2,17.8,3.3,17.6,3.4z M13.8,2.2C13.8,2.2,13.8,2.2,13.8,2.2c-0.2,0.6-0.3,1.2-0.4,1.8c-0.5-0.2-1-0.4-1.5-0.4c-1,0-1.9,0.4-2.6,1.2 c-0.6,0.7-1,1.7-0.8,2.8c0.6-0.2,1.2-0.3,1.8-0.3c2.4,0,4.6,1.1,6.2,2.8c-0.1,0.2-0.2,0.3-0.2,0.5c-0.7,0.9-1.1,2-1.1,3.2 c0,1.4,0.6,2.8,1.6,3.8c0,0,0.1,0.1,0.1,0.1c0.1,0.1,0.1,0.1,0.2,0.2c-0.7,0.6-1.5,1-2.3,1.2c-0.1,0-0.1,0-0.2,0 c-0.9,0.2-1.9,0.1-2.8-0.2c-0.9-0.3-1.8-0.9-2.4-1.6c-1.3-1.6-1.7-3.7-1.2-5.7C9,8.5,10.6,6.7,12.9,6c0.5-1,1.3-1.8,2.2-2.5 C14.6,3,14.2,2.6,13.8,2.2z"/></svg>
                          <div className="text-left">
                             <span className="text-xs">Baixar na</span>
                             <p className="font-bold text-base">App Store</p>
