@@ -148,7 +148,7 @@ export default function LandingPage() {
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
                    <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                     <div className="flex items-center justify-center gap-3 px-2 py-1">
+                    <div className="flex items-center justify-center gap-3 px-2 py-1">
                       <div className="text-left">
                         <p className="text-xs">Disponível no</p>
                         <p className="font-bold text-base -mt-1">Google Play</p>
@@ -221,8 +221,12 @@ export default function LandingPage() {
                     <AccordionTrigger>Como o aluno irá efetuar a compra na cantina?</AccordionTrigger>
                     <AccordionContent>
                       <div className="prose prose-sm text-muted-foreground max-w-none">
-                        Com o CTNAPP, o aluno evita as filas do caixa fazendo o pedido diretamente pelo aplicativo. Basta acessar com seu usuário e senha, escolher os produtos e realizar a compra.
-                        <p className="mt-2">Como alternativa, o aluno também pode ir direto ao caixa e pedir para descontar o valor do saldo disponível em sua conta CTNAPP.</p>
+                        <p>
+                          Para evitar filas, o aluno pode usar o aplicativo para reservar o pedido com antecedência e apenas retirá-lo no intervalo.
+                        </p>
+                        <p className="mt-2">
+                          Ele também pode comprar diretamente no intervalo, pagando com Pix ou com o saldo pré-pago disponível em sua conta CTNAPP.
+                        </p>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
