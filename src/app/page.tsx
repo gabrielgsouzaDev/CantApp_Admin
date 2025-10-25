@@ -39,7 +39,7 @@ export default function LandingPage() {
               <span className="text-primary">inteligente e centralizada</span>.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl">
-              CTNADMIN é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle e resultados para todos.
+              CTNAPP é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle e resultados para todos.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl w-full">
               <Card className="text-left hover:shadow-lg transition-shadow">
@@ -69,11 +69,11 @@ export default function LandingPage() {
         </section>
 
         <section id="features" className="w-full bg-secondary/50 py-20 md:py-24">
-            <div className="container">
+           <div className="container">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     <div className="space-y-4">
                         <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
-                        <p className="text-muted-foreground text-lg">Com o CTNADMIN, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
+                        <p className="text-muted-foreground text-lg">Com o CTNAPP, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <Card>
@@ -119,7 +119,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
               <div className="flex flex-col items-center">
                 <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
-                  <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwYXZhdGFyfGVufDB8fHx8MTc2MTM1OTc3MHww&ixlib=rb-4.1.0&q=80&w=1080" />
+                  <AvatarImage src="https://images.unsplash.com/photo-1576487248805-cf45f6bcc674?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" data-ai-hint="family children" />
                   <AvatarFallback>P</AvatarFallback>
                 </Avatar>
                 <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
@@ -127,7 +127,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col items-center">
                 <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
-                  <AvatarImage src="https://images.unsplash.com/photo-1660057873647-882398b8ec1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGVyc29uJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjEyNzgxNzN8MA&ixlib=rb-4.1.0&q=80&w=1080" />
+                  <AvatarImage src="https://images.unsplash.com/photo-1620052643539-4341F1644782?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" data-ai-hint="canteen food" />
                   <AvatarFallback>C</AvatarFallback>
                 </Avatar>
                 <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
@@ -135,7 +135,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col items-center">
                 <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
-                  <AvatarImage src="https://images.unsplash.com/photo-1569913486515-b74bf7751574?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3b21hbiUyMGF2YXRhcnxlbnwwfHx8fDE3NjEzMDUwMTN8MA&ixlib=rb-4.1.0&q=80&w=1080" />
+                  <AvatarImage src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" data-ai-hint="school building" />
                   <AvatarFallback>E</AvatarFallback>
                 </Avatar>
                 <h3 className="text-xl font-semibold mb-2">Escolas</h3>
@@ -147,7 +147,7 @@ export default function LandingPage() {
       </main>
       <footer className="border-t">
         <div className="container py-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} CTNADMIN. Todos os direitos reservados.
+          © {new Date().getFullYear()} CTNAPP. Todos os direitos reservados.
         </div>
       </footer>
     </div>

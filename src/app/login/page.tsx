@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const { login, loading } = useAuth();
@@ -38,9 +39,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm shadow-2xl">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
-             <button type="button" onClick={() => router.push('/')} className="mx-auto mb-4">
+             <Link href="/" className="mx-auto mb-4">
               <Logo />
-            </button>
+            </Link>
             <CardTitle className="text-2xl font-headline">Bem-vindo de volta</CardTitle>
             <CardDescription>
               Faça login para acessar seu painel.

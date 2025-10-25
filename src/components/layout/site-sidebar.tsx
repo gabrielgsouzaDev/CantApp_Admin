@@ -32,7 +32,9 @@ export function SiteSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <Logo />
+        <Link href="/">
+          <Logo />
+        </Link>
       </SidebarHeader>
       <Separator />
       <SidebarContent>
