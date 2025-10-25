@@ -116,7 +116,7 @@ export default function LandingPage() {
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
               <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">Simples para todos os envolvidos, da matrícula ao lanche.</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8 text-center">
+            <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
               <div className="flex flex-col items-center">
                 <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
                   <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwYXZhdGFyfGVufDB8fHx8MTc2MTM1OTc3MHww&ixlib=rb-4.1.0&q=80&w=1080" />
