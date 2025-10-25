@@ -9,23 +9,17 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
-import { Role } from "@/lib/types";
-import { Check, LogOut, User as UserIcon, ChevronsUpDown } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react";
 
 export function UserNav() {
-  const { user, logout, setRole, role } = useAuth();
+  const { user, logout } = useAuth();
 
   if (!user) {
     return null;
   }
-
-  const roles: Role[] = ["Admin", "Escola", "Cantineiro"];
 
   return (
     <DropdownMenu>
@@ -52,20 +46,6 @@ export function UserNav() {
             <UserIcon className="mr-2" />
             <span>Perfil</span>
           </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <ChevronsUpDown className="mr-2" />
-              <span>Trocar de Função</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              {roles.map((r) => (
-                <DropdownMenuItem key={r} onClick={() => setRole(r)}>
-                  {r}
-                  {role === r && <Check className="ml-auto h-4 w-4" />}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>

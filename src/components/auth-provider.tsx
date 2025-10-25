@@ -8,9 +8,8 @@ import { mockUsers } from "@/lib/data";
 interface AuthContextType {
   user: User | null;
   role: Role | null;
-  login: (email: string) => void;
+  login: (role: Role) => void;
   logout: () => void;
-  setRole: (role: Role) => void;
   loading: boolean;
 }
 
@@ -22,7 +21,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    // Simulate checking for a logged-in user in local storage
     try {
       const storedUser = localStorage.getItem("ctnadmin-user");
       if (storedUser) {
@@ -35,37 +33,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  const login = (email: string) => {
+  const login = (role: Role) => {
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const foundUser = Object.values(mockUsers).find(u => u.email === email);
-      const userToLogin = foundUser || mockUsers.admin;
-      setUser(userToLogin);
-      localStorage.setItem("ctnadmin-user", JSON.stringify(userToLogin));
-      router.push("/dashboard");
-      setLoading(false);
-    }, 500);
+    const userToLogin = Object.values(mockUsers).find(u => u.role === role) || mockUsers.admin;
+    setUser(userToLogin);
+    localStorage.setItem("ctnadmin-user", JSON.stringify(userToLogin));
+    router.push("/dashboard");
+    setLoading(false);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("ctnadmin-user");
-    router.push("/login");
-  };
-
-  const setRole = (role: Role) => {
-    if (user) {
-      const newUser = { ...user, role };
-      setUser(newUser);
-      localStorage.setItem("ctnadmin-user", JSON.stringify(newUser));
-    }
+    router.push("/");
   };
 
   const role = user?.role ?? null;
 
   return (
-    <AuthContext.Provider value={{ user, role, login, logout, setRole, loading }}>
+    <AuthContext.Provider value={{ user, role, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
