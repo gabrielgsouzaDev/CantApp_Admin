@@ -10,6 +10,7 @@ import { ArrowRight, Wallet, School, Utensils, Zap } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Users, Store } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default function LandingPage() {
   const { login } = useAuth();
@@ -113,56 +114,6 @@ export default function LandingPage() {
                 </div>
             </div>
         </section>
-        
-        <section id="cta" className="py-20 md:py-24 bg-background">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-              <div className="relative">
-                {appLaptopImage && (
-                  <Image
-                    src={appLaptopImage.imageUrl}
-                    alt={appLaptopImage.description}
-                    width={1024}
-                    height={768}
-                    className="rounded-lg shadow-2xl"
-                    data-ai-hint={appLaptopImage.imageHint}
-                  />
-                )}
-                {appMobileImage && (
-                  <div className="absolute -bottom-16 -right-12 w-48 md:w-56">
-                    <Image
-                      src={appMobileImage.imageUrl}
-                      alt={appMobileImage.description}
-                      width={300}
-                      height={600}
-                      className="rounded-lg shadow-2xl border-4 border-background"
-                      data-ai-hint={appMobileImage.imageHint}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col items-start gap-4">
-                <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
-                <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
-                <div className="flex flex-col sm:flex-row gap-4 w-full">
-                    <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary px-6 py-3">
-                        <div className="text-left">
-                            <span className="text-xs">Disponível no</span>
-                            <p className="font-bold text-base">Google Play</p>
-                        </div>
-                    </Button>
-                    <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary px-6 py-3">
-                         <div className="text-left">
-                            <span className="text-xs">Baixar na</span>
-                            <p className="font-bold text-base">App Store</p>
-                        </div>
-                    </Button>
-                </div>
-                <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push('/login')}>Acessar via Web</Button>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <section id="how-it-works" className="py-20 md:py-32 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
@@ -195,6 +146,110 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        <section id="cta" className="py-20 md:py-24 bg-background">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              <div className="relative">
+                {appLaptopImage && (
+                  <Image
+                    src={appLaptopImage.imageUrl}
+                    alt={appLaptopImage.description}
+                    width={1024}
+                    height={768}
+                    className="rounded-lg shadow-2xl"
+                    data-ai-hint={appLaptopImage.imageHint}
+                  />
+                )}
+                {appMobileImage && (
+                  <div className="absolute -bottom-16 -right-12 w-48 md:w-56">
+                    <Image
+                      src={appMobileImage.imageUrl}
+                      alt={appMobileImage.description}
+                      width={300}
+                      height={600}
+                      className="rounded-lg shadow-2xl border-4 border-background"
+                      data-ai-hint={appMobileImage.imageHint}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col items-start gap-6">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
+                <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
+                    <div className="flex items-center justify-center gap-3 px-2 py-1">
+                      <div className="text-left">
+                        <p className="text-xs">Disponível no</p>
+                        <p className="font-bold text-base -mt-1">Google Play</p>
+                      </div>
+                    </div>
+                  </Button>
+                  <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
+                    <div className="flex items-center justify-center gap-3 px-2 py-1">
+                      <div className="text-left">
+                        <p className="text-xs">Baixar na</p>
+                        <p className="font-bold text-base -mt-1">App Store</p>
+                      </div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="py-20 md:py-32 bg-secondary/50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="grid md:grid-cols-3 gap-12">
+              <div className="flex flex-col gap-4">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Dúvidas?</h2>
+                <p className="text-muted-foreground text-lg">Ainda tem dúvidas? Queremos te ouvir, clique no botão abaixo e entre em contato com nossa equipe.</p>
+                <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push('/contact')}>
+                  Fale com nossa equipe
+                </Button>
+              </div>
+              <div className="md:col-span-2">
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Como o aluno irá efetuar a compra na cantina?</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="prose prose-sm text-muted-foreground max-w-none">
+                        Utilizando o CTNAPP o aluno pode fazer a compra por 2 opções sem pegar fila de caixa:
+                        <ul className="mt-2">
+                          <li><strong>Totem:</strong> Terminais de auto-atendimento que através da biometria do aluno, ele acessa a conta e os produtos disponíveis para consumo.</li>
+                          <li><strong>Aplicativo:</strong> O aluno pode utilizar se preferir, o aplicativo para realizar a sua compra. Basta acessar informando o RA, com a senha criada no cadastro, e fazer sua compra.</li>
+                        </ul>
+                        <p>O aluno também pode ir direto no caixa e pedir para descontar do saldo em sua conta.</p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>Como posso gerenciar a alimentação do meu filho?</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="prose prose-sm text-muted-foreground max-w-none">
+                        No CTNAPP você pode gerenciar ou controlar a alimentação do seu filho com os seguintes recursos:
+                        <ul className="mt-2">
+                          <li><strong>Permissão de compra:</strong> Nessa função você pode escolher o produto que seu filho não poderá comprar. Esse controle pode ser feito por dia da semana.</li>
+                          <li><strong>Permissão de valor:</strong> Utilizando esse recurso, o pai pode restringir um valor diário de gasto, por ex: todo dia R$ 10,00 disponíveis para utilizar. Sendo assim, quando a compra passar desse valor, o sistema irá bloquear a compra.</li>
+                        </ul>
+                        <p>As funções de permissão de compra e valor, podem ser combinadas e utilizadas juntas.</p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-3">
+                    <AccordionTrigger>Quero usar o CTNAPP, quanto custa?</AccordionTrigger>
+                    <AccordionContent>
+                      <p className="text-muted-foreground">O CTNAPP não cobra taxa para utilizar. Cobra apenas taxa de transação de R$3,00 em todos os tipos de recargas, não importando o valor da recarga.</p>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
       <footer className="border-t">
         <div className="container mx-auto py-8 text-center text-sm text-muted-foreground px-4 sm:px-6 lg:px-8">
