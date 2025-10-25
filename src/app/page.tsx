@@ -26,21 +26,21 @@ export default function LandingPage() {
             <Logo />
           </div>
           <div className="flex flex-1 items-center justify-end space-x-2">
-            <Button variant="ghost" onClick={() => router.push('/dashboard')}>Entrar</Button>
-            <Button onClick={() => router.push('/dashboard')}>Começar Agora</Button>
+            <Button variant="ghost" onClick={() => router.push('/login')}>Entrar</Button>
+            <Button onClick={() => router.push('/login')}>Começar Agora</Button>
           </div>
         </div>
       </header>
       <main className="flex-grow">
-        <section className="container text-center py-20 md:py-32">
-          <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4">
+        <section className="container flex flex-col items-center text-center py-20 md:py-32">
+          <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 max-w-4xl">
             A gestão da cantina escolar, <br />
             <span className="text-primary">inteligente e centralizada</span>.
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl">
             CTNADMIN é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle e resultados para todos.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl w-full">
             <Card className="text-left hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle>Para Escolas</CardTitle>
@@ -66,49 +66,50 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="features" className="container py-20 md:py-24 bg-secondary/50 rounded-3xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
-              <p className="text-muted-foreground text-lg">Com o CTNADMIN, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
+        <section id="features" className="w-full bg-secondary/50">
+            <div className="container grid md:grid-cols-2 gap-12 items-center py-20 md:py-24">
+                <div className="space-y-4">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
+                <p className="text-muted-foreground text-lg">Com o CTNADMIN, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <Card>
+                    <CardHeader>
+                    <Utensils className="h-8 w-8 text-primary mb-2" />
+                    <CardTitle>Cardápio Digital</CardTitle>
+                    <CardDescription>Apresente seus produtos de forma atraente e facilite a escolha.</CardDescription>
+                    </CardHeader>
+                </Card>
+                <Card>
+                    <CardHeader>
+                    <Zap className="h-8 w-8 text-primary mb-2" />
+                    <CardTitle>Pedidos Online</CardTitle>
+                    <CardDescription>Os alunos pedem e pagam pelo app, retirando na cantina sem filas.</CardDescription>
+                    </CardHeader>
+                </Card>
+                <Card>
+                    <CardHeader>
+                    <Wallet className="h-8 w-8 text-primary mb-2" />
+                    <CardTitle>Controle Financeiro</CardTitle>
+                    <CardDescription>Visão clara das vendas, faturamento e relatórios completos.</CardDescription>
+                    </CardHeader>
+                </Card>
+                <Card>
+                    <CardHeader>
+                    <School className="h-8 w-8 text-primary mb-2" />
+                    <CardTitle>Gestão Escolar</CardTitle>
+                    <CardDescription>Acompanhe o desempenho das cantinas parceiras em tempo real.</CardDescription>
+                    </CardHeader>
+                </Card>
+                </div>
             </div>
-            <div className="grid grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <Utensils className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle>Cardápio Digital</CardTitle>
-                  <CardDescription>Apresente seus produtos de forma atraente e facilite a escolha.</CardDescription>
-                </CardHeader>
-              </Card>
-               <Card>
-                <CardHeader>
-                  <Zap className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle>Pedidos Online</CardTitle>
-                  <CardDescription>Os alunos pedem e pagam pelo app, retirando na cantina sem filas.</CardDescription>
-                </CardHeader>
-              </Card>
-               <Card>
-                <CardHeader>
-                  <Wallet className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle>Controle Financeiro</CardTitle>
-                  <CardDescription>Visão clara das vendas, faturamento e relatórios completos.</CardDescription>
-                </CardHeader>
-              </Card>
-               <Card>
-                <CardHeader>
-                  <School className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle>Gestão Escolar</CardTitle>
-                  <CardDescription>Acompanhe o desempenho das cantinas parceiras em tempo real.</CardDescription>
-                </CardHeader>
-              </Card>
-            </div>
-          </div>
         </section>
+
 
         <section id="how-it-works" className="container py-20 md:py-32">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
-            <p className="text-muted-foreground text-lg mt-2">Simples para todos os envolvidos.</p>
+            <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">Simples para todos os envolvidos, da matrícula ao lanche.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div className="flex flex-col items-center">

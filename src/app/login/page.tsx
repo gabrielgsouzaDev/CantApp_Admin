@@ -14,15 +14,23 @@ import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { login, loading } = useAuth();
-  const [email, setEmail] = useState("admin@ctn.com");
-  const [password, setPassword] = useState("password");
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    login(email);
+    if (email.startsWith("escola")) {
+      login("Escola");
+    } else if (email.startsWith("cantineiro")) {
+      login("Cantineiro");
+    } else {
+      login("Admin");
+    }
   };
 
   return (
@@ -30,9 +38,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm shadow-2xl">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4">
+             <button type="button" onClick={() => router.push('/')} className="mx-auto mb-4">
               <Logo />
-            </div>
+            </button>
             <CardTitle className="text-2xl font-headline">Bem-vindo de volta</CardTitle>
             <CardDescription>
               Faça login para acessar seu painel.
@@ -47,7 +55,7 @@ export default function LoginPage() {
                 placeholder="m@example.com"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.change_me.value)}
                 disabled={loading}
               />
             </div>
@@ -71,8 +79,8 @@ export default function LoginPage() {
                 "Entrar"
               )}
             </Button>
-            <p className="text-xs text-muted-foreground">
-              Use <code className="font-mono p-1 bg-muted rounded-sm">admin@ctn.com</code>, <code className="font-mono p-1 bg-muted rounded-sm">escola@ctn.com</code>, ou <code className="font-mono p-1 bg-muted rounded-sm">cantineiro@ctn.com</code> para testar.
+            <p className="text-xs text-muted-foreground text-center">
+              Use <code className="font-mono p-1 bg-muted rounded-sm">escola@ctn.com</code> ou <code className="font-mono p-1 bg-muted rounded-sm">cantineiro@ctn.com</code> para testar.
             </p>
           </CardFooter>
         </form>
