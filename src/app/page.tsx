@@ -36,7 +36,7 @@ export default function LandingPage() {
         </div>
       </header>
       <main className="flex-grow">
-        <section className="w-full py-20 md:py-32">
+        <section id="hero" className="w-full py-20 md:py-32">
           <div className="container flex flex-col items-center text-center px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 max-w-4xl">
               A gestão da cantina escolar, <br />
@@ -112,40 +112,8 @@ export default function LandingPage() {
                 </div>
             </div>
         </section>
-
-        <section id="how-it-works" className="py-20 md:py-32">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
-              <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">Simples para todos os envolvidos, da matrícula ao lanche.</p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
-                  <Users className="h-12 w-12 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
-                <p className="text-muted-foreground">Consultam o cardápio, fazem pedidos e pagam online, com total segurança e comodidade.</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
-                  <Store className="h-12 w-12 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
-                <p className="text-muted-foreground">Recebem os pedidos no sistema, preparam com antecedência e otimizam a operação, sem filas e com mais vendas.</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
-                  <School className="h-12 w-12 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Escolas</h3>
-                <p className="text-muted-foreground">Acompanham tudo através de um painel centralizado, com relatórios financeiros e de desempenho.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="cta" className="py-20 md:py-24 bg-secondary/50">
+        
+        <section id="cta" className="py-20 md:py-24 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="relative">
@@ -191,6 +159,37 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <section id="how-it-works" className="py-20 md:py-32 bg-secondary/50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
+              <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">Simples para todos os envolvidos, da matrícula ao lanche.</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
+              <div className="flex flex-col items-center">
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
+                  <Users className="h-12 w-12 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
+                <p className="text-muted-foreground">Consultam o cardápio, fazem pedidos e pagam online, com total segurança e comodidade.</p>
+              </div>
+              <div className="flex flex-col items-center">
+                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
+                  <Store className="h-12 w-12 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
+                <p className="text-muted-foreground">Recebem os pedidos no sistema, preparam com antecedência e otimizam a operação, sem filas e com mais vendas.</p>
+              </div>
+              <div className="flex flex-col items-center">
+                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
+                  <School className="h-12 w-12 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Escolas</h3>
+                <p className="text-muted-foreground">Acompanham tudo através de um painel centralizado, com relatórios financeiros e de desempenho.</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <footer className="border-t">
         <div className="container mx-auto py-8 text-center text-sm text-muted-foreground px-4 sm:px-6 lg:px-8">
