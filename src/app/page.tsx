@@ -115,7 +115,7 @@ export default function LandingPage() {
         
         <section id="cta" className="py-20 md:py-24 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="grid md:grid-cols-2 gap-16 items-center">
               <div className="relative">
                 {appLaptopImage && (
                   <Image
@@ -128,7 +128,7 @@ export default function LandingPage() {
                   />
                 )}
                 {appMobileImage && (
-                  <div className="absolute -bottom-12 -right-12 w-48 md:w-56">
+                  <div className="absolute -bottom-16 -right-12 w-48 md:w-56">
                     <Image
                       src={appMobileImage.imageUrl}
                       alt={appMobileImage.description}
@@ -141,16 +141,22 @@ export default function LandingPage() {
                 )}
               </div>
               <div className="flex flex-col items-start gap-4">
-                <h2 className="text-3xl md:text-4xl font-bold font-headline">Sua escola já usa o CTNAPP?</h2>
-                <p className="text-muted-foreground text-lg">Cadastre agora mesmo ou faça o login caso já tenha acesso.</p>
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
+                <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full">
-                    <Button variant="outline" className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 hover:text-white">
-                        <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M325.3 234.3L104.6 13l280.8 161.2-79.9 60.1zM470.6 278.6c0 24.3-15.6 45.6-39.9 51.4l-280.8-161.2-60.1 80 161.2 280.8c5.8 24.3-27.1 45.6-51.4 39.9L13.1 278.6c-24.3-5.8-24.3-45.6 0-51.4l457.5-161.2c24.3-5.8 51.4 15.6 51.4 39.9v172.8z"></path></svg>
-                        <span>Disponível no <br/> <b>Google Play</b></span>
+                    <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
+                        <svg className="mr-3 h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4.4 3.425L14.45 12 4.4 20.575V3.425ZM5.8 5.85v12.3L12.025 12 5.8 5.85Zm9.9 0v12.3H17.1V5.85h-1.4Z"/></svg>
+                        <div className="text-left">
+                            <span className="text-xs">Disponível no</span>
+                            <p className="font-bold text-base">Google Play</p>
+                        </div>
                     </Button>
-                    <Button variant="outline" className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 hover:text-white">
-                        <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 3-64.4 20.7-84.7 14.8-16.5 47.9-24.8 72.9-25.7-1.1 34.2-13.7 61.2-33.3 80.9-16.4 16.4-37.4 25.4-59.3 25.4 .1 0 .1 0 0 0zM224 0c-72.6 0-134.4 59.2-134.4 131.9 0 62.8 40.2 116.8 97.2 130.3-57.5 48.6-97.2 118.3-97.2 195.1 0 4.2 3.4 7.6 7.6 7.6h151.2c4.2 0 7.6-3.4 7.6-7.6 0-76.8-39.7-146.5-97.2-195.1 57-13.5 97.2-67.5 97.2-130.3 0-72.7-61.8-131.9-134.4-131.9z"></path></svg>
-                        <span>Baixar na <br/> <b>App Store</b></span>
+                    <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
+                         <svg className="mr-3 h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.802 18.064c.297-.433.43-1.002.43-1.572 0-.64-.176-1.185-.53-1.638-.352-.454-.833-.68-1.442-.68-.61 0-1.08.226-1.413.68-.335.453-.502 1-.502 1.638 0 .57.135 1.135.405 1.695.27.56.635.98 1.094 1.258.46.28.97.42 1.53.42.597 0 1.1-.153 1.516-.46.417-.306.74-.716.97-1.221H18.8l.002.004ZM14.93 5.467c.725-1.015 1.72-1.522 2.985-1.522 1.11 0 1.95.223 2.52.668.57.446.855 1.106.855 1.983 0 .42-.08.776-.238 1.07-.158.293-.365.52-.62.68-.255.16-.543.24-.863.24-.48 0-.895-.14-1.245-.42-.35-.28-.58-.64-.69-1.08h-3.3c-.024.46-.144.87-.36 1.23-.215.36-.506.66-.87.9-.364.24-.793.36-1.288.36-.71 0-1.28-.24-1.71-.72-.43-.48-.645-1.11-.645-1.89 0-1.08.385-1.92 1.155-2.52.77-.6 1.815-.9 3.135-.9.465 0 .9.06 1.305.18l.045.03Zm-1.125 1.83c.315-.225.56-.54.735-.945.175-.405.263-.87.263-1.395 0-.585-.16-1.04-.48-1.365-.32-.325-.79-.488-1.41-.488-.81 0-1.425.26-1.845.78-.42.52-.63 1.245-.63 2.175 0 .525.135.945.405 1.26.27.315.63.473 1.08.473.495 0 .89-.15 1.185-.45Z"/></svg>
+                         <div className="text-left">
+                            <span className="text-xs">Baixar na</span>
+                            <p className="font-bold text-base">App Store</p>
+                        </div>
                     </Button>
                 </div>
                 <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push('/login')}>Acessar via Web</Button>
