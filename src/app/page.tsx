@@ -21,7 +21,7 @@ export default function LandingPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
         <div className="container flex h-14 items-center">
-          <div className="mr-4 hidden md:flex">
+          <div className="mr-4 flex">
             <Logo />
           </div>
           <div className="flex flex-1 items-center justify-end space-x-2">
@@ -31,7 +31,7 @@ export default function LandingPage() {
         </div>
       </header>
       <main className="flex-grow">
-        <section className="py-20 md:py-32">
+        <section className="w-full py-20 md:py-32">
           <div className="container flex flex-col items-center text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 max-w-4xl">
               A gestão da cantina escolar, <br />
@@ -108,7 +108,6 @@ export default function LandingPage() {
             </div>
         </section>
 
-
         <section id="how-it-works" className="py-20 md:py-32">
           <div className="container">
             <div className="text-center mb-12">
@@ -117,21 +116,21 @@ export default function LandingPage() {
             </div>
             <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
               <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/50 rounded-full border-2 border-primary">
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
                   <Users className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
                 <p className="text-muted-foreground">Consultam o cardápio, fazem pedidos e pagam online, com total segurança e comodidade.</p>
               </div>
               <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/50 rounded-full border-2 border-primary">
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
                   <Store className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
                 <p className="text-muted-foreground">Recebem os pedidos no sistema, preparam com antecedência e otimizam a operação, sem filas e com mais vendas.</p>
               </div>
               <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/50 rounded-full border-2 border-primary">
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
                   <School className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Escolas</h3>
