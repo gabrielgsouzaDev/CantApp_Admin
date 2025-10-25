@@ -146,14 +146,20 @@ export default function LandingPage() {
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full">
                     <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                        <svg className="mr-3 h-8 w-8" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M4.34 2.85l7.23 4.13c.2.12.33.32.33.54v8.96c0 .22-.14.42-.34.54l-7.22 4.12c-.2.12-.45.12-.66 0L.1 17.02c-.2-.12-.33-.32-.33-.54V6.52c0-.22.13-.42.33-.54l3.56-2.05c.2-.12.45-.12.65 0l.04.02zM4.67 4.48L2.01 6.01v9.98l2.67 1.53V4.48zm.66 13.04l5.9-3.37V8.2L5.33 4.84v12.68zM14.6 21.03a.53.53 0 01-.19.03c-.1 0-.2-.03-.28-.08l-3.2-1.83V1.85l3.19-1.83a.56.56 0 01.56 0l8.32 4.77c.18.1.28.3.28.5V17.2a.54.54 0 01-.28.49l-8.32 4.77c-.08.05-.18.07-.28.07zM12.08 18.1l2.23 1.28L22.62 17V6.9l-8.31-4.76-2.23 1.28v14.68z"/></svg>
+                        <svg className="mr-3 h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M4.65 2.13L15.35 12.83C15.7 13.18 15.7 13.75 15.35 14.1L4.65 21.87C3.58 22.94 2 22.15 2 20.73V3.27C2 1.85 3.58 1.06 4.65 2.13Z" strokeMiterlimit="10"/>
+                          <path d="M15.35 12.83L20.25 7.93C21.32 6.86 22.92 7.65 22.92 9.07V14.93C22.92 16.35 21.32 17.14 20.25 16.07L15.35 11.17" strokeMiterlimit="10"/>
+                </svg>
+
                         <div className="text-left">
                             <span className="text-xs">Disponível no</span>
                             <p className="font-bold text-base">Google Play</p>
                         </div>
                     </Button>
                     <Button variant="outline" className="h-auto w-full sm:w-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                         <svg className="mr-3 h-8 w-8" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.6,3.4c-1.9-2-4.8-2.6-7.1-1.8c-2.3,0.8-4.2,2.9-4.8,5.4c-0.7,2.5-0.1,5.2,1.5,7.2c0.8,1,1.9,1.9,3.1,2.5 c1.2,0.6,2.5,0.8,3.8,0.7c0.2,0,0.3,0,0.5,0c1.2,0,2.4-0.3,3.5-0.8c0.1,0,0.1-0.1,0.2-0.1c1-0.5,1.9-1.2,2.7-2 c-1.3,0-2.6-0.5-3.5-1.5c-1-1-1.5-2.3-1.5-3.6c0-1.4,0.5-2.7,1.4-3.7c-0.1-0.1-0.3-0.2-0.4-0.3c-1.2-0.9-2.7-1.4-4.3-1.4 c-0.8,0-1.5,0.1-2.2,0.4c-0.2-1.3,0.2-2.6,1.1-3.6c0.9-1,2.2-1.6,3.6-1.6c0.5,0,1,0.1,1.5,0.3C18.1,3.2,17.8,3.3,17.6,3.4z M13.8,2.2C13.8,2.2,13.8,2.2,13.8,2.2c-0.2,0.6-0.3,1.2-0.4,1.8c-0.5-0.2-1-0.4-1.5-0.4c-1,0-1.9,0.4-2.6,1.2 c-0.6,0.7-1,1.7-0.8,2.8c0.6-0.2,1.2-0.3,1.8-0.3c2.4,0,4.6,1.1,6.2,2.8c-0.1,0.2-0.2,0.3-0.2,0.5c-0.7,0.9-1.1,2-1.1,3.2 c0,1.4,0.6,2.8,1.6,3.8c0,0,0.1,0.1,0.1,0.1c0.1,0.1,0.1,0.1,0.2,0.2c-0.7,0.6-1.5,1-2.3,1.2c-0.1,0-0.1,0-0.2,0 c-0.9,0.2-1.9,0.1-2.8-0.2c-0.9-0.3-1.8-0.9-2.4-1.6c-1.3-1.6-1.7-3.7-1.2-5.7C9,8.5,10.6,6.7,12.9,6c0.5-1,1.3-1.8,2.2-2.5 C14.6,3,14.2,2.6,13.8,2.2z"/></svg>
+                         <svg className="mr-3 h-8 w-8" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17.6,3.4c-1.9-2-4.8-2.6-7.1-1.8c-2.3,0.8-4.2,2.9-4.8,5.4c-0.7,2.5-0.1,5.2,1.5,7.2c0.8,1,1.9,1.9,3.1,2.5 c1.2,0.6,2.5,0.8,3.8,0.7c0.2,0,0.3,0,0.5,0c1.2,0,2.4-0.3,3.5-0.8c0.1,0,0.1-0.1,0.2-0.1c1-0.5,1.9-1.2,2.7-2 c-1.3,0-2.6-0.5-3.5-1.5c-1-1-1.5-2.3-1.5-3.6c0-1.4,0.5-2.7,1.4-3.7c-0.1-0.1-0.3-0.2-0.4-0.3c-1.2-0.9-2.7-1.4-4.3-1.4 c-0.8,0-1.5,0.1-2.2,0.4c-0.2-1.3,0.2-2.6,1.1-3.6c0.9-1,2.2-1.6,3.6-1.6c0.5,0,1,0.1,1.5,0.3C18.1,3.2,17.8,3.3,17.6,3.4z M13.8,2.2C13.8,2.2,13.8,2.2,13.8,2.2c-0.2,0.6-0.3,1.2-0.4,1.8c-0.5-0.2-1-0.4-1.5-0.4c-1,0-1.9,0.4-2.6,1.2 c-0.6,0.7-1,1.7-0.8,2.8c0.6-0.2,1.2-0.3,1.8-0.3c2.4,0,4.6,1.1,6.2,2.8c-0.1,0.2-0.2,0.3-0.2,0.5c-0.7,0.9-1.1,2-1.1,3.2 c0,1.4,0.6,2.8,1.6,3.8c0,0,0.1,0.1,0.1,0.1c0.1,0.1,0.1,0.1,0.2,0.2c-0.7,0.6-1.5,1-2.3,1.2c-0.1,0-0.1,0-0.2,0 c-0.9,0.2-1.9,0.1-2.8-0.2c-0.9-0.3-1.8-0.9-2.4-1.6c-1.3-1.6-1.7-3.7-1.2-5.7C9,8.5,10.6,6.7,12.9,6c0.5-1,1.3-1.8,2.2-2.5 C14.6,3,14.2,2.6,13.8,2.2z"/>
+                         </svg>
                          <div className="text-left">
                             <span className="text-xs">Baixar na</span>
                             <p className="font-bold text-base">App Store</p>
@@ -174,21 +180,21 @@ export default function LandingPage() {
             </div>
             <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
               <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-primary/10 rounded-full">
                   <Users className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
                 <p className="text-muted-foreground">Consultam o cardápio, fazem pedidos e pagam online, com total segurança e comodidade.</p>
               </div>
               <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
+                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-primary/10 rounded-full">
                   <Store className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
                 <p className="text-muted-foreground">Recebem os pedidos no sistema, preparam com antecedência e otimizam a operação, sem filas e com mais vendas.</p>
               </div>
               <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/20 rounded-full">
+                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-primary/10 rounded-full">
                   <School className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Escolas</h3>
