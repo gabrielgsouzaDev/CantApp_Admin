@@ -6,7 +6,8 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Wallet, School, Utensils, Zap } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function LandingPage() {
   const { login } = useAuth();
@@ -18,21 +19,27 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="p-4 flex justify-between items-center">
-        <Logo />
-        <Button onClick={() => router.push('/dashboard')}>Acessar Painel</Button>
+    <div className="flex min-h-screen flex-col bg-background">
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
+        <div className="container flex h-14 items-center">
+          <div className="mr-4 hidden md:flex">
+            <Logo />
+          </div>
+          <div className="flex flex-1 items-center justify-end space-x-2">
+            <Button variant="ghost" onClick={() => router.push('/dashboard')}>Entrar</Button>
+            <Button onClick={() => router.push('/dashboard')}>Começar Agora</Button>
+          </div>
+        </div>
       </header>
-      <main className="flex-grow flex items-center justify-center p-4">
-        <div className="text-center max-w-4xl">
+      <main className="flex-grow">
+        <section className="container text-center py-20 md:py-32">
           <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4">
             A gestão da cantina escolar, <br />
             <span className="text-primary">inteligente e centralizada</span>.
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8">
-            CTNADMIN é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle.
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
+            CTNADMIN é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle e resultados para todos.
           </p>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             <Card className="text-left hover:shadow-lg transition-shadow">
               <CardHeader>
@@ -57,10 +64,84 @@ export default function LandingPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
+
+        <section id="features" className="container py-20 md:py-24 bg-secondary/50 rounded-3xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-4">
+              <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
+              <p className="text-muted-foreground text-lg">Com o CTNADMIN, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <Utensils className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle>Cardápio Digital</CardTitle>
+                  <CardDescription>Apresente seus produtos de forma atraente e facilite a escolha.</CardDescription>
+                </CardHeader>
+              </Card>
+               <Card>
+                <CardHeader>
+                  <Zap className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle>Pedidos Online</CardTitle>
+                  <CardDescription>Os alunos pedem e pagam pelo app, retirando na cantina sem filas.</CardDescription>
+                </CardHeader>
+              </Card>
+               <Card>
+                <CardHeader>
+                  <Wallet className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle>Controle Financeiro</CardTitle>
+                  <CardDescription>Visão clara das vendas, faturamento e relatórios completos.</CardDescription>
+                </CardHeader>
+              </Card>
+               <Card>
+                <CardHeader>
+                  <School className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle>Gestão Escolar</CardTitle>
+                  <CardDescription>Acompanhe o desempenho das cantinas parceiras em tempo real.</CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        <section id="how-it-works" className="container py-20 md:py-32">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
+            <p className="text-muted-foreground text-lg mt-2">Simples para todos os envolvidos.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8 text-center">
+            <div className="flex flex-col items-center">
+              <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
+                <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwYXZhdGFyfGVufDB8fHx8MTc2MTM1OTc3MHww&ixlib=rb-4.1.0&q=80&w=1080" />
+                <AvatarFallback>P</AvatarFallback>
+              </Avatar>
+              <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
+              <p className="text-muted-foreground">Consultam o cardápio, fazem pedidos e pagam online, com total segurança e comodidade.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
+                 <AvatarImage src="https://images.unsplash.com/photo-1660057873647-882398b8ec1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGVyc29uJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjEyNzgxNzN8MA&ixlib=rb-4.1.0&q=80&w=1080" />
+                <AvatarFallback>C</AvatarFallback>
+              </Avatar>
+              <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
+              <p className="text-muted-foreground">Recebem os pedidos no sistema, preparam com antecedência e otimizam a operação, sem filas e com mais vendas.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
+                 <AvatarImage src="https://images.unsplash.com/photo-1569913486515-b74bf7751574?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3b21hbiUyMGF2YXRhcnxlbnwwfHx8fDE3NjEzMDUwMTN8MA&ixlib=rb-4.1.0&q=80&w=1080" />
+                <AvatarFallback>E</AvatarFallback>
+              </Avatar>
+              <h3 className="text-xl font-semibold mb-2">Escolas</h3>
+              <p className="text-muted-foreground">Acompanham tudo através de um painel centralizado, com relatórios financeiros e de desempenho.</p>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="p-4 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} CTNADMIN. Todos os direitos reservados.
+      <footer className="border-t">
+        <div className="container py-8 text-center text-sm text-muted-foreground">
+          © {new Date().getFullYear()} CTNADMIN. Todos os direitos reservados.
+        </div>
       </footer>
     </div>
   );
