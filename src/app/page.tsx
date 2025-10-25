@@ -7,7 +7,7 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, Play, Apple } from "lucide-react";
+import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -148,7 +148,7 @@ export default function LandingPage() {
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
                    <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                    <div className="flex items-center justify-center gap-3 px-2 py-1">
+                     <div className="flex items-center justify-center gap-3 px-2 py-1">
                       <div className="text-left">
                         <p className="text-xs">Disponível no</p>
                         <p className="font-bold text-base -mt-1">Google Play</p>
@@ -234,12 +234,12 @@ export default function LandingPage() {
                     <AccordionTrigger>Como posso gerenciar a alimentação do meu filho?</AccordionTrigger>
                     <AccordionContent>
                       <div className="prose prose-sm text-muted-foreground max-w-none">
-                        No CTNAPP você pode gerenciar ou controlar a alimentação do seu filho com os seguintes recursos:
+                        O CTNAPP oferece ferramentas para que você gerencie os hábitos alimentares do seu filho de forma personalizada:
                         <ul className="mt-2">
-                          <li><strong>Permissão de compra:</strong> Nessa função você pode escolher o produto que seu filho não poderá comprar. Esse controle pode ser feito por dia da semana.</li>
-                          <li><strong>Permissão de valor:</strong> Utilizando esse recurso, o pai pode restringir um valor diário de gasto, por ex: todo dia R$ 10,00 disponíveis para utilizar. Sendo assim, quando a compra passar desse valor, o sistema irá bloquear a compra.</li>
+                          <li><strong>Controle de Produtos:</strong> Defina quais itens do cardápio seu filho pode ou não pode consumir. Essa restrição pode ser configurada para dias específicos da semana.</li>
+                          <li><strong>Limite de Gastos Diário:</strong> Estabeleça um valor máximo para as compras diárias. Se o limite for atingido, o sistema impede novas compras, ajudando no controle do orçamento.</li>
                         </ul>
-                        <p>As funções de permissão de compra e valor, podem ser combinadas e utilizadas juntas.</p>
+                        <p>Você pode combinar ambos os recursos para um controle ainda mais completo.</p>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -264,3 +264,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
