@@ -6,8 +6,7 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store } from "lucide-react";
 
 export default function LandingPage() {
   const { login } = useAuth();
@@ -118,26 +117,23 @@ export default function LandingPage() {
             </div>
             <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
               <div className="flex flex-col items-center">
-                <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
-                  <AvatarImage src="https://images.unsplash.com/photo-1576487248805-cf45f6bcc674?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" data-ai-hint="family children" />
-                  <AvatarFallback>P</AvatarFallback>
-                </Avatar>
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/50 rounded-full border-2 border-primary">
+                  <Users className="h-12 w-12 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
                 <p className="text-muted-foreground">Consultam o cardápio, fazem pedidos e pagam online, com total segurança e comodidade.</p>
               </div>
               <div className="flex flex-col items-center">
-                <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
-                  <AvatarImage src="https://images.unsplash.com/photo-1620052643539-4341F1644782?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" data-ai-hint="canteen food" />
-                  <AvatarFallback>C</AvatarFallback>
-                </Avatar>
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/50 rounded-full border-2 border-primary">
+                  <Store className="h-12 w-12 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
                 <p className="text-muted-foreground">Recebem os pedidos no sistema, preparam com antecedência e otimizam a operação, sem filas e com mais vendas.</p>
               </div>
               <div className="flex flex-col items-center">
-                <Avatar className="h-24 w-24 mb-4 border-2 border-primary p-1">
-                  <AvatarImage src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" data-ai-hint="school building" />
-                  <AvatarFallback>E</AvatarFallback>
-                </Avatar>
+                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-accent/50 rounded-full border-2 border-primary">
+                  <School className="h-12 w-12 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold mb-2">Escolas</h3>
                 <p className="text-muted-foreground">Acompanham tudo através de um painel centralizado, com relatórios financeiros e de desempenho.</p>
               </div>
