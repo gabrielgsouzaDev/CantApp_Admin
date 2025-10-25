@@ -164,7 +164,7 @@ export default function LandingPage() {
                     </div>
                   </Button>
                 </div>
-                 <Button size="lg" className="w-full sm:w-auto mt-2">
+                 <Button size="lg" className="w-full sm:w-auto mt-2" onClick={() => router.push('/login')}>
                   Acessar via Web
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -205,7 +205,7 @@ export default function LandingPage() {
           </div>
         </section>
         
-        <section id="faq" className="py-20 md:py-32 bg-secondary/50">
+        <section id="faq" className="py-20 md:py-32 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-12">
               <div className="flex flex-col gap-4">
@@ -221,12 +221,8 @@ export default function LandingPage() {
                     <AccordionTrigger>Como o aluno irá efetuar a compra na cantina?</AccordionTrigger>
                     <AccordionContent>
                       <div className="prose prose-sm text-muted-foreground max-w-none">
-                        Utilizando o CTNAPP o aluno pode fazer a compra por 2 opções sem pegar fila de caixa:
-                        <ul className="mt-2">
-                          <li><strong>Totem:</strong> Terminais de auto-atendimento que através da biometria do aluno, ele acessa a conta e os produtos disponíveis para consumo.</li>
-                          <li><strong>Aplicativo:</strong> O aluno pode utilizar se preferir, o aplicativo para realizar a sua compra. Basta acessar informando o RA, com a senha criada no cadastro, e fazer sua compra.</li>
-                        </ul>
-                        <p>O aluno também pode ir direto no caixa e pedir para descontar do saldo em sua conta.</p>
+                        Com o CTNAPP, o aluno evita as filas do caixa fazendo o pedido diretamente pelo aplicativo. Basta acessar com seu usuário e senha, escolher os produtos e realizar a compra.
+                        <p className="mt-2">Como alternativa, o aluno também pode ir direto ao caixa e pedir para descontar o valor do saldo disponível em sua conta CTNAPP.</p>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -264,5 +260,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
