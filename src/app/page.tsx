@@ -27,28 +27,17 @@ export default function LandingPage() {
         <div className="text-center max-w-4xl">
           <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4">
             A gestão da cantina escolar, <br />
-            <span className="text-primary">simplificada</span>.
+            <span className="text-primary">inteligente e centralizada</span>.
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8">
-            CTNADMIN centraliza pedidos, produtos e relatórios em uma plataforma intuitiva para administradores, escolas e cantineiros.
+            CTNADMIN é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             <Card className="text-left hover:shadow-lg transition-shadow">
               <CardHeader>
-                <CardTitle>Admin</CardTitle>
-                <CardDescription>Visão completa e controle total do sistema.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full" onClick={() => handleLoginAs("Admin")}>
-                  Entrar como Admin <ArrowRight className="ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="text-left hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle>Escola</CardTitle>
-                <CardDescription>Gerencie cantinas e acompanhe os dados.</CardDescription>
+                <CardTitle>Para Escolas</CardTitle>
+                <CardDescription>Coordene cantinas, acesse relatórios financeiros e tenha uma visão unificada da operação.</CardDescription>
               </CardHeader>
               <CardContent>
                 <Button className="w-full" onClick={() => handleLoginAs("Escola")}>
@@ -58,12 +47,12 @@ export default function LandingPage() {
             </Card>
             <Card className="text-left hover:shadow-lg transition-shadow">
               <CardHeader>
-                <CardTitle>Cantineiro</CardTitle>
-                <CardDescription>Gerencie produtos e visualize os pedidos.</CardDescription>
+                <CardTitle>Para Cantinas</CardTitle>
+                <CardDescription>Receba pedidos online, gerencie seu cardápio digital e simplifique seu dia a dia.</CardDescription>
               </CardHeader>
               <CardContent>
                 <Button className="w-full" onClick={() => handleLoginAs("Cantineiro")}>
-                  Entrar como Cantineiro <ArrowRight className="ml-2" />
+                  Entrar como Cantina <ArrowRight className="ml-2" />
                 </Button>
               </CardContent>
             </Card>
