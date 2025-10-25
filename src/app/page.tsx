@@ -69,40 +69,42 @@ export default function LandingPage() {
         </section>
 
         <section id="features" className="w-full bg-secondary/50 py-20 md:py-24">
-            <div className="container grid md:grid-cols-2 gap-12 items-center">
-                <div className="space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
-                <p className="text-muted-foreground text-lg">Com o CTNADMIN, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <Card>
-                    <CardHeader>
-                    <Utensils className="h-8 w-8 text-primary mb-2" />
-                    <CardTitle>Cardápio Digital</CardTitle>
-                    <CardDescription>Apresente seus produtos de forma atraente e facilite a escolha.</CardDescription>
-                    </CardHeader>
-                </Card>
-                <Card>
-                    <CardHeader>
-                    <Zap className="h-8 w-8 text-primary mb-2" />
-                    <CardTitle>Pedidos Online</CardTitle>
-                    <CardDescription>Os alunos pedem e pagam pelo app, retirando na cantina sem filas.</CardDescription>
-                    </CardHeader>
-                </Card>
-                <Card>
-                    <CardHeader>
-                    <Wallet className="h-8 w-8 text-primary mb-2" />
-                    <CardTitle>Controle Financeiro</CardTitle>
-                    <CardDescription>Visão clara das vendas, faturamento e relatórios completos.</CardDescription>
-                    </CardHeader>
-                </Card>
-                <Card>
-                    <CardHeader>
-                    <School className="h-8 w-8 text-primary mb-2" />
-                    <CardTitle>Gestão Escolar</CardTitle>
-                    <CardDescription>Acompanhe o desempenho das cantinas parceiras em tempo real.</CardDescription>
-                    </CardHeader>
-                </Card>
+            <div className="container">
+                <div className="grid md:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-4">
+                        <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
+                        <p className="text-muted-foreground text-lg">Com o CTNADMIN, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <Card>
+                            <CardHeader>
+                            <Utensils className="h-8 w-8 text-primary mb-2" />
+                            <CardTitle>Cardápio Digital</CardTitle>
+                            <CardDescription>Apresente seus produtos de forma atraente e facilite a escolha.</CardDescription>
+                            </CardHeader>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                            <Zap className="h-8 w-8 text-primary mb-2" />
+                            <CardTitle>Pedidos Online</CardTitle>
+                            <CardDescription>Os alunos pedem e pagam pelo app, retirando na cantina sem filas.</CardDescription>
+                            </CardHeader>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                            <Wallet className="h-8 w-8 text-primary mb-2" />
+                            <CardTitle>Controle Financeiro</CardTitle>
+                            <CardDescription>Visão clara das vendas, faturamento e relatórios completos.</CardDescription>
+                            </CardHeader>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                            <School className="h-8 w-8 text-primary mb-2" />
+                            <CardTitle>Gestão Escolar</CardTitle>
+                            <CardDescription>Acompanhe o desempenho das cantinas parceiras em tempo real.</CardDescription>
+                            </CardHeader>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </section>
