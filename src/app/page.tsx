@@ -40,11 +40,9 @@ export default function LandingPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
         <div className="container flex h-14 items-center px-4 sm:px-6 lg:px-8">
-          <div className="mr-4 flex">
-            <Link href="/" className="flex items-center gap-2">
-              <Logo />
-            </Link>
-          </div>
+          <Link href="/" className="mr-4 flex">
+            <Logo />
+          </Link>
           <div className="flex flex-1 items-center justify-end space-x-2">
             <Button variant="ghost" onClick={() => router.push('/login')}>Entrar</Button>
             <Button onClick={() => router.push('/login')}>Começar Agora</Button>
@@ -82,14 +80,14 @@ export default function LandingPage() {
                         <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <Button className="w-full" variant="outline">
-                            <GraduationCap className="mr-2 h-4 w-4" /> Aluno
+                        <Button variant="outline">
+                            <GraduationCap className="h-4 w-4" /> Aluno
                         </Button>
-                        <Button className="w-full" variant="outline">
-                            <Users className="mr-2 h-4 w-4" /> Responsável
+                        <Button variant="outline">
+                            <Users className="h-4 w-4" /> Responsável
                         </Button>
-                        <Button className="w-full" variant="outline">
-                           <Briefcase className="mr-2 h-4 w-4" /> Funcionário
+                        <Button variant="outline">
+                           <Briefcase className="h-4 w-4" /> Funcionário
                         </Button>
                     </CardContent>
                 </Card>
