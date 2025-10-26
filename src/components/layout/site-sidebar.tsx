@@ -44,16 +44,13 @@ export function SiteSidebar() {
         <SidebarMenu>
           {mainNavItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} passHref legacyBehavior>
+              <Link href={item.href} legacyBehavior={false}>
                 <SidebarMenuButton
-                  asChild
                   isActive={pathname === item.href}
                   tooltip={item.title}
                 >
-                  <a>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </a>
+                  <item.icon />
+                  <span>{item.title}</span>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -65,16 +62,13 @@ export function SiteSidebar() {
         <SidebarMenu>
          {settingsNavItem && (
             <SidebarMenuItem>
-              <Link href={settingsNavItem.href} passHref legacyBehavior>
+              <Link href={settingsNavItem.href} legacyBehavior={false}>
                 <SidebarMenuButton
-                  asChild
                   isActive={pathname === settingsNavItem.href}
                   tooltip={settingsNavItem.title}
                 >
-                  <a>
-                    <Settings />
-                    <span>{settingsNavItem.title}</span>
-                  </a>
+                  <Settings />
+                  <span>{settingsNavItem.title}</span>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
