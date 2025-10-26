@@ -13,10 +13,10 @@ export const mockUsers: Record<string, User> = {
 
 
 export const navItems: NavItem[] = [
-    { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, roles: ["Admin", "Escola", "Cantineiro"] },
+    { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, roles: ["Admin", "Escola"] },
     { title: "Escolas", href: "/schools", icon: Building, roles: ["Admin"] },
     { title: "Cantinas", href: "/canteens", icon: BookCopy, roles: ["Admin", "Escola"] },
-    { title: "Produtos", href: "/products", icon: UtensilsCrossed, roles: ["Admin", "Escola", "Cantineiro"] },
+    { title: "Produtos", href: "/products", icon: UtensilsCrossed, roles: ["Admin", "Escola"] },
     { title: "Pedidos", href: "/orders", icon: ShoppingCart, roles: ["Admin", "Escola", "Cantineiro"] },
     { title: "Usuários", href: "/users", icon: Users, roles: ["Admin"] },
     { title: "Relatórios", href: "/reports", icon: FileText, roles: ["Admin", "Escola"] },

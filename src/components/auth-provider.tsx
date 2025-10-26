@@ -38,7 +38,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userToLogin = Object.values(mockUsers).find(u => u.role === role) || mockUsers.admin;
     setUser(userToLogin);
     localStorage.setItem("ctnadmin-user", JSON.stringify(userToLogin));
-    router.push("/dashboard");
+    if (role === "Cantineiro") {
+      router.push("/orders");
+    } else {
+      router.push("/dashboard");
+    }
     setLoading(false);
   };
 
