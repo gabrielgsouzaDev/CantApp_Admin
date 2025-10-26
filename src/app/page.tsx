@@ -7,11 +7,12 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store } from "lucide-react";
+import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function LandingPage() {
   const { login } = useAuth();
@@ -24,6 +25,20 @@ export default function LandingPage() {
 
   const appLaptopImage = PlaceHolderImages.find(img => img.id === 'app-laptop');
   const appMobileImage = PlaceHolderImages.find(img => img.id === 'app-mobile');
+  const adminDashboardImage = PlaceHolderImages.find(img => img.id === 'admin-dashboard');
+  const parentAppImage = PlaceHolderImages.find(img => img.id === 'parent-app');
+
+  const googlePlayIcon = (
+    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 mr-2">
+      <path d="M22.715 11.391c-.13-.23-.39-.39-.65-.39h-1.95V7.4C20.115 4.42 17.695 2 14.715 2H9.315c-2.98 0-5.4 2.42-5.4 5.4v3.6h-1.9c-.26 0-.52.16-.65.39-.13.23-.13.51 0 .74l5.35 9.25c.13.23.39.39.65.39h5.4c.26 0 .52-.16.65-.39l5.35-9.25c.13-.23.13-.51-.05-.74zM10.715 4.3c.33-.29.83-.17 1.01.29l2.53 6.41h-6.73l3.19-6.7zm-2.8 8.1h6.2l-3.1 5.37-3.1-5.37z" />
+    </svg>
+  );
+
+  const appleIcon = (
+    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 mr-2">
+      <path d="M19.25 15.65c-.25.13-.5.25-.75.38-.5.25-1.01.37-1.5.37-.5 0-1.01-.12-1.5-.37s-.88-.5-1.26-.75c-.37-.25-.75-.5-1.12-.75s-.75-.5-1.13-.75c-1.12-.75-2.5-1.12-4-1.12-1.25 0-2.5.63-3.75 1.88-1.5 1.5-2.25 3.37-2.25 5.62 0 1.5.38 2.88 1.13 4.13.75 1.25 1.75 2.25 3 3 .75.5 1.5.75 2.25.75.75 0 1.38-.25 2-.75s1.25-1.12 1.87-1.87c.63-.75 1-1.5 1.13-2.25h-4.62c-.5 0-.88-.13-1.12-.37-.25-.25-.38-.63-.38-1.13s.13-.88.38-1.12c.25-.25.63-.38 1.12-.38h6.25c.25 0 .5.13.75.38.25.25.37.5.37.75 0 .75-.25 1.5-.75 2.25-.5.75-1.12 1.38-1.87 1.87-.75.5-1.63.75-2.63.75-1 0-1.87-.25-2.62-.75s-1.38-1.12-1.88-1.87c-.5-.75-.75-1.63-.75-2.63 0-1.25.37-2.37 1.12-3.37s1.62-1.5 2.62-1.5c.25 0 .5.13.75.38s.5.5.75.75c.25.25.63.5 1.13.75s1.12.5 1.87.75c.75.25 1.38.38 1.88.38.75 0 1.37-.25 1.87-.75.5-.5.75-1.13.75-1.88 0-.87-.37-1.75-1.12-2.62-.75-.88-1.75-1.37-3-1.5-1.25-.12-2.5.25-3.75 1.12-.25.13-.5.25-.75.38-.25.12-.38.12-.5 0-.13 0-.25-.13-.37-.38s0-.5.13-.75c.12-.25.37-.5.75-.75s.75-.5 1.12-.75c1.13-.75 2.5-1.12 4-1.12 1.25 0 2.5.63 3.75 1.88 1.5 1.5 2.25 3.37 2.25 5.62 0 .5-.12 1-.37 1.37z" />
+    </svg>
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -204,8 +219,111 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        <section id="advantages" className="py-20 md:py-32 bg-background">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold font-headline">Vantagens para Todos</h2>
+              <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">
+                Descubra como o CTNAPP transforma a gestão para cada perfil.
+              </p>
+            </div>
+            <Tabs defaultValue="admin" className="w-full max-w-4xl mx-auto">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="admin">Para Escolas e Cantinas</TabsTrigger>
+                <TabsTrigger value="user">Para Pais e Alunos</TabsTrigger>
+              </TabsList>
+              <TabsContent value="admin">
+                <Card className="border-0 shadow-none">
+                  <CardContent className="p-6">
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+                      <div className="space-y-6">
+                        <div className="flex items-start gap-4">
+                          <BarChart className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold text-lg">Controle e Visão Estratégica</h3>
+                            <p className="text-muted-foreground">Acesse dashboards com dados de vendas, faturamento e desempenho em tempo real para tomar as melhores decisões.</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <Package className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold text-lg">Gestão de Produtos</h3>
+                            <p className="text-muted-foreground">Crie e gerencie cardápios digitais, controle o estoque de forma inteligente e evite desperdícios.</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <Wallet className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold text-lg">Centralização Financeira</h3>
+                            <p className="text-muted-foreground">Monitore todas as transações, automatize relatórios e simplifique a conciliação financeira.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center">
+                         {adminDashboardImage && (
+                            <Image
+                                src={adminDashboardImage.imageUrl}
+                                alt={adminDashboardImage.description}
+                                width={500}
+                                height={400}
+                                className="rounded-lg shadow-lg"
+                                data-ai-hint={adminDashboardImage.imageHint}
+                            />
+                         )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="user">
+                <Card className="border-0 shadow-none">
+                  <CardContent className="p-6">
+                     <div className="grid md:grid-cols-2 gap-8 items-center">
+                       <div className="space-y-6">
+                        <div className="flex items-start gap-4">
+                          <Zap className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold text-lg">Adeus às Filas</h3>
+                            <p className="text-muted-foreground">Compre antecipadamente pelo app e apenas retire o lanche no intervalo. Mais tempo livre para o que importa.</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <Shield className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold text-lg">Pagamento Fácil e Seguro</h3>
+                            <p className="text-muted-foreground">Utilize saldo pré-pago ou Pix para fazer compras de forma rápida e segura, sem precisar de dinheiro em espécie.</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <Apple className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold text-lg">Controle Alimentar na Mão</h3>
+                            <p className="text-muted-foreground">Pais podem definir limites de gastos diários e restringir produtos, garantindo uma alimentação mais saudável.</p>
+                          </div>
+                        </div>
+                      </div>
+                       <div className="flex items-center justify-center order-first md:order-last">
+                         {parentAppImage && (
+                            <Image
+                                src={parentAppImage.imageUrl}
+                                alt={parentAppImage.description}
+                                width={500}
+                                height={400}
+                                className="rounded-lg shadow-lg"
+                                data-ai-hint={parentAppImage.imageHint}
+                            />
+                         )}
+                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </section>
         
-        <section id="faq" className="py-20 md:py-32 bg-background">
+        <section id="faq" className="py-20 md:py-32 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-12">
               <div className="flex flex-col gap-4">
@@ -235,11 +353,11 @@ export default function LandingPage() {
                     <AccordionContent>
                       <div className="prose prose-sm text-muted-foreground max-w-none">
                         O CTNAPP oferece ferramentas para que você gerencie os hábitos alimentares do seu filho de forma personalizada:
-                        <ul className="mt-2">
+                        <ul className="mt-2 list-disc pl-5 space-y-1">
                           <li><strong>Controle de Produtos:</strong> Defina quais itens do cardápio seu filho pode ou não pode consumir. Essa restrição pode ser configurada para dias específicos da semana.</li>
                           <li><strong>Limite de Gastos Diário:</strong> Estabeleça um valor máximo para as compras diárias. Se o limite for atingido, o sistema impede novas compras, ajudando no controle do orçamento.</li>
                         </ul>
-                        <p>Você pode combinar ambos os recursos para um controle ainda mais completo.</p>
+                        <p className="mt-2">Você pode combinar ambos os recursos para um controle ainda mais completo.</p>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -264,7 +382,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
-
-    
