@@ -7,7 +7,7 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple, FileDigit } from "lucide-react";
+import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple, FileDigit, UtensilsCrossed } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -76,39 +76,63 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="features" className="py-20 md:py-32 bg-secondary/50">
+        <section id="features" className="py-20 md:py-32">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Recursos Principais</h2>
-                <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">Tudo que você precisa para uma gestão moderna e eficiente.</p>
+                <p className="text-muted-foreground text-lg mt-2 max-w-3xl mx-auto">Uma plataforma completa com as ferramentas certas para modernizar a cantina escolar.</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8 text-center max-w-6xl mx-auto">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-20 w-20 mb-4 bg-primary/10 rounded-full">
-                  <Wallet className="h-10 w-10 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Pagamentos Digitais</h3>
-                <p className="text-muted-foreground">Aceite pagamentos via Pix ou saldo pré-pago da carteira digital. Seguro para os pais, prático para a cantina.</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-20 w-20 mb-4 bg-primary/10 rounded-full">
-                  <Utensils className="h-10 w-10 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Cardápio e Pedidos Online</h3>
-                <p className="text-muted-foreground">Alunos reservam o lanche com antecedência pelo app, otimizando o tempo e acabando com as filas no intervalo.</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-20 w-20 mb-4 bg-primary/10 rounded-full">
-                  <FileDigit className="h-10 w-10 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Controle e Relatórios</h3>
-                <p className="text-muted-foreground">Painel administrativo completo para escolas e cantinas acompanharem vendas, estoque e faturamento em tempo real.</p>
-              </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              <Card className="lg:col-span-2 hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-4">
+                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-lg">
+                      <Wallet className="h-6 w-6 text-primary" />
+                    </div>
+                    <span>Pagamentos Rápidos e Seguros</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Modernize as transações com a carteira digital pré-paga do CTNAPP ou pagamentos via Pix. Os pais carregam créditos de forma segura e os alunos compram sem precisar de dinheiro, agilizando o atendimento e aumentando a segurança.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow">
+                 <CardHeader>
+                  <CardTitle className="flex items-center gap-4">
+                     <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-lg">
+                        <UtensilsCrossed className="h-6 w-6 text-primary" />
+                     </div>
+                     <span>Cardápio Digital</span>
+                   </CardTitle>
+                </CardHeader>
+                <CardContent>
+                   <CardDescription>
+                    Alunos e pais podem consultar o cardápio, reservar lanches com antecedência pelo app e acabar com as filas. Menos tempo de espera, mais tempo para o intervalo.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-4">
+                     <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-lg">
+                      <FileDigit className="h-6 w-6 text-primary" />
+                     </div>
+                     <span>Controle e Relatórios</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                   <CardDescription>
+                    Painel administrativo completo para escolas e cantinas acompanharem vendas, estoque e faturamento em tempo real, gerando insights para decisões mais inteligentes.
+                  </CardDescription>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
-        <section id="how-it-works" className="py-20 md:py-32 bg-background">
+        <section id="how-it-works" className="py-20 md:py-32 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
@@ -140,7 +164,7 @@ export default function LandingPage() {
           </div>
         </section>
         
-        <section id="advantages" className="py-20 md:py-32 bg-secondary/50">
+        <section id="advantages" className="py-20 md:py-32 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Vantagens para Todos</h2>
@@ -195,7 +219,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="cta" className="py-20 md:py-24 bg-background">
+        <section id="cta" className="py-20 md:py-24 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-16 items-center">
               <div className="relative order-last md:order-first">
@@ -252,7 +276,7 @@ export default function LandingPage() {
           </div>
         </section>
         
-        <section id="faq" className="py-20 md:py-32 bg-secondary/50">
+        <section id="faq" className="py-20 md:py-32 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-12">
               <div className="flex flex-col gap-4">
@@ -311,5 +335,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
