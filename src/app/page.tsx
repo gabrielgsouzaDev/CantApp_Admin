@@ -10,11 +10,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, Users, User, Briefcase, GraduationCap, ClipboardList, Smartphone, ShoppingBag, CreditCard } from "lucide-react";
+import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, User, Briefcase, GraduationCap, ClipboardList, Smartphone, ShoppingBag, CreditCard, ShoppingCart } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -68,7 +76,7 @@ export default function LandingPage() {
                   <span>Aluno</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                   <Users className="mr-2 h-4 w-4" />
+                   <User className="mr-2 h-4 w-4" />
                   <span>Responsável</span>
                 </DropdownMenuItem>
                  <DropdownMenuItem>
@@ -168,100 +176,140 @@ export default function LandingPage() {
         </section>
 
         <section id="how-it-works" className="py-20 md:py-32 bg-secondary/50">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
-              <p className="text-muted-foreground text-lg mt-2 max-w-3xl mx-auto">Uma jornada simples e conectada, do cadastro à gestão diária.</p>
-            </div>
-            <div className="relative max-w-3xl mx-auto">
-              {/* Timeline Line */}
-              <div className="absolute left-1/2 -translate-x-1/2 h-full w-0.5 bg-border"></div>
+          <div className="container px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
+            <p className="text-muted-foreground text-lg mt-2 max-w-3xl mx-auto mb-8">
+              Uma jornada simples e conectada, do cadastro à gestão diária. Clique para ver o passo a passo.
+            </p>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="lg">Veja o Passo a Passo</Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-headline">A Jornada do Pedido no CTNAPP</DialogTitle>
+                </DialogHeader>
+                <ScrollArea className="h-[70vh] pr-6">
+                  <div className="relative py-8">
+                    {/* Timeline Line */}
+                    <div className="absolute left-6 md:left-1/2 -translate-x-1/2 h-full w-0.5 bg-border"></div>
 
-              {/* Timeline Items */}
-              <div className="space-y-16">
-                
-                {/* Step 1 */}
-                <div className="relative flex items-center justify-between">
-                  <div className="w-2/5">
-                    <div className="bg-card p-6 rounded-lg shadow-md border-l-4 border-primary">
-                      <h3 className="font-semibold text-lg mb-2">1. Cadastro e Configuração</h3>
-                      <p className="text-sm text-muted-foreground">A Escola e a Cantina se cadastram, configuram o perfil e montam o cardápio digital com controle de estoque.</p>
-                    </div>
-                  </div>
-                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
-                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
-                      <ClipboardList className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="w-2/5"></div>
-                </div>
+                    {/* Timeline Items */}
+                    <div className="space-y-12">
+                      
+                      {/* Step 1 */}
+                      <div className="relative flex items-center gap-6">
+                        <div className="absolute left-6 md:left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border z-10">
+                          <div className="flex items-center justify-center h-8 w-8 bg-primary/10 rounded-full text-primary">
+                            <ClipboardList className="h-5 w-5" />
+                          </div>
+                        </div>
+                        <div className="md:w-1/2 md:text-right">
+                          <div className="md:ml-auto md:w-4/5">
+                            <h3 className="font-semibold text-lg mb-1 text-left">1. Cadastro e Estoque</h3>
+                            <p className="text-sm text-muted-foreground text-left">
+                              A Escola e a Cantina se cadastram, montam o cardápio digital e adicionam a quantidade inicial de cada produto no estoque.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="hidden md:block w-1/2"></div>
+                      </div>
 
-                {/* Step 2 */}
-                <div className="relative flex items-center justify-between">
-                  <div className="w-2/5"></div>
-                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
-                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
-                      <CreditCard className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="w-2/5">
-                    <div className="bg-card p-6 rounded-lg shadow-md border-r-4 border-primary text-right md:text-left">
-                       <h3 className="font-semibold text-lg mb-2">2. Recarga e Acesso dos Pais</h3>
-                      <p className="text-sm text-muted-foreground">Os pais acessam a plataforma, associam seus filhos e adicionam créditos na carteira digital via Pix ou cartão.</p>
-                    </div>
-                  </div>
-                </div>
+                      {/* Step 2 */}
+                      <div className="relative flex items-center gap-6">
+                        <div className="hidden md:block w-1/2"></div>
+                        <div className="absolute left-6 md:left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border z-10">
+                          <div className="flex items-center justify-center h-8 w-8 bg-primary/10 rounded-full text-primary">
+                            <CreditCard className="h-5 w-5" />
+                          </div>
+                        </div>
+                        <div className="md:w-1/2 text-left">
+                          <div className="md:mr-auto md:w-4/5">
+                            <h3 className="font-semibold text-lg mb-1">2. Recarga dos Pais</h3>
+                            <p className="text-sm text-muted-foreground">
+                              Os pais acessam a plataforma, associam seus filhos e adicionam créditos na carteira digital via Pix ou cartão.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
 
-                {/* Step 3 */}
-                <div className="relative flex items-center justify-between">
-                  <div className="w-2/5">
-                    <div className="bg-card p-6 rounded-lg shadow-md border-l-4 border-primary">
-                      <h3 className="font-semibold text-lg mb-2">3. Pedido Antecipado</h3>
-                      <p className="text-sm text-muted-foreground">O aluno, pelo app, escolhe o lanche com antecedência, garantindo o produto e agilizando o intervalo.</p>
-                    </div>
-                  </div>
-                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
-                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
-                      <Smartphone className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="w-2/5"></div>
-                </div>
+                      {/* Step 3 */}
+                      <div className="relative flex items-center gap-6">
+                        <div className="absolute left-6 md:left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border z-10">
+                          <div className="flex items-center justify-center h-8 w-8 bg-primary/10 rounded-full text-primary">
+                            <Smartphone className="h-5 w-5" />
+                          </div>
+                        </div>
+                         <div className="md:w-1/2 md:text-right">
+                           <div className="md:ml-auto md:w-4/5">
+                            <h3 className="font-semibold text-lg mb-1 text-left">3. Pedido Antecipado</h3>
+                            <p className="text-sm text-muted-foreground text-left">
+                              O aluno, pelo app, escolhe o lanche com antecedência, garantindo o produto e agilizando o intervalo.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="hidden md:block w-1/2"></div>
+                      </div>
 
-                 {/* Step 4 */}
-                <div className="relative flex items-center justify-between">
-                  <div className="w-2/5"></div>
-                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
-                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
-                        <ShoppingBag className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="w-2/5">
-                    <div className="bg-card p-6 rounded-lg shadow-md border-r-4 border-primary text-right md:text-left">
-                       <h3 className="font-semibold text-lg mb-2">4. Retirada Rápida</h3>
-                      <p className="text-sm text-muted-foreground">No intervalo, o aluno apenas retira o pedido no balcão, sem filas e sem manusear dinheiro, usando um QR code.</p>
-                    </div>
-                  </div>
-                </div>
+                       {/* Step 4 */}
+                      <div className="relative flex items-center gap-6">
+                        <div className="hidden md:block w-1/2"></div>
+                        <div className="absolute left-6 md:left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border z-10">
+                            <div className="flex items-center justify-center h-8 w-8 bg-primary/10 rounded-full text-primary">
+                                <ShoppingCart className="h-5 w-5" />
+                            </div>
+                        </div>
+                        <div className="md:w-1/2 text-left">
+                           <div className="md:mr-auto md:w-4/5">
+                             <h3 className="font-semibold text-lg mb-1">4. Preparo e Baixa no Estoque</h3>
+                            <p className="text-sm text-muted-foreground">
+                              A cantina recebe o pedido, prepara o lanche e o sistema automaticamente dá baixa no item do estoque.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
 
-                {/* Step 5 */}
-                <div className="relative flex items-center justify-between">
-                  <div className="w-2/5">
-                     <div className="bg-card p-6 rounded-lg shadow-md border-l-4 border-primary">
-                       <h3 className="font-semibold text-lg mb-2">5. Gestão e Análise</h3>
-                      <p className="text-sm text-muted-foreground">A Escola e a Cantina acompanham vendas, estoque e faturamento em tempo real, com relatórios completos.</p>
-                    </div>
-                  </div>
-                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
-                     <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
-                        <BarChart className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="w-2/5"></div>
-                </div>
+                      {/* Step 5 */}
+                      <div className="relative flex items-center gap-6">
+                        <div className="absolute left-6 md:left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border z-10">
+                           <div className="flex items-center justify-center h-8 w-8 bg-primary/10 rounded-full text-primary">
+                              <ShoppingBag className="h-5 w-5" />
+                          </div>
+                        </div>
+                        <div className="md:w-1/2 md:text-right">
+                           <div className="md:ml-auto md:w-4/5">
+                             <h3 className="font-semibold text-lg mb-1 text-left">5. Retirada Rápida</h3>
+                            <p className="text-sm text-muted-foreground text-left">
+                              No intervalo, o aluno apenas retira o pedido no balcão, sem filas e sem manusear dinheiro, usando um QR code.
+                            </p>
+                          </div>
+                        </div>
+                         <div className="hidden md:block w-1/2"></div>
+                      </div>
+                      
+                      {/* Step 6 */}
+                      <div className="relative flex items-center gap-6">
+                        <div className="hidden md:block w-1/2"></div>
+                        <div className="absolute left-6 md:left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border z-10">
+                           <div className="flex items-center justify-center h-8 w-8 bg-primary/10 rounded-full text-primary">
+                              <BarChart className="h-5 w-5" />
+                          </div>
+                        </div>
+                        <div className="md:w-1/2 text-left">
+                          <div className="md:mr-auto md:w-4/5">
+                            <h3 className="font-semibold text-lg mb-1">6. Gestão e Análise</h3>
+                            <p className="text-sm text-muted-foreground">
+                              A Escola e a Cantina acompanham vendas, estoque e faturamento em tempo real, com relatórios completos para otimização.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
 
-              </div>
-            </div>
+                    </div>
+                  </div>
+                </ScrollArea>
+              </DialogContent>
+            </Dialog>
           </div>
         </section>
         
@@ -442,3 +490,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
