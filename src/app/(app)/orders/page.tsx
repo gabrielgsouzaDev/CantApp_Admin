@@ -3,9 +3,17 @@
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, User, Soup, Cookie } from "lucide-react";
+import { Clock, Cookie, Soup } from "lucide-react";
 import { useState, DragEvent } from "react";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 type OrderStatus = "A Fazer" | "Em Preparo" | "Pronto";
 
@@ -32,31 +40,59 @@ const mockOrders: Order[] = [
 
 const OrderCard = ({ order }: { order: Order }) => {
   return (
-    <Card 
-      draggable 
-      onDragStart={(e) => e.dataTransfer.setData("orderId", order.id)}
-      className="mb-4 cursor-grab active:cursor-grabbing bg-card"
-    >
-      <CardHeader className="p-4">
-        <CardTitle className="text-base flex justify-between items-center">
-          <span>{order.studentName}</span>
-           <span className="text-xs font-normal text-muted-foreground flex items-center gap-1">
-             <Clock className="h-3 w-3" />
-             {order.time}
-           </span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <div className="space-y-2">
-            {order.items.map((item, index) => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Card
+          draggable
+          onDragStart={(e) => e.dataTransfer.setData("orderId", order.id)}
+          className="mb-4 cursor-grab active:cursor-grabbing bg-card hover:bg-accent transition-colors"
+        >
+          <CardHeader className="p-4">
+            <CardTitle className="text-base flex justify-between items-center">
+              <span>{order.studentName}</span>
+              <span className="text-xs font-normal text-muted-foreground flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {order.time}
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="space-y-2">
+              {order.items.map((item, index) => (
                 <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.name}</span>
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.name}</span>
                 </div>
-            ))}
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Pedido de {order.studentName}</DialogTitle>
+          <DialogDescription>
+            Recebido às {order.time}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+            <div className="flex justify-between items-center">
+                <span className="text-muted-foreground">Status</span>
+                <Badge variant={order.status === 'Pronto' ? 'default' : 'secondary'}>
+                    {order.status === 'Pronto' ? 'Pronto para Retirada' : order.status}
+                </Badge>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold">Itens do Pedido</h4>
+                <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+                    {order.items.map((item, index) => (
+                        <li key={index}>{item.name}</li>
+                    ))}
+                </ul>
+            </div>
         </div>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -72,28 +108,30 @@ const KanbanColumn = ({
   title: string;
   status: OrderStatus;
   orders: Order[];
-  onDrop: (status: OrderStatus) => void;
+  onDrop: (e: DragEvent<HTMLDivElement>, status: OrderStatus) => void;
   isOver: boolean;
   onDragOver: (e: DragEvent<HTMLDivElement>) => void;
   onDragLeave: (e: DragEvent<HTMLDivElement>) => void;
 }) => {
   return (
-    <Card 
+    <Card
       className={cn(
         "flex-1 bg-muted/40 transition-colors",
         isOver && "bg-primary/10"
       )}
-      onDrop={() => onDrop(status)}
+      onDrop={(e) => onDrop(e, status)}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
     >
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-            {title}
-            <Badge variant="secondary" className="text-sm">{orders.length}</Badge>
+          {title}
+          <Badge variant="secondary" className="text-sm">
+            {orders.length}
+          </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className="h-full">
+      <CardContent className="h-full min-h-[200px]">
         {orders.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}
@@ -106,7 +144,9 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>(mockOrders);
   const [dragOverColumn, setDragOverColumn] = useState<OrderStatus | null>(null);
 
-  const handleDrop = (status: OrderStatus, orderId: string) => {
+  const handleDrop = (e: DragEvent<HTMLDivElement>, status: OrderStatus) => {
+    e.preventDefault();
+    const orderId = e.dataTransfer.getData("orderId");
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
         order.id === orderId ? { ...order, status } : order
@@ -115,24 +155,14 @@ export default function OrdersPage() {
     setDragOverColumn(null);
   };
 
-  const onDrop = (status: OrderStatus) => (e: DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: DragEvent<HTMLDivElement>, status: OrderStatus) => {
     e.preventDefault();
-    const orderId = e.dataTransfer.getData("orderId");
-    handleDrop(status, orderId);
+    setDragOverColumn(status);
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      const target = e.currentTarget as HTMLDivElement;
-      const status = target.dataset.status as OrderStatus;
-      if (status) {
-          setDragOverColumn(status);
-      }
-  }
-
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-      setDragOverColumn(null);
-  }
+  const handleDragLeave = () => {
+    setDragOverColumn(null);
+  };
 
   const columns: { title: string; status: OrderStatus }[] = [
     { title: "A Fazer", status: "A Fazer" },
@@ -142,29 +172,21 @@ export default function OrdersPage() {
 
   return (
     <>
-      <PageHeader title="Pedidos" description="Gerencie os pedidos em tempo real." />
-      <div className="flex flex-1 gap-4 overflow-x-auto h-[calc(100vh-150px)] p-1">
+      <PageHeader
+        title="Pedidos"
+        description="Gerencie os pedidos em tempo real."
+      />
+      <div className="flex flex-1 flex-col md:flex-row gap-4 overflow-x-auto h-[calc(100vh-150px)] p-1">
         {columns.map(({ title, status }) => (
           <KanbanColumn
             key={status}
             title={title}
             status={status}
             orders={orders.filter((o) => o.status === status)}
-            onDrop={(droppedStatus) => {
-                // This is a bit of a workaround to get the onDrop event from the card
-                // We need to access the dataTransfer object which is only available in the actual drop event
-                return (e: DragEvent<HTMLDivElement>) => {
-                     e.preventDefault();
-                    const orderId = e.dataTransfer.getData("orderId");
-                    handleDrop(droppedStatus, orderId);
-                }
-            }}
+            onDrop={handleDrop}
             isOver={dragOverColumn === status}
-            onDragOver={(e) => {
-                e.preventDefault();
-                setDragOverColumn(status);
-            }}
-            onDragLeave={() => setDragOverColumn(null)}
+            onDragOver={(e) => handleDragOver(e, status)}
+            onDragLeave={handleDragLeave}
           />
         ))}
       </div>
