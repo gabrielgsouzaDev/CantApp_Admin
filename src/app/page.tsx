@@ -28,18 +28,6 @@ export default function LandingPage() {
   const adminDashboardImage = PlaceHolderImages.find(img => img.id === 'admin-dashboard');
   const parentAppImage = PlaceHolderImages.find(img => img.id === 'parent-app');
 
-  const googlePlayIcon = (
-    <svg role="img" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6">
-      <path d="M325.3,234.3L104.6,13l-9.4,41.2l132.3,132.3l-132.3,134.4l9.4,41.2L325.3,234.3z M401.2,160.7l-48.4-48.4L208.8,234.3l144.2,122.2l48.2-48.2L401.2,160.7z M171.3,465.1l9.4,41.2l144.2-122.2l-48.2-48.2L171.3,465.1z M465.1,234.3c0,2.2-0.4,4.5-0.9,6.5l-48.4,48.4L294.6,160.7l48.2-48.2c2.2-2.2,4.5-4.5,6.5-6.5C465.1,133.5,465.1,234.3,465.1,234.3z" />
-    </svg>
-  );
-
-  const appleIcon = (
-    <svg role="img" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6">
-      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C39.2 141.1 0 183.2 0 241.2c0 61.6 31.5 116.8 81.2 153.2 24.6 17.9 50.4 22.9 75.8 22.9 33.1 0 61.6-19.4 88.5-19.4 26.9 0 56.5 19.4 84.1 19.4 26.9 0 52.2-12.8 72.3-34.9-25.4-15.6-44.5-42.3-44.6-76.5zM228.8 90.3c15.6-19.4 34.9-31.5 53.1-31.5 1.2 0 2.4 0 3.6 0-17.3 12.8-34.3 31.5-47.5 51.6-13.4 21.3-24 41.1-24 62.2 0 1.2 0 2.2 0 3.4 15.6-1.5 35.5-12.8 49.3-26.9-1.2-1.2-2.6-2.4-4-3.6-14.3-12.8-29.4-25.4-30.5-45.2z" />
-    </svg>
-  );
-
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
@@ -299,7 +287,6 @@ export default function LandingPage() {
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
                    <Button variant="outline" className="h-auto justify-center text-left p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
                     <div className="flex items-center gap-3 px-4 py-2">
-                      {googlePlayIcon}
                       <div className="flex flex-col">
                          <span className="text-xs">Disponível no</span>
                          <span className="font-bold text-base -mt-1">Google Play</span>
@@ -308,7 +295,6 @@ export default function LandingPage() {
                   </Button>
                   <Button variant="outline" className="h-auto justify-center text-left p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
                      <div className="flex items-center gap-3 px-4 py-2">
-                       {appleIcon}
                        <div className="flex flex-col">
                          <span className="text-xs">Baixar na</span>
                          <span className="font-bold text-base -mt-1">App Store</span>
