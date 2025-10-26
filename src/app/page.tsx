@@ -309,8 +309,8 @@ export default function LandingPage() {
                   <SelectValue placeholder="Selecione um perfil" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="admin">Para Escolas e Cantinas</SelectItem>
-                  <SelectItem value="user">Para Pais e Alunos</SelectItem>
+                  <SelectItem value="admin">Para a Área Administrativa</SelectItem>
+                  <SelectItem value="user">Para o Portal do Usuário</SelectItem>
                 </SelectContent>
               </Select>
             </div>
