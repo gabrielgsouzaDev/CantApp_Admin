@@ -4,6 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
@@ -44,8 +50,33 @@ export default function LandingPage() {
             <Logo />
           </Link>
           <div className="flex flex-1 items-center justify-end space-x-2">
-            <Button variant="ghost" onClick={() => router.push('/login')}>Entrar</Button>
-            <Button onClick={() => router.push('/login')}>Começar Agora</Button>
+             <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button>Começar Agora</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleLoginAs("Escola")}>
+                  <School className="mr-2 h-4 w-4" />
+                  <span>Escola</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleLoginAs("Cantineiro")}>
+                   <Store className="mr-2 h-4 w-4" />
+                  <span>Cantina</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                   <GraduationCap className="mr-2 h-4 w-4" />
+                  <span>Aluno</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                   <Users className="mr-2 h-4 w-4" />
+                  <span>Responsável</span>
+                </DropdownMenuItem>
+                 <DropdownMenuItem>
+                   <Briefcase className="mr-2 h-4 w-4" />
+                   <span>Funcionário</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
@@ -67,10 +98,10 @@ export default function LandingPage() {
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <Button className="w-full" onClick={() => handleLoginAs("Escola")}>
-                            Acessar como Escola
+                            <School className="h-4 w-4" /> Acessar como Escola
                         </Button>
                         <Button className="w-full" onClick={() => handleLoginAs("Cantineiro")}>
-                            Acessar como Cantina
+                            <Store className="h-4 w-4" /> Acessar como Cantina
                         </Button>
                     </CardContent>
                 </Card>
