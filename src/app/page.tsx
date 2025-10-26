@@ -241,7 +241,7 @@ export default function LandingPage() {
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
-                   <Button asChild variant="outline" className="h-auto justify-center p-0">
+                   <Button asChild variant="outline" className="h-auto justify-center p-0 border-primary text-primary hover:bg-primary/10 hover:text-primary">
                     <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
                        <div className="flex flex-col text-left">
                          <span className="text-xs">Disponível no</span>
@@ -249,7 +249,7 @@ export default function LandingPage() {
                       </div>
                     </a>
                   </Button>
-                  <Button asChild variant="outline" className="h-auto justify-center p-0">
+                  <Button asChild variant="outline" className="h-auto justify-center p-0 border-primary text-primary hover:bg-primary/10 hover:text-primary">
                     <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
                        <div className="flex flex-col text-left">
                          <span className="text-xs">Baixar na</span>
