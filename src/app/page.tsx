@@ -14,7 +14,7 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, Users, User, Briefcase, GraduationCap } from "lucide-react";
+import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, Users, User, Briefcase, GraduationCap, ClipboardList, Smartphone, ShoppingBag, CreditCard } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -97,7 +97,7 @@ export default function LandingPage() {
                         <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Button className="justify-center" onClick={() => handleLoginAs("Escola")}>
+                       <Button className="justify-center" onClick={() => handleLoginAs("Escola")}>
                             <School /> Acessar como Escola
                         </Button>
                         <Button className="justify-center" onClick={() => handleLoginAs("Cantineiro")}>
@@ -111,7 +111,7 @@ export default function LandingPage() {
                         <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button variant="outline" className="w-full justify-center">
+                       <Button variant="outline" className="w-full justify-center">
                             Acessar como Aluno, Responsável ou Funcionário
                         </Button>
                     </CardContent>
@@ -169,31 +169,97 @@ export default function LandingPage() {
 
         <section id="how-it-works" className="py-20 md:py-32 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
+            <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
-              <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">Simples para todos os envolvidos, da matrícula ao lanche.</p>
+              <p className="text-muted-foreground text-lg mt-2 max-w-3xl mx-auto">Uma jornada simples e conectada, do cadastro à gestão diária.</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-24 w-24 mb-4 bg-primary/10 rounded-full">
-                  <Users className="h-12 w-12 text-primary" />
+            <div className="relative max-w-3xl mx-auto">
+              {/* Timeline Line */}
+              <div className="absolute left-1/2 -translate-x-1/2 h-full w-0.5 bg-border"></div>
+
+              {/* Timeline Items */}
+              <div className="space-y-16">
+                
+                {/* Step 1 */}
+                <div className="relative flex items-center justify-between">
+                  <div className="w-2/5">
+                    <div className="bg-card p-6 rounded-lg shadow-md border-l-4 border-primary">
+                      <h3 className="font-semibold text-lg mb-2">1. Cadastro e Configuração</h3>
+                      <p className="text-sm text-muted-foreground">A Escola e a Cantina se cadastram, configuram o perfil e montam o cardápio digital com controle de estoque.</p>
+                    </div>
+                  </div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
+                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
+                      <ClipboardList className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="w-2/5"></div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Pais e Alunos</h3>
-                <p className="text-muted-foreground">Consultam o cardápio, fazem pedidos e pagam online, com total segurança e comodidade.</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-primary/10 rounded-full">
-                  <Store className="h-12 w-12 text-primary" />
+
+                {/* Step 2 */}
+                <div className="relative flex items-center justify-between">
+                  <div className="w-2/5"></div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
+                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
+                      <CreditCard className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="w-2/5">
+                    <div className="bg-card p-6 rounded-lg shadow-md border-r-4 border-primary text-right md:text-left">
+                       <h3 className="font-semibold text-lg mb-2">2. Recarga e Acesso dos Pais</h3>
+                      <p className="text-sm text-muted-foreground">Os pais acessam a plataforma, associam seus filhos e adicionam créditos na carteira digital via Pix ou cartão.</p>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Cantinas</h3>
-                <p className="text-muted-foreground">Recebem os pedidos no sistema, preparam com antecedência e otimizam a operação, sem filas e com mais vendas.</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center justify-center h-24 w-24 mb-4 bg-primary/10 rounded-full">
-                  <School className="h-12 w-12 text-primary" />
+
+                {/* Step 3 */}
+                <div className="relative flex items-center justify-between">
+                  <div className="w-2/5">
+                    <div className="bg-card p-6 rounded-lg shadow-md border-l-4 border-primary">
+                      <h3 className="font-semibold text-lg mb-2">3. Pedido Antecipado</h3>
+                      <p className="text-sm text-muted-foreground">O aluno, pelo app, escolhe o lanche com antecedência, garantindo o produto e agilizando o intervalo.</p>
+                    </div>
+                  </div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
+                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
+                      <Smartphone className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="w-2/5"></div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Escolas</h3>
-                <p className="text-muted-foreground">Acompanham tudo através de um painel centralizado, com relatórios financeiros e de desempenho.</p>
+
+                 {/* Step 4 */}
+                <div className="relative flex items-center justify-between">
+                  <div className="w-2/5"></div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
+                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
+                        <ShoppingBag className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="w-2/5">
+                    <div className="bg-card p-6 rounded-lg shadow-md border-r-4 border-primary text-right md:text-left">
+                       <h3 className="font-semibold text-lg mb-2">4. Retirada Rápida</h3>
+                      <p className="text-sm text-muted-foreground">No intervalo, o aluno apenas retira o pedido no balcão, sem filas e sem manusear dinheiro, usando um QR code.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 5 */}
+                <div className="relative flex items-center justify-between">
+                  <div className="w-2/5">
+                     <div className="bg-card p-6 rounded-lg shadow-md border-l-4 border-primary">
+                       <h3 className="font-semibold text-lg mb-2">5. Gestão e Análise</h3>
+                      <p className="text-sm text-muted-foreground">A Escola e a Cantina acompanham vendas, estoque e faturamento em tempo real, com relatórios completos.</p>
+                    </div>
+                  </div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bg-background p-2 rounded-full border-2 border-border">
+                     <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-full text-primary">
+                        <BarChart className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="w-2/5"></div>
+                </div>
+
               </div>
             </div>
           </div>
