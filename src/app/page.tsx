@@ -7,7 +7,7 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple } from "lucide-react";
+import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple, FileDigit } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -72,6 +72,38 @@ export default function LandingPage() {
                   </Button>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" className="py-20 md:py-32 bg-secondary/50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Recursos Principais</h2>
+                <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">Tudo que você precisa para uma gestão moderna e eficiente.</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8 text-center max-w-6xl mx-auto">
+              <div className="flex flex-col items-center">
+                <div className="flex items-center justify-center h-20 w-20 mb-4 bg-primary/10 rounded-full">
+                  <Wallet className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Pagamentos Digitais</h3>
+                <p className="text-muted-foreground">Aceite pagamentos via Pix ou saldo pré-pago da carteira digital. Seguro para os pais, prático para a cantina.</p>
+              </div>
+              <div className="flex flex-col items-center">
+                 <div className="flex items-center justify-center h-20 w-20 mb-4 bg-primary/10 rounded-full">
+                  <Utensils className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Cardápio e Pedidos Online</h3>
+                <p className="text-muted-foreground">Alunos reservam o lanche com antecedência pelo app, otimizando o tempo e acabando com as filas no intervalo.</p>
+              </div>
+              <div className="flex flex-col items-center">
+                 <div className="flex items-center justify-center h-20 w-20 mb-4 bg-primary/10 rounded-full">
+                  <FileDigit className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Controle e Relatórios</h3>
+                <p className="text-muted-foreground">Painel administrativo completo para escolas e cantinas acompanharem vendas, estoque e faturamento em tempo real.</p>
+              </div>
             </div>
           </div>
         </section>
@@ -279,3 +311,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
