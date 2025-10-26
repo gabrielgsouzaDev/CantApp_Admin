@@ -29,14 +29,14 @@ export default function LandingPage() {
   const parentAppImage = PlaceHolderImages.find(img => img.id === 'parent-app');
 
   const googlePlayIcon = (
-    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-5 h-5">
-      <path d="M21.5,12.2L6.3,2.9C5.9,2.7,5.5,2.8,5.3,3.2l5.1,5.1L12,10l-1.3,4.8l-5-5.1C5.3,9.2,5.9,9.3,6.3,9.1l15.2-9.3 C21.9,11.9,21.9,12.1,21.5,12.2z M5.3,20.8c-0.3-0.4-0.1-0.9,0.3-1.1l5-5.1L12,14l-1.6-1.9l-5.1,5.1C5.5,21.2,5.1,21.3,5.3,20.8z M2.5,12.5L2.5,12.5C2.1,12.4,1.9,12,1.9,11.6l0-0.1c0.1-0.4,0.4-0.6,0.8-0.6l0,0l3,1.8L2.5,12.5z M21.5,12.2l-3.2,2l-3.4-3.5 l3.4-3.5l3.2,2C21.9,9.5,22.1,10,21.9,10.4v3.2C22.1,14,21.9,14.5,21.5,14.2L21.5,12.2z"/>
+    <svg role="img" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6">
+      <path d="M325.3,234.3L104.6,13l-9.4,41.2l132.3,132.3l-132.3,134.4l9.4,41.2L325.3,234.3z M401.2,160.7l-48.4-48.4L208.8,234.3l144.2,122.2l48.2-48.2L401.2,160.7z M171.3,465.1l9.4,41.2l144.2-122.2l-48.2-48.2L171.3,465.1z M465.1,234.3c0,2.2-0.4,4.5-0.9,6.5l-48.4,48.4L294.6,160.7l48.2-48.2c2.2-2.2,4.5-4.5,6.5-6.5C465.1,133.5,465.1,234.3,465.1,234.3z" />
     </svg>
   );
 
   const appleIcon = (
-    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-5 h-5">
-      <path d="M19.05,15.65c0,0.13-0.06,0.26-0.19,0.32c-0.13,0.06-0.26,0.06-0.38,0c-0.88-0.5-1.76-0.75-2.64-0.75 c-0.88,0-1.63,0.25-2.25,0.75c-0.13,0.06-0.25,0.06-0.38,0c-1-0.5-1.94-1.19-2.75-2.06c-1.13-1.13-1.81-2.56-1.94-4.25 c0-0.13,0.06-0.25,0.19-0.31c0.12-0.06,0.25-0.06,0.38,0c0.88,0.5,1.75,0.75,2.63,0.75c0.87,0,1.62-0.25,2.25-0.75 c0.12-0.06,0.25-0.06,0.38,0c0.12,0.06,0.19,0.19,0.19,0.31C14.8,11,14.74,12.25,14.24,13.44c0.56,0.56,1.19,1,1.88,1.31 C16.5,15,16.86,15.19,17.24,15.44C17.62,15.69,18.24,15.88,19.05,15.65z M13.3,4.75c0.69-0.88,1.13-2,1.25-3.19 c0-0.19-0.12-0.31-0.31-0.31c-0.06,0-0.13,0-0.19,0c-1.31,0.06-2.69,0.69-3.63,1.81c-0.81,1-1.31,2.31-1.25,3.69 c0,0.13,0.06,0.25,0.19,0.31c0.06,0,0.13,0,0.19,0C11.19,7.06,12.44,6.25,13.3,4.75z"/>
+    <svg role="img" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6">
+      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C39.2 141.1 0 183.2 0 241.2c0 61.6 31.5 116.8 81.2 153.2 24.6 17.9 50.4 22.9 75.8 22.9 33.1 0 61.6-19.4 88.5-19.4 26.9 0 56.5 19.4 84.1 19.4 26.9 0 52.2-12.8 72.3-34.9-25.4-15.6-44.5-42.3-44.6-76.5zM228.8 90.3c15.6-19.4 34.9-31.5 53.1-31.5 1.2 0 2.4 0 3.6 0-17.3 12.8-34.3 31.5-47.5 51.6-13.4 21.3-24 41.1-24 62.2 0 1.2 0 2.2 0 3.4 15.6-1.5 35.5-12.8 49.3-26.9-1.2-1.2-2.6-2.4-4-3.6-14.3-12.8-29.4-25.4-30.5-45.2z" />
     </svg>
   );
 
@@ -210,7 +210,7 @@ export default function LandingPage() {
                                 alt={adminDashboardImage.description}
                                 width={500}
                                 height={400}
-                                className="rounded-lg shadow-lg"
+                                className="rounded-lg shadow-lg object-cover"
                                 data-ai-hint={adminDashboardImage.imageHint}
                             />
                          )}
@@ -253,7 +253,7 @@ export default function LandingPage() {
                                 alt={parentAppImage.description}
                                 width={500}
                                 height={400}
-                                className="rounded-lg shadow-lg"
+                                className="rounded-lg shadow-lg object-cover"
                                 data-ai-hint={parentAppImage.imageHint}
                             />
                          )}
@@ -293,18 +293,26 @@ export default function LandingPage() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col items-center md:items-start text-center md:text-left gap-6">
+              <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
-                   <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                    <div className="flex items-center justify-center gap-3 px-3 py-2">
-                       <p className="font-bold text-base -mt-1">Disponível no Google Play</p>
+                   <Button variant="outline" className="h-auto justify-center text-left p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
+                    <div className="flex items-center gap-3 px-4 py-2">
+                      {googlePlayIcon}
+                      <div className="flex flex-col">
+                         <span className="text-xs">Disponível no</span>
+                         <span className="font-bold text-base -mt-1">Google Play</span>
+                      </div>
                     </div>
                   </Button>
-                  <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                    <div className="flex items-center justify-center gap-3 px-3 py-2">
-                       <p className="font-bold text-base -mt-1">Baixar na App Store</p>
+                  <Button variant="outline" className="h-auto justify-center text-left p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
+                     <div className="flex items-center gap-3 px-4 py-2">
+                       {appleIcon}
+                       <div className="flex flex-col">
+                         <span className="text-xs">Baixar na</span>
+                         <span className="font-bold text-base -mt-1">App Store</span>
+                      </div>
                     </div>
                   </Button>
                 </div>
@@ -376,5 +384,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
