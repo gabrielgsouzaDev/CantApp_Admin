@@ -25,8 +25,6 @@ export default function LandingPage() {
 
   const appLaptopImage = PlaceHolderImages.find(img => img.id === 'app-laptop');
   const appMobileImage = PlaceHolderImages.find(img => img.id === 'app-mobile');
-  const adminDashboardImage = PlaceHolderImages.find(img => img.id === 'admin-dashboard');
-  const parentAppImage = PlaceHolderImages.find(img => img.id === 'parent-app');
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -150,7 +148,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
+        
         <section id="advantages" className="py-20 md:py-32 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -159,96 +157,48 @@ export default function LandingPage() {
                 Descubra como o CTNAPP transforma a gestão para cada perfil.
               </p>
             </div>
-            <Tabs defaultValue="admin" className="w-full max-w-4xl mx-auto">
+            <Tabs defaultValue="admin" className="w-full max-w-5xl mx-auto">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="admin">Para Escolas e Cantinas</TabsTrigger>
                 <TabsTrigger value="user">Para Pais e Alunos</TabsTrigger>
               </TabsList>
               <TabsContent value="admin">
-                <Card className="border-0 shadow-none bg-transparent">
-                  <CardContent className="p-6 md:p-10">
-                    <div className="grid md:grid-cols-2 gap-8 items-center">
-                      <div className="space-y-6">
-                        <div className="flex items-start gap-4">
-                          <BarChart className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h3 className="font-semibold text-lg">Controle e Visão Estratégica</h3>
-                            <p className="text-muted-foreground">Acesse dashboards com dados de vendas, faturamento e desempenho em tempo real para tomar as melhores decisões.</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-4">
-                          <Package className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h3 className="font-semibold text-lg">Gestão de Produtos</h3>
-                            <p className="text-muted-foreground">Crie e gerencie cardápios digitais, controle o estoque de forma inteligente e evite desperdícios.</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-4">
-                          <Wallet className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h3 className="font-semibold text-lg">Centralização Financeira</h3>
-                            <p className="text-muted-foreground">Monitore todas as transações, automatize relatórios e simplifique a conciliação financeira.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center">
-                         {adminDashboardImage && (
-                            <Image
-                                src={adminDashboardImage.imageUrl}
-                                alt={adminDashboardImage.description}
-                                width={500}
-                                height={400}
-                                className="rounded-lg shadow-lg object-cover"
-                                data-ai-hint={adminDashboardImage.imageHint}
-                            />
-                         )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <BarChart className="h-10 w-10 text-primary" />
+                    <h3 className="font-semibold text-lg mt-2">Controle e Visão Estratégica</h3>
+                    <p className="text-muted-foreground text-sm">Acesse dashboards com dados de vendas, faturamento e desempenho em tempo real para tomar as melhores decisões.</p>
+                  </div>
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <Package className="h-10 w-10 text-primary" />
+                    <h3 className="font-semibold text-lg mt-2">Gestão de Produtos</h3>
+                    <p className="text-muted-foreground text-sm">Crie e gerencie cardápios digitais, controle o estoque de forma inteligente e evite desperdícios.</p>
+                  </div>
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <Wallet className="h-10 w-10 text-primary" />
+                    <h3 className="font-semibold text-lg mt-2">Centralização Financeira</h3>
+                    <p className="text-muted-foreground text-sm">Monitore todas as transações, automatize relatórios e simplifique a conciliação financeira.</p>
+                  </div>
+                </div>
               </TabsContent>
               <TabsContent value="user">
-                <Card className="border-0 shadow-none bg-transparent">
-                  <CardContent className="p-6 md:p-10">
-                     <div className="grid md:grid-cols-2 gap-8 items-center">
-                       <div className="space-y-6">
-                        <div className="flex items-start gap-4">
-                          <Zap className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h3 className="font-semibold text-lg">Adeus às Filas</h3>
-                            <p className="text-muted-foreground">Compre antecipadamente pelo app e apenas retire o lanche no intervalo. Mais tempo livre para o que importa.</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-4">
-                          <Shield className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h3 className="font-semibold text-lg">Pagamento Fácil e Seguro</h3>
-                            <p className="text-muted-foreground">Utilize saldo pré-pago ou Pix para fazer compras de forma rápida e segura, sem precisar de dinheiro em espécie.</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-4">
-                          <Apple className="h-8 w-8 text-primary mt-1 flex-shrink-0" />
-                          <div>
-                            <h3 className="font-semibold text-lg">Controle Alimentar na Mão</h3>
-                            <p className="text-muted-foreground">Pais podem definir limites de gastos diários e restringir produtos, garantindo uma alimentação mais saudável.</p>
-                          </div>
-                        </div>
-                      </div>
-                       <div className="flex items-center justify-center order-first md:order-last">
-                         {parentAppImage && (
-                            <Image
-                                src={parentAppImage.imageUrl}
-                                alt={parentAppImage.description}
-                                width={500}
-                                height={400}
-                                className="rounded-lg shadow-lg object-cover"
-                                data-ai-hint={parentAppImage.imageHint}
-                            />
-                         )}
-                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <Zap className="h-10 w-10 text-primary" />
+                    <h3 className="font-semibold text-lg mt-2">Adeus às Filas</h3>
+                    <p className="text-muted-foreground text-sm">Compre antecipadamente pelo app e apenas retire o lanche no intervalo. Mais tempo livre para o que importa.</p>
+                  </div>
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <Shield className="h-10 w-10 text-primary" />
+                    <h3 className="font-semibold text-lg mt-2">Pagamento Fácil e Seguro</h3>
+                    <p className="text-muted-foreground text-sm">Utilize saldo pré-pago ou Pix para fazer compras de forma rápida e segura, sem precisar de dinheiro em espécie.</p>
+                  </div>
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <Apple className="h-10 w-10 text-primary" />
+                    <h3 className="font-semibold text-lg mt-2">Controle Alimentar na Mão</h3>
+                    <p className="text-muted-foreground text-sm">Pais podem definir limites de gastos diários e restringir produtos, garantindo uma alimentação mais saudável.</p>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
@@ -285,21 +235,21 @@ export default function LandingPage() {
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
-                   <Button variant="outline" className="h-auto justify-center text-left p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
-                    <div className="flex items-center gap-3 px-4 py-2">
-                      <div className="flex flex-col">
+                  <Button asChild variant="outline" className="h-auto justify-center p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
+                    <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
+                       <div className="flex flex-col text-left">
                          <span className="text-xs">Disponível no</span>
                          <span className="font-bold text-base -mt-1">Google Play</span>
                       </div>
-                    </div>
+                    </a>
                   </Button>
-                  <Button variant="outline" className="h-auto justify-center text-left p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
-                     <div className="flex items-center gap-3 px-4 py-2">
-                       <div className="flex flex-col">
+                  <Button asChild variant="outline" className="h-auto justify-center p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
+                    <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
+                       <div className="flex flex-col text-left">
                          <span className="text-xs">Baixar na</span>
                          <span className="font-bold text-base -mt-1">App Store</span>
                       </div>
-                    </div>
+                    </a>
                   </Button>
                 </div>
                  <Button size="lg" className="w-full sm:w-auto mt-2" onClick={() => router.push('/login')}>
@@ -340,7 +290,7 @@ export default function LandingPage() {
                     <AccordionTrigger>Como posso gerenciar a alimentação do meu filho?</AccordionTrigger>
                     <AccordionContent>
                       <div className="prose prose-sm text-muted-foreground max-w-none">
-                        O CTNAPP oferece ferramentas para que você gerencie os hábitos alimentares do seu filho de forma personalizada:
+                       O CTNAPP oferece ferramentas para que você gerencie os hábitos alimentares do seu filho de forma personalizada:
                         <ul className="mt-2 list-disc pl-5 space-y-1">
                           <li><strong>Controle de Produtos:</strong> Defina quais itens do cardápio seu filho pode ou não pode consumir. Essa restrição pode ser configurada para dias específicos da semana.</li>
                           <li><strong>Limite de Gastos Diário:</strong> Estabeleça um valor máximo para as compras diárias. Se o limite for atingido, o sistema impede novas compras, ajudando no controle do orçamento.</li>
