@@ -29,14 +29,14 @@ export default function LandingPage() {
   const parentAppImage = PlaceHolderImages.find(img => img.id === 'parent-app');
 
   const googlePlayIcon = (
-    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 mr-2">
-      <path d="M22.715 11.391c-.13-.23-.39-.39-.65-.39h-1.95V7.4C20.115 4.42 17.695 2 14.715 2H9.315c-2.98 0-5.4 2.42-5.4 5.4v3.6h-1.9c-.26 0-.52.16-.65.39-.13.23-.13.51 0 .74l5.35 9.25c.13.23.39.39.65.39h5.4c.26 0 .52-.16.65-.39l5.35-9.25c.13-.23.13-.51-.05-.74zM10.715 4.3c.33-.29.83-.17 1.01.29l2.53 6.41h-6.73l3.19-6.7zm-2.8 8.1h6.2l-3.1 5.37-3.1-5.37z" />
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-5 h-5">
+      <path d="M21.5,12.2L6.3,2.9C5.9,2.7,5.5,2.8,5.3,3.2l5.1,5.1L12,10l-1.3,4.8l-5-5.1C5.3,9.2,5.9,9.3,6.3,9.1l15.2-9.3 C21.9,11.9,21.9,12.1,21.5,12.2z M5.3,20.8c-0.3-0.4-0.1-0.9,0.3-1.1l5-5.1L12,14l-1.6-1.9l-5.1,5.1C5.5,21.2,5.1,21.3,5.3,20.8z M2.5,12.5L2.5,12.5C2.1,12.4,1.9,12,1.9,11.6l0-0.1c0.1-0.4,0.4-0.6,0.8-0.6l0,0l3,1.8L2.5,12.5z M21.5,12.2l-3.2,2l-3.4-3.5 l3.4-3.5l3.2,2C21.9,9.5,22.1,10,21.9,10.4v3.2C22.1,14,21.9,14.5,21.5,14.2L21.5,12.2z"/>
     </svg>
   );
 
   const appleIcon = (
-    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 mr-2">
-      <path d="M19.25 15.65c-.25.13-.5.25-.75.38-.5.25-1.01.37-1.5.37-.5 0-1.01-.12-1.5-.37s-.88-.5-1.26-.75c-.37-.25-.75-.5-1.12-.75s-.75-.5-1.13-.75c-1.12-.75-2.5-1.12-4-1.12-1.25 0-2.5.63-3.75 1.88-1.5 1.5-2.25 3.37-2.25 5.62 0 1.5.38 2.88 1.13 4.13.75 1.25 1.75 2.25 3 3 .75.5 1.5.75 2.25.75.75 0 1.38-.25 2-.75s1.25-1.12 1.87-1.87c.63-.75 1-1.5 1.13-2.25h-4.62c-.5 0-.88-.13-1.12-.37-.25-.25-.38-.63-.38-1.13s.13-.88.38-1.12c.25-.25.63-.38 1.12-.38h6.25c.25 0 .5.13.75.38.25.25.37.5.37.75 0 .75-.25 1.5-.75 2.25-.5.75-1.12 1.38-1.87 1.87-.75.5-1.63.75-2.63.75-1 0-1.87-.25-2.62-.75s-1.38-1.12-1.88-1.87c-.5-.75-.75-1.63-.75-2.63 0-1.25.37-2.37 1.12-3.37s1.62-1.5 2.62-1.5c.25 0 .5.13.75.38s.5.5.75.75c.25.25.63.5 1.13.75s1.12.5 1.87.75c.75.25 1.38.38 1.88.38.75 0 1.37-.25 1.87-.75.5-.5.75-1.13.75-1.88 0-.87-.37-1.75-1.12-2.62-.75-.88-1.75-1.37-3-1.5-1.25-.12-2.5.25-3.75 1.12-.25.13-.5.25-.75.38-.25.12-.38.12-.5 0-.13 0-.25-.13-.37-.38s0-.5.13-.75c.12-.25.37-.5.75-.75s.75-.5 1.12-.75c1.13-.75 2.5-1.12 4-1.12 1.25 0 2.5.63 3.75 1.88 1.5 1.5 2.25 3.37 2.25 5.62 0 .5-.12 1-.37 1.37z" />
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-5 h-5">
+      <path d="M19.05,15.65c0,0.13-0.06,0.26-0.19,0.32c-0.13,0.06-0.26,0.06-0.38,0c-0.88-0.5-1.76-0.75-2.64-0.75 c-0.88,0-1.63,0.25-2.25,0.75c-0.13,0.06-0.25,0.06-0.38,0c-1-0.5-1.94-1.19-2.75-2.06c-1.13-1.13-1.81-2.56-1.94-4.25 c0-0.13,0.06-0.25,0.19-0.31c0.12-0.06,0.25-0.06,0.38,0c0.88,0.5,1.75,0.75,2.63,0.75c0.87,0,1.62-0.25,2.25-0.75 c0.12-0.06,0.25-0.06,0.38,0c0.12,0.06,0.19,0.19,0.19,0.31C14.8,11,14.74,12.25,14.24,13.44c0.56,0.56,1.19,1,1.88,1.31 C16.5,15,16.86,15.19,17.24,15.44C17.62,15.69,18.24,15.88,19.05,15.65z M13.3,4.75c0.69-0.88,1.13-2,1.25-3.19 c0-0.19-0.12-0.31-0.31-0.31c-0.06,0-0.13,0-0.19,0c-1.31,0.06-2.69,0.69-3.63,1.81c-0.81,1-1.31,2.31-1.25,3.69 c0,0.13,0.06,0.25,0.19,0.31c0.06,0,0.13,0,0.19,0C11.19,7.06,12.44,6.25,13.3,4.75z"/>
     </svg>
   );
 
@@ -130,65 +130,8 @@ export default function LandingPage() {
                 </div>
             </div>
         </section>
-        
-        <section id="cta" className="py-20 md:py-24 bg-background">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-              <div className="relative order-last md:order-first">
-                {appLaptopImage && (
-                  <Image
-                    src={appLaptopImage.imageUrl}
-                    alt={appLaptopImage.description}
-                    width={1024}
-                    height={768}
-                    className="rounded-lg shadow-2xl"
-                    data-ai-hint={appLaptopImage.imageHint}
-                  />
-                )}
-                {appMobileImage && (
-                  <div className="absolute -bottom-12 -right-12 w-48 md:w-56">
-                    <Image
-                      src={appMobileImage.imageUrl}
-                      alt={appMobileImage.description}
-                      width={300}
-                      height={600}
-                      className="rounded-lg shadow-2xl border-4 border-background"
-                      data-ai-hint={appMobileImage.imageHint}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col items-center md:items-start text-center md:text-left gap-6">
-                <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
-                <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
-                <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
-                   <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                    <div className="flex items-center justify-center gap-3 px-2 py-1">
-                      <div className="text-left">
-                        <p className="text-xs">Disponível no</p>
-                        <p className="font-bold text-base -mt-1">Google Play</p>
-                      </div>
-                    </div>
-                  </Button>
-                  <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
-                    <div className="flex items-center justify-center gap-3 px-2 py-1">
-                      <div className="text-left">
-                        <p className="text-xs">Baixar na</p>
-                        <p className="font-bold text-base -mt-1">App Store</p>
-                      </div>
-                    </div>
-                  </Button>
-                </div>
-                 <Button size="lg" className="w-full sm:w-auto mt-2" onClick={() => router.push('/login')}>
-                  Acessar via Web
-                  <ArrowRight className="ml-2" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <section id="how-it-works" className="py-20 md:py-32 bg-secondary/50">
+        <section id="how-it-works" className="py-20 md:py-32 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Como Funciona?</h2>
@@ -220,7 +163,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="advantages" className="py-20 md:py-32 bg-background">
+        <section id="advantages" className="py-20 md:py-32 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Vantagens para Todos</h2>
@@ -234,8 +177,8 @@ export default function LandingPage() {
                 <TabsTrigger value="user">Para Pais e Alunos</TabsTrigger>
               </TabsList>
               <TabsContent value="admin">
-                <Card className="border-0 shadow-none">
-                  <CardContent className="p-6">
+                <Card className="border-0 shadow-none bg-transparent">
+                  <CardContent className="p-6 md:p-10">
                     <div className="grid md:grid-cols-2 gap-8 items-center">
                       <div className="space-y-6">
                         <div className="flex items-start gap-4">
@@ -277,8 +220,8 @@ export default function LandingPage() {
                 </Card>
               </TabsContent>
               <TabsContent value="user">
-                <Card className="border-0 shadow-none">
-                  <CardContent className="p-6">
+                <Card className="border-0 shadow-none bg-transparent">
+                  <CardContent className="p-6 md:p-10">
                      <div className="grid md:grid-cols-2 gap-8 items-center">
                        <div className="space-y-6">
                         <div className="flex items-start gap-4">
@@ -320,6 +263,57 @@ export default function LandingPage() {
                 </Card>
               </TabsContent>
             </Tabs>
+          </div>
+        </section>
+
+        <section id="cta" className="py-20 md:py-24 bg-background">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              <div className="relative order-last md:order-first">
+                {appLaptopImage && (
+                  <Image
+                    src={appLaptopImage.imageUrl}
+                    alt={appLaptopImage.description}
+                    width={1024}
+                    height={768}
+                    className="rounded-lg shadow-2xl"
+                    data-ai-hint={appLaptopImage.imageHint}
+                  />
+                )}
+                {appMobileImage && (
+                  <div className="absolute -bottom-12 -right-12 w-48 md:w-56">
+                    <Image
+                      src={appMobileImage.imageUrl}
+                      alt={appMobileImage.description}
+                      width={300}
+                      height={600}
+                      className="rounded-lg shadow-2xl border-4 border-background"
+                      data-ai-hint={appMobileImage.imageHint}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col items-center md:items-start text-center md:text-left gap-6">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
+                <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
+                <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
+                   <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
+                    <div className="flex items-center justify-center gap-3 px-3 py-2">
+                       <p className="font-bold text-base -mt-1">Disponível no Google Play</p>
+                    </div>
+                  </Button>
+                  <Button variant="outline" className="h-auto text-primary border-primary hover:bg-primary/5 hover:text-primary">
+                    <div className="flex items-center justify-center gap-3 px-3 py-2">
+                       <p className="font-bold text-base -mt-1">Baixar na App Store</p>
+                    </div>
+                  </Button>
+                </div>
+                 <Button size="lg" className="w-full sm:w-auto mt-2" onClick={() => router.push('/login')}>
+                  Acessar via Web
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+            </div>
           </div>
         </section>
         
@@ -382,3 +376,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
