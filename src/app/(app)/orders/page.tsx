@@ -1,9 +1,10 @@
+
 "use client";
 
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Cookie, Soup } from "lucide-react";
+import { Clock, Cookie, Soup, CreditCard } from "lucide-react";
 import { useState, DragEvent } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 
 type OrderStatus = "A Fazer" | "Em Preparo" | "Pronto";
+type PaymentStatus = "Pago" | "Pendente";
 
 type OrderItem = {
   name: string;
@@ -28,14 +30,15 @@ type Order = {
   time: string;
   items: OrderItem[];
   status: OrderStatus;
+  paymentStatus: PaymentStatus;
 };
 
 const mockOrders: Order[] = [
-  { id: "ORD001", studentName: "João Silva", time: "10:30", items: [{name: "Pão de Queijo", icon: Cookie}, {name: "Suco de Laranja", icon: Soup}], status: "A Fazer" },
-  { id: "ORD002", studentName: "Maria Clara", time: "10:32", items: [{name: "Misto Quente", icon: Cookie}], status: "A Fazer" },
-  { id: "ORD003", studentName: "Pedro Alves", time: "10:35", items: [{name: "Bolo de Chocolate", icon: Cookie}, {name: "Achocolatado", icon: Soup}], status: "Em Preparo" },
-  { id: "ORD004", studentName: "Ana Beatriz", time: "10:38", items: [{name: "Coxinha", icon: Cookie}], status: "Em Preparo" },
-  { id: "ORD005", studentName: "Lucas Costa", time: "10:40", items: [{name: "Esfirra de Carne", icon: Cookie}], status: "Pronto" },
+  { id: "ORD001", studentName: "João Silva", time: "10:30", items: [{name: "Pão de Queijo", icon: Cookie}, {name: "Suco de Laranja", icon: Soup}], status: "A Fazer", paymentStatus: "Pago" },
+  { id: "ORD002", studentName: "Maria Clara", time: "10:32", items: [{name: "Misto Quente", icon: Cookie}], status: "A Fazer", paymentStatus: "Pendente" },
+  { id: "ORD003", studentName: "Pedro Alves", time: "10:35", items: [{name: "Bolo de Chocolate", icon: Cookie}, {name: "Achocolatado", icon: Soup}], status: "Em Preparo", paymentStatus: "Pago" },
+  { id: "ORD004", studentName: "Ana Beatriz", time: "10:38", items: [{name: "Coxinha", icon: Cookie}], status: "Em Preparo", paymentStatus: "Pendente" },
+  { id: "ORD005", studentName: "Lucas Costa", time: "10:40", items: [{name: "Esfirra de Carne", icon: Cookie}], status: "Pronto", paymentStatus: "Pago" },
 ];
 
 const OrderCard = ({ order }: { order: Order }) => {
@@ -55,6 +58,14 @@ const OrderCard = ({ order }: { order: Order }) => {
                 {order.time}
               </span>
             </CardTitle>
+             <div className="flex items-center justify-between pt-2">
+                <Badge
+                    variant={order.paymentStatus === "Pendente" ? "destructive" : "default"}
+                    className={cn(order.paymentStatus === "Pago" && "bg-green-600 text-white")}
+                >
+                    {order.paymentStatus}
+                </Badge>
+            </div>
           </CardHeader>
           <CardContent className="p-4 pt-0">
             <div className="space-y-2">
@@ -77,9 +88,19 @@ const OrderCard = ({ order }: { order: Order }) => {
         </DialogHeader>
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Status</span>
+                <span className="text-muted-foreground">Status do Pedido</span>
                 <Badge variant={order.status === 'Pronto' ? 'default' : 'secondary'}>
                     {order.status === 'Pronto' ? 'Pronto para Retirada' : order.status}
+                </Badge>
+            </div>
+             <div className="flex justify-between items-center">
+                <span className="text-muted-foreground">Status do Pagamento</span>
+                 <Badge
+                    variant={order.paymentStatus === "Pendente" ? "destructive" : "default"}
+                    className={cn("flex items-center gap-1.5", order.paymentStatus === "Pago" && "bg-green-600 text-white")}
+                >
+                    <CreditCard className="h-3.5 w-3.5" />
+                    {order.paymentStatus}
                 </Badge>
             </div>
             <div className="space-y-2">
@@ -131,7 +152,7 @@ const KanbanColumn = ({
           </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className="h-full min-h-[200px]">
+      <CardContent className="h-full min-h-[200px] p-4">
         {orders.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}
