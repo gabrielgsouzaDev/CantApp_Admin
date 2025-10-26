@@ -360,7 +360,7 @@ export default function LandingPage() {
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-16 items-center">
               <div className="relative order-last md:order-first">
-                {appLaptopImage && (
+                {/* {appLaptopImage && (
                   <Image
                     src={appLaptopImage.imageUrl}
                     alt={appLaptopImage.description}
@@ -381,7 +381,7 @@ export default function LandingPage() {
                       data-ai-hint={appMobileImage.imageHint}
                     />
                   </div>
-                )}
+                )} */}
               </div>
               <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
