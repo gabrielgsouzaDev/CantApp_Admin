@@ -7,7 +7,7 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple, FileDigit, UtensilsCrossed } from "lucide-react";
+import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple, FileDigit, UtensilsCrossed, Settings, Search, CheckCircle } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -77,59 +77,50 @@ export default function LandingPage() {
         </section>
 
         <section id="features" className="py-20 md:py-32">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold font-headline">Recursos Principais</h2>
-                <p className="text-muted-foreground text-lg mt-2 max-w-3xl mx-auto">Uma plataforma completa com as ferramentas certas para modernizar a cantina escolar.</p>
+            <div className="container px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-4xl font-bold font-headline">Recursos para Transformar sua Gestão</h2>
+                    <p className="text-muted-foreground text-lg mt-2 max-w-3xl mx-auto">Ferramentas poderosas para uma operação mais eficiente e lucrativa.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-0 max-w-6xl mx-auto">
+                    <Card className="transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl hover:z-10 rounded-lg">
+                        <CardHeader className="text-center items-center">
+                            <div className="flex items-center justify-center h-16 w-16 bg-primary/10 rounded-full mb-4">
+                                <Zap className="h-8 w-8 text-primary" />
+                            </div>
+                            <CardTitle>Otimização Total</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-center">
+                            <p className="text-muted-foreground">Reduza filas com pedidos antecipados, agilize o atendimento com cardápio digital e modernize pagamentos com Pix e saldo pré-pago.</p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="transform transition-transform duration-300 md:-translate-y-8 hover:-translate-y-10 hover:shadow-2xl hover:z-20 rounded-lg bg-card border-2 border-primary shadow-lg">
+                         <CardHeader className="text-center items-center">
+                            <div className="flex items-center justify-center h-16 w-16 bg-primary/10 rounded-full mb-4">
+                                <Settings className="h-8 w-8 text-primary" />
+                            </div>
+                            <CardTitle>Controle Centralizado</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-center">
+                            <p className="text-muted-foreground">Monitore vendas, faturamento e estoque em tempo real. Acesse relatórios completos e tome decisões baseadas em dados para escalar seu negócio.</p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl hover:z-10 rounded-lg">
+                         <CardHeader className="text-center items-center">
+                            <div className="flex items-center justify-center h-16 w-16 bg-primary/10 rounded-full mb-4">
+                                <Shield className="h-8 w-8 text-primary" />
+                            </div>
+                            <CardTitle>Segurança e Autonomia</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-center">
+                            <p className="text-muted-foreground">Dê aos pais o poder de gerenciar o consumo dos filhos com restrições de produtos e limites de gastos diários, promovendo uma alimentação mais saudável.</p>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              <Card className="lg:col-span-2 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-4">
-                    <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-lg">
-                      <Wallet className="h-6 w-6 text-primary" />
-                    </div>
-                    <span>Pagamentos Rápidos e Seguros</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Modernize as transações com a carteira digital pré-paga do CTNAPP ou pagamentos via Pix. Os pais carregam créditos de forma segura e os alunos compram sem precisar de dinheiro, agilizando o atendimento e aumentando a segurança.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow">
-                 <CardHeader>
-                  <CardTitle className="flex items-center gap-4">
-                     <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-lg">
-                        <UtensilsCrossed className="h-6 w-6 text-primary" />
-                     </div>
-                     <span>Cardápio Digital</span>
-                   </CardTitle>
-                </CardHeader>
-                <CardContent>
-                   <CardDescription>
-                    Alunos e pais podem consultar o cardápio, reservar lanches com antecedência pelo app e acabar com as filas. Menos tempo de espera, mais tempo para o intervalo.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-4">
-                     <div className="flex items-center justify-center h-12 w-12 bg-primary/10 rounded-lg">
-                      <FileDigit className="h-6 w-6 text-primary" />
-                     </div>
-                     <span>Controle e Relatórios</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                   <CardDescription>
-                    Painel administrativo completo para escolas e cantinas acompanharem vendas, estoque e faturamento em tempo real, gerando insights para decisões mais inteligentes.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
         </section>
 
         <section id="how-it-works" className="py-20 md:py-32 bg-secondary/50">
@@ -250,7 +241,7 @@ export default function LandingPage() {
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
-                  <Button asChild variant="outline" className="h-auto justify-center p-0">
+                   <Button asChild variant="outline" className="h-auto justify-center p-0">
                     <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
                        <div className="flex flex-col text-left">
                          <span className="text-xs">Disponível no</span>
@@ -335,6 +326,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
 
