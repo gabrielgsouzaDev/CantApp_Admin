@@ -7,7 +7,7 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Utensils, Zap, Users, Store, BarChart, Package, Shield, Apple, FileDigit, UtensilsCrossed, Settings, Search, CheckCircle } from "lucide-react";
+import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, Users } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -26,6 +26,8 @@ export default function LandingPage() {
 
   const appLaptopImage = PlaceHolderImages.find(img => img.id === 'app-laptop');
   const appMobileImage = PlaceHolderImages.find(img => img.id === 'app-mobile');
+  const adminDashboardImage = PlaceHolderImages.find(img => img.id === 'admin-dashboard');
+  const parentAppImage = PlaceHolderImages.find(img => img.id === 'parent-app');
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -50,42 +52,32 @@ export default function LandingPage() {
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl">
               CTNAPP é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle e resultados para todos.
             </p>
-             <div className="max-w-xl w-full">
-                <Tabs defaultValue="admin" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="admin">Escolas & Cantinas</TabsTrigger>
-                        <TabsTrigger value="user">Pais & Alunos</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="admin">
-                        <Card className="text-left mt-4 border-primary/20">
-                            <CardHeader>
-                                <CardTitle>Acesso ao Painel</CardTitle>
-                                <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                 <Button className="w-full" onClick={() => handleLoginAs("Escola")}>
-                                    Entrar como Escola <ArrowRight className="ml-2" />
-                                </Button>
-                                <Button className="w-full" onClick={() => handleLoginAs("Cantineiro")}>
-                                    Entrar como Cantina <ArrowRight className="ml-2" />
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-                    <TabsContent value="user">
-                        <Card className="text-left mt-4 border-primary/20">
-                            <CardHeader>
-                                <CardTitle>Portal da Família</CardTitle>
-                                <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <Button className="w-full" variant="outline">
-                                    Acessar Portal do Aluno/Responsável <ArrowRight className="ml-2" />
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-                </Tabs>
+             <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="text-left border-primary/20">
+                    <CardHeader>
+                        <CardTitle>Área Administrativa</CardTitle>
+                        <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Button className="w-full" onClick={() => handleLoginAs("Escola")}>
+                            Acessar como Escola
+                        </Button>
+                        <Button className="w-full" onClick={() => handleLoginAs("Cantineiro")}>
+                            Acessar como Cantina
+                        </Button>
+                    </CardContent>
+                </Card>
+                <Card className="text-left border-border">
+                    <CardHeader>
+                        <CardTitle>Portal do Usuário</CardTitle>
+                        <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button className="w-full" variant="outline">
+                            Acessar como Aluno/Responsável
+                        </Button>
+                    </CardContent>
+                </Card>
              </div>
           </div>
         </section>
