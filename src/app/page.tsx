@@ -76,47 +76,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="features" className="w-full bg-secondary/50 py-20 md:py-24">
-           <div className="container px-4 sm:px-6 lg:px-8">
-                <div className="grid md:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-4">
-                        <h2 className="text-3xl md:text-4xl font-bold font-headline">Chega de filas e preocupações. O futuro da cantina é digital.</h2>
-                        <p className="text-muted-foreground text-lg">Com o CTNAPP, a rotina da cantina se torna mais simples e eficiente, e a gestão escolar ganha um poderoso aliado.</p>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <Card>
-                            <CardHeader>
-                            <Utensils className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle>Cardápio Digital</CardTitle>
-                            <CardDescription>Apresente seus produtos de forma atraente e facilite a escolha.</CardDescription>
-                            </CardHeader>
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                            <Zap className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle>Pedidos Online</CardTitle>
-                            <CardDescription>Os alunos pedem e pagam pelo app, retirando na cantina sem filas.</CardDescription>
-                            </CardHeader>
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                            <Wallet className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle>Controle Financeiro</CardTitle>
-                            <CardDescription>Visão clara das vendas, faturamento e relatórios completos.</CardDescription>
-                            </CardHeader>
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                            <School className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle>Gestão Escolar</CardTitle>
-                            <CardDescription>Acompanhe o desempenho das cantinas parceiras em tempo real.</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="how-it-works" className="py-20 md:py-32 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -235,7 +194,7 @@ export default function LandingPage() {
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
                 <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
-                  <Button asChild variant="outline" className="h-auto justify-center p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
+                  <Button asChild variant="outline" className="h-auto justify-center p-0">
                     <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
                        <div className="flex flex-col text-left">
                          <span className="text-xs">Disponível no</span>
@@ -243,7 +202,7 @@ export default function LandingPage() {
                       </div>
                     </a>
                   </Button>
-                  <Button asChild variant="outline" className="h-auto justify-center p-0 border-primary text-primary hover:bg-primary/5 hover:text-primary">
+                  <Button asChild variant="outline" className="h-auto justify-center p-0">
                     <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
                        <div className="flex flex-col text-left">
                          <span className="text-xs">Baixar na</span>
