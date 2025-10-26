@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'CTNADMIN',
-  description: 'Admin panel for CTN',
+  title: 'CTNAPP - Gestão Inteligente para Cantinas Escolares',
+  description: 'Otimize pedidos, pagamentos e estoque da sua cantina escolar. Menos filas, mais controle e segurança para pais, alunos e escolas.',
 };
 
 export default function RootLayout({

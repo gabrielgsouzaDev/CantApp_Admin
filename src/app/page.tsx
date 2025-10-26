@@ -1,23 +1,32 @@
-
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, Users } from "lucide-react";
+import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, Users, User, Briefcase, GraduationCap } from "lucide-react";
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+type AdvantageView = 'admin' | 'user';
 
 export default function LandingPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const [advantageView, setAdvantageView] = useState<AdvantageView>('admin');
+
 
   const handleLoginAs = (role: Role) => {
     login(role);
@@ -26,15 +35,15 @@ export default function LandingPage() {
 
   const appLaptopImage = PlaceHolderImages.find(img => img.id === 'app-laptop');
   const appMobileImage = PlaceHolderImages.find(img => img.id === 'app-mobile');
-  const adminDashboardImage = PlaceHolderImages.find(img => img.id === 'admin-dashboard');
-  const parentAppImage = PlaceHolderImages.find(img => img.id === 'parent-app');
-
+  
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
         <div className="container flex h-14 items-center px-4 sm:px-6 lg:px-8">
           <div className="mr-4 flex">
-            <Logo />
+            <Link href="/" className="flex items-center gap-2">
+              <Logo />
+            </Link>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-2">
             <Button variant="ghost" onClick={() => router.push('/login')}>Entrar</Button>
@@ -72,9 +81,15 @@ export default function LandingPage() {
                         <CardTitle>Portal do Usuário</CardTitle>
                         <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <Button className="w-full" variant="outline">
-                            Acessar como Aluno/Responsável
+                            <GraduationCap className="mr-2 h-4 w-4" /> Aluno
+                        </Button>
+                        <Button className="w-full" variant="outline">
+                            <Users className="mr-2 h-4 w-4" /> Responsável
+                        </Button>
+                        <Button className="w-full" variant="outline">
+                           <Briefcase className="mr-2 h-4 w-4" /> Funcionário
                         </Button>
                     </CardContent>
                 </Card>
@@ -163,56 +178,62 @@ export default function LandingPage() {
         
         <section id="advantages" className="py-20 md:py-32 bg-background">
           <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold font-headline">Vantagens para Todos</h2>
-              <p className="text-muted-foreground text-lg mt-2 max-w-2xl mx-auto">
-                Descubra como o CTNAPP transforma a gestão para cada perfil.
-              </p>
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
+              <div className="text-center sm:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Vantagens para Todos</h2>
+                <p className="text-muted-foreground text-lg mt-2 max-w-2xl">
+                  Descubra como o CTNAPP transforma a gestão para cada perfil.
+                </p>
+              </div>
+               <Select value={advantageView} onValueChange={(value) => setAdvantageView(value as AdvantageView)}>
+                <SelectTrigger className="w-full sm:w-[280px]">
+                  <SelectValue placeholder="Selecione um perfil" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Para Escolas e Cantinas</SelectItem>
+                  <SelectItem value="user">Para Pais e Alunos</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Tabs defaultValue="admin" className="w-full max-w-5xl mx-auto">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="admin">Para Escolas e Cantinas</TabsTrigger>
-                <TabsTrigger value="user">Para Pais e Alunos</TabsTrigger>
-              </TabsList>
-              <TabsContent value="admin">
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <BarChart className="h-10 w-10 text-primary" />
-                    <h3 className="font-semibold text-lg mt-2">Controle e Visão Estratégica</h3>
-                    <p className="text-muted-foreground text-sm">Acesse dashboards com dados de vendas, faturamento e desempenho em tempo real para tomar as melhores decisões.</p>
-                  </div>
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <Package className="h-10 w-10 text-primary" />
-                    <h3 className="font-semibold text-lg mt-2">Gestão de Produtos</h3>
-                    <p className="text-muted-foreground text-sm">Crie e gerencie cardápios digitais, controle o estoque de forma inteligente e evite desperdícios.</p>
-                  </div>
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <Wallet className="h-10 w-10 text-primary" />
-                    <h3 className="font-semibold text-lg mt-2">Centralização Financeira</h3>
-                    <p className="text-muted-foreground text-sm">Monitore todas as transações, automatize relatórios e simplifique a conciliação financeira.</p>
-                  </div>
+            
+            {advantageView === 'admin' && (
+              <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex flex-col items-center text-center gap-2">
+                  <BarChart className="h-10 w-10 text-primary" />
+                  <h3 className="font-semibold text-lg mt-2">Controle e Visão Estratégica</h3>
+                  <p className="text-muted-foreground text-sm">Acesse dashboards com dados de vendas, faturamento e desempenho em tempo real para tomar as melhores decisões.</p>
                 </div>
-              </TabsContent>
-              <TabsContent value="user">
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <Zap className="h-10 w-10 text-primary" />
-                    <h3 className="font-semibold text-lg mt-2">Adeus às Filas</h3>
-                    <p className="text-muted-foreground text-sm">Compre antecipadamente pelo app e apenas retire o lanche no intervalo. Mais tempo livre para o que importa.</p>
-                  </div>
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <Shield className="h-10 w-10 text-primary" />
-                    <h3 className="font-semibold text-lg mt-2">Pagamento Fácil e Seguro</h3>
-                    <p className="text-muted-foreground text-sm">Utilize saldo pré-pago ou Pix para fazer compras de forma rápida e segura, sem precisar de dinheiro em espécie.</p>
-                  </div>
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <Apple className="h-10 w-10 text-primary" />
-                    <h3 className="font-semibold text-lg mt-2">Controle Alimentar na Mão</h3>
-                    <p className="text-muted-foreground text-sm">Pais podem definir limites de gastos diários e restringir produtos, garantindo uma alimentação mais saudável.</p>
-                  </div>
+                <div className="flex flex-col items-center text-center gap-2">
+                  <Package className="h-10 w-10 text-primary" />
+                  <h3 className="font-semibold text-lg mt-2">Gestão de Produtos</h3>
+                  <p className="text-muted-foreground text-sm">Crie e gerencie cardápios digitais, controle o estoque de forma inteligente e evite desperdícios.</p>
                 </div>
-              </TabsContent>
-            </Tabs>
+                <div className="flex flex-col items-center text-center gap-2">
+                  <Wallet className="h-10 w-10 text-primary" />
+                  <h3 className="font-semibold text-lg mt-2">Centralização Financeira</h3>
+                  <p className="text-muted-foreground text-sm">Monitore todas as transações, automatize relatórios e simplifique a conciliação financeira.</p>
+                </div>
+              </div>
+            )}
+            {advantageView === 'user' && (
+              <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex flex-col items-center text-center gap-2">
+                  <Zap className="h-10 w-10 text-primary" />
+                  <h3 className="font-semibold text-lg mt-2">Adeus às Filas</h3>
+                  <p className="text-muted-foreground text-sm">Compre antecipadamente pelo app e apenas retire o lanche no intervalo. Mais tempo livre para o que importa.</p>
+                </div>
+                <div className="flex flex-col items-center text-center gap-2">
+                  <Shield className="h-10 w-10 text-primary" />
+                  <h3 className="font-semibold text-lg mt-2">Pagamento Fácil e Seguro</h3>
+                  <p className="text-muted-foreground text-sm">Utilize saldo pré-pago ou Pix para fazer compras de forma rápida e segura, sem precisar de dinheiro em espécie.</p>
+                </div>
+                <div className="flex flex-col items-center text-center gap-2">
+                  <Apple className="h-10 w-10 text-primary" />
+                  <h3 className="font-semibold text-lg mt-2">Controle Alimentar na Mão</h3>
+                  <p className="text-muted-foreground text-sm">Pais podem definir limites de gastos diários e restringir produtos, garantindo uma alimentação mais saudável.</p>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
@@ -279,7 +300,7 @@ export default function LandingPage() {
               <div className="flex flex-col gap-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Dúvidas?</h2>
                 <p className="text-muted-foreground text-lg">Ainda tem dúvidas? Queremos te ouvir, clique no botão abaixo e entre em contato com nossa equipe.</p>
-                <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push('/contact')}>
+                <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push('/login')}>
                   Fale com nossa equipe
                 </Button>
               </div>
@@ -332,3 +353,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
