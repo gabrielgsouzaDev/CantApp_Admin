@@ -97,11 +97,11 @@ export default function LandingPage() {
                         <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Button className="w-full" onClick={() => handleLoginAs("Escola")}>
-                            <School className="h-4 w-4" /> Acessar como Escola
+                        <Button className="justify-center" onClick={() => handleLoginAs("Escola")}>
+                            <School /> Acessar como Escola
                         </Button>
-                        <Button className="w-full" onClick={() => handleLoginAs("Cantineiro")}>
-                            <Store className="h-4 w-4" /> Acessar como Cantina
+                        <Button className="justify-center" onClick={() => handleLoginAs("Cantineiro")}>
+                            <Store /> Acessar como Cantina
                         </Button>
                     </CardContent>
                 </Card>
@@ -110,15 +110,9 @@ export default function LandingPage() {
                         <CardTitle>Portal do Usuário</CardTitle>
                         <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <Button variant="outline">
-                            <GraduationCap className="h-4 w-4" /> Aluno
-                        </Button>
-                        <Button variant="outline">
-                            <Users className="h-4 w-4" /> Responsável
-                        </Button>
-                        <Button variant="outline">
-                           <Briefcase className="h-4 w-4" /> Funcionário
+                    <CardContent>
+                        <Button variant="outline" className="w-full justify-center">
+                            Acessar como Aluno, Responsável ou Funcionário
                         </Button>
                     </CardContent>
                 </Card>
