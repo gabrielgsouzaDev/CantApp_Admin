@@ -63,6 +63,10 @@ export default function LandingPage() {
                 <Button>Começar Agora</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleLoginAs("Admin")}>
+                   <Shield className="mr-2 h-4 w-4" />
+                  <span>Admin</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleLoginAs("Escola")}>
                   <School className="mr-2 h-4 w-4" />
                   <span>Escola</span>
@@ -472,3 +476,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
