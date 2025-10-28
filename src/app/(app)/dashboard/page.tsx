@@ -9,6 +9,7 @@ import { StatsCard } from "@/components/dashboard/stats-card";
 import { OverviewChart } from "@/components/dashboard/overview-chart";
 import { RecentSales } from "@/components/dashboard/recent-sales";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardPage() {
   const { role, loading } = useAuth();
@@ -30,7 +31,11 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Dashboard" description="Bem-vindo ao seu painel de controle." />
+      <PageHeader title="Dashboard" description="Bem-vindo ao seu painel de controle.">
+        {role === "Admin" && (
+          <Button variant="outline">Botão Temporário (Admin)</Button>
+        )}
+      </PageHeader>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard 
