@@ -63,11 +63,11 @@ export default function LandingPage() {
                 <Button>Começar Agora</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleLoginAs("Escola")}>
+                <DropdownMenuItem onClick={() => router.push("/escola/login")}>
                   <School className="mr-2 h-4 w-4" />
                   <span>Escola</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleLoginAs("Cantineiro")}>
+                <DropdownMenuItem onClick={() => router.push("/cantina/login")}>
                    <Store className="mr-2 h-4 w-4" />
                   <span>Cantina</span>
                 </DropdownMenuItem>
@@ -82,6 +82,10 @@ export default function LandingPage() {
                  <DropdownMenuItem>
                    <Briefcase className="mr-2 h-4 w-4" />
                    <span>Funcionário</span>
+                </DropdownMenuItem>
+                 <DropdownMenuItem onClick={() => router.push("/admin/login")}>
+                   <Shield className="mr-2 h-4 w-4" />
+                   <span>Admin</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -104,12 +108,12 @@ export default function LandingPage() {
                         <CardTitle>Área Administrativa</CardTitle>
                         <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid grid-cols-1 gap-4">
-                       <Button className="justify-center" onClick={() => handleLoginAs("Escola")}>
-                            <School /> Acessar como Escola
+                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                       <Button asChild className="justify-center">
+                          <Link href="/escola/login"><School />Acessar como Escola</Link>
                         </Button>
-                        <Button className="justify-center" onClick={() => handleLoginAs("Cantineiro")}>
-                            <Store /> Acessar como Cantina
+                        <Button asChild className="justify-center">
+                          <Link href="/cantina/login"><Store />Acessar como Cantina</Link>
                         </Button>
                     </CardContent>
                 </Card>
@@ -472,5 +476,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    

@@ -12,39 +12,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Store } from "lucide-react";
 import { Logo } from "@/components/logo";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function CantinaLoginPage() {
   const { login, loading } = useAuth();
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.startsWith("escola")) {
-      login("Escola");
-    } else if (email.startsWith("cantineiro")) {
-      login("Cantineiro");
-    } else {
-      login("Admin");
-    }
+    login("Cantineiro");
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
       <Card className="w-full max-w-sm shadow-2xl">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
              <Link href="/" className="mx-auto mb-4">
               <Logo />
             </Link>
-            <CardTitle className="text-2xl font-headline">Bem-vindo de volta</CardTitle>
+            <div className="flex justify-center items-center gap-2">
+                <Store className="h-6 w-6 text-primary" />
+                <CardTitle className="text-2xl font-headline">Portal da Cantina</CardTitle>
+            </div>
             <CardDescription>
-              Faça login para acessar seu painel.
+              Acesse para gerenciar seus pedidos.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -53,7 +48,7 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="cantina@escola.com"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -80,9 +75,9 @@ export default function LoginPage() {
                 "Entrar"
               )}
             </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              Use <code className="font-mono p-1 bg-muted rounded-sm">escola@ctn.com</code> ou <code className="font-mono p-1 bg-muted rounded-sm">cantineiro@ctn.com</code> para testar.
-            </p>
+             <Link href="/" className="text-xs text-muted-foreground hover:text-primary">
+                Voltar à página inicial
+            </Link>
           </CardFooter>
         </form>
       </Card>

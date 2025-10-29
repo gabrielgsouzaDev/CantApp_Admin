@@ -14,7 +14,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
 import { Loader2, Shield } from "lucide-react";
 import { Logo } from "@/components/logo";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function AdminLoginPage() {
