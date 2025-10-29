@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 type ChartView = 'sales' | 'canteens' | 'students';
 
 export default function EscolaDashboardPage() {
-    const [activeChart, setActiveChart] = useState<ChartView>('sales');
+    const [activeChart, setActiveChart] = useState<ChartView | null>('sales');
 
     return (
      <div className="flex flex-col gap-6">
@@ -25,7 +25,7 @@ export default function EscolaDashboardPage() {
                 description="+15% do mês passado"
               />
             </div>
-            <div onClick={() => setActiveChart('canteens')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'canteens' && "ring-2 ring-primary")}>
+            <div onClick={() => setActiveChart(null)} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'canteens' && "ring-2 ring-primary")}>
               <StatsCard 
                 title="Cantinas Ativas"
                 value="2"
@@ -51,7 +51,7 @@ export default function EscolaDashboardPage() {
             </div>
         </div>
          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <OverviewChart activeView={activeChart} />
+          {activeChart && <OverviewChart activeView={activeChart} />}
           <RecentSales />
         </div>
     </div>

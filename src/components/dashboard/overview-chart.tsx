@@ -1,12 +1,11 @@
 "use client"
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, Line, LineChart, Pie, PieChart, Cell } from "recharts"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import { format, subMonths, startOfMonth } from "date-fns";
+import { format, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-// Mock data for different views
 const generateMockData = (formatter: (value: number) => number, unit: string = 'R$') => {
   return Array.from({ length: 12 }, (_, i) => {
     const date = subMonths(new Date(), 11 - i);
@@ -28,10 +27,9 @@ const mockData = {
 };
 
 const chartTitles: Record<string, string> = {
-    revenue: "Receita Total (Últimos 12 Meses)",
+    revenue: "Receita Mensal (Últimos 12 Meses)",
     schools: "Novas Escolas (Últimos 12 Meses)",
     users: "Novos Usuários (Últimos 12 Meses)",
-    canteens: "Novas Cantinas (Últimos 12 Meses)",
     sales: "Vendas (Últimos 12 Meses)",
     students: "Alunos Ativos (Últimos 12 Meses)",
 }
@@ -49,18 +47,13 @@ export function OverviewChart({ activeView }: { activeView: ChartView }) {
   const [title, setTitle] = useState("");
 
   useEffect(() => {
-    // In a real app, you would fetch data based on activeView
     setData(mockData[activeView]);
     setTitle(chartTitles[activeView] || "Visão Geral");
   }, [activeView]);
-
-  return (
-     <Card className="col-span-4">
-        <CardHeader>
-            <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="pl-2">
-            <ResponsiveContainer width="100%" height={350}>
+  
+  const renderChart = () => {
+      return (
+        <ResponsiveContainer width="100%" height={350}>
             <BarChart data={data}>
                 <XAxis
                 dataKey="name"
@@ -99,7 +92,17 @@ export function OverviewChart({ activeView }: { activeView: ChartView }) {
                 />
                 <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
             </BarChart>
-            </ResponsiveContainer>
+        </ResponsiveContainer>
+      )
+  }
+
+  return (
+     <Card className="col-span-4">
+        <CardHeader>
+            <CardTitle>{title}</CardTitle>
+        </CardHeader>
+        <CardContent className="pl-2">
+           {renderChart()}
         </CardContent>
     </Card>
   )
