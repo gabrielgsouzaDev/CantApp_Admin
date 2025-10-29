@@ -32,8 +32,13 @@ export const seedOrders = async () => {
         { studentName: "Lucas Costa", time: Date.now() - 100000, items: [{id: 'esfirra-carne', name: "Esfirra de Carne", price: 6}], status: "Pronto", paymentStatus: "Pago", total: 6 },
     ];
 
-    for (const order of mockOrders) {
-        await addDoc(ordersCollection, order);
+    const currentOrders = await getDocs(ordersCollection);
+    if (currentOrders.empty) {
+      for (const order of mockOrders) {
+          await addDoc(ordersCollection, order);
+      }
+      console.log("Seeded orders successfully!");
+    } else {
+      console.log("Orders collection is not empty. Skipping seed.");
     }
-    console.log("Seeded orders successfully!");
 }

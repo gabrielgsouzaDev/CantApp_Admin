@@ -3,7 +3,7 @@
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Cookie, Soup, CreditCard, Loader2 } from "lucide-react";
+import { Clock, Cookie, CreditCard, Loader2 } from "lucide-react";
 import { useState, DragEvent, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -157,7 +157,7 @@ export default function OrdersPage() {
     return () => unsubscribe();
   }, []);
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>, status: OrderStatus) => {
+  const handleDrop = async (e: DragEvent<HTMLDivElement>, status: OrderStatus) => {
     e.preventDefault();
     const orderId = e.dataTransfer.getData("orderId");
     
@@ -169,10 +169,13 @@ export default function OrdersPage() {
     );
     
     // Update Firestore
-    updateOrderStatus(orderId, status).catch(err => {
-      console.error("Failed to update order status", err);
-      // Revert optimistic update on error if necessary
-    });
+    try {
+      await updateOrderStatus(orderId, status);
+    } catch (err) {
+       console.error("Failed to update order status", err);
+       // Revert optimistic update on error if necessary
+       // For simplicity, we are not reverting here, but in a real app you should.
+    }
 
     setDragOverColumn(null);
   };

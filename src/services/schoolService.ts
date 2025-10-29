@@ -21,11 +21,15 @@ export const seedSchools = async () => {
         { name: "Escola Secundária Sul", city: "Belo Horizonte", status: "inactive" },
         { name: "Instituto de Educação Oeste", city: "Porto Alegre", status: "active" },
         { name: "Centro Educacional Leste", city: "Salvador", status: "active" },
-        { name: "Error School", city: "Curitiba", status: "active" },
     ];
-
-    for (const school of mockSchools) {
-        await addDoc(schoolsCollection, school);
+    
+    const currentSchools = await getDocs(schoolsCollection);
+    if (currentSchools.empty) {
+      for (const school of mockSchools) {
+          await addDoc(schoolsCollection, school);
+      }
+      console.log("Seeded schools in ADMIN DB successfully!");
+    } else {
+        console.log("Schools collection is not empty. Skipping seed.");
     }
-    console.log("Seeded schools in ADMIN DB successfully!");
 }
