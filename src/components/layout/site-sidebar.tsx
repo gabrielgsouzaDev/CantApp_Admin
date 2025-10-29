@@ -17,6 +17,7 @@ import { Logo } from "../logo";
 import { Separator } from "../ui/separator";
 import { LogOutConfirmationDialog } from "./logout-confirmation-dialog";
 import { Settings, LogOut } from "lucide-react";
+import { Role } from "@/lib/types";
 
 export function SiteSidebar() {
   const { role, user } = useAuth();
@@ -26,10 +27,14 @@ export function SiteSidebar() {
     return null;
   }
 
-  const mainNavItems = navItems.filter(
-    (item) => item.roles.includes(role) && item.title !== "Configurações"
-  );
-  const settingsNavItem = navItems.find((item) => item.title === "Configurações" && item.roles.includes(role));
+  const filterNavItems = (role: Role) => {
+    const allNavs = navItems.filter(item => item.roles.includes(role));
+    const mainNavs = allNavs.filter(item => item.title !== "Configurações");
+    const settingsNav = allNavs.find(item => item.title === "Configurações");
+    return { mainNavs, settingsNav };
+  };
+
+  const { mainNavs, settingsNav } = filterNavItems(role);
 
 
   return (
@@ -42,9 +47,9 @@ export function SiteSidebar() {
       <Separator />
       <SidebarContent>
         <SidebarMenu>
-          {mainNavItems.map((item) => (
+          {mainNavs.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} legacyBehavior={false}>
+              <Link href={item.href}>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
                   tooltip={item.title}
@@ -60,15 +65,15 @@ export function SiteSidebar() {
       <Separator />
       <SidebarFooter>
         <SidebarMenu>
-         {settingsNavItem && (
+         {settingsNav && (
             <SidebarMenuItem>
-              <Link href={settingsNavItem.href} legacyBehavior={false}>
+              <Link href={settingsNav.href}>
                 <SidebarMenuButton
-                  isActive={pathname === settingsNavItem.href}
-                  tooltip={settingsNavItem.title}
+                  isActive={pathname === settingsNav.href}
+                  tooltip={settingsNav.title}
                 >
                   <Settings />
-                  <span>{settingsNavItem.title}</span>
+                  <span>{settingsNav.title}</span>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

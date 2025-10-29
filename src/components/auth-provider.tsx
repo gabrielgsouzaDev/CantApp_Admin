@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } else {
       router.push("/dashboard");
     }
-    setLoading(false);
+    // setLoading(false) is called inside the /dashboard or /orders page after redirection.
   };
 
   const logout = () => {
