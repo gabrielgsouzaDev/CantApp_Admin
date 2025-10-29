@@ -7,9 +7,10 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteSidebar } from "@/components/layout/site-sidebar";
 import { Loader2 } from "lucide-react";
+import { getDashboardRouteForRole } from "@/lib/utils";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, role, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,6 +26,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
+  
+  // Se o usuário está na raiz da área logada, redireciona para o dashboard correto
+  if (typeof window !== 'undefined' && window.location.pathname.endsWith('/app')) {
+     const dashboardRoute = getDashboardRouteForRole(user.role);
+     router.replace(dashboardRoute);
+     return (
+       <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+     );
+  }
+
 
   return (
     <SidebarProvider>

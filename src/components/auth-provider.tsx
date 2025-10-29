@@ -4,6 +4,7 @@ import { User, Role } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { mockUsers } from "@/lib/data";
+import { getDashboardRouteForRole } from "@/lib/utils";
 
 interface AuthContextType {
   user: User | null;
@@ -38,12 +39,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userToLogin = Object.values(mockUsers).find(u => u.role === role) || mockUsers.admin;
     setUser(userToLogin);
     localStorage.setItem("ctnadmin-user", JSON.stringify(userToLogin));
-    if (role === "Cantineiro") {
-      router.push("/orders");
-    } else {
-      router.push("/dashboard");
-    }
-    // setLoading(false) is called inside the /dashboard or /orders page after redirection.
+    
+    const dashboardRoute = getDashboardRouteForRole(role);
+    router.push(dashboardRoute);
   };
 
   const logout = () => {

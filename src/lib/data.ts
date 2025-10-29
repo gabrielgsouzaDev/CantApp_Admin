@@ -13,8 +13,10 @@ export const mockUsers: Record<string, User> = {
 
 
 export const navItems: NavItem[] = [
-    // Admin
+    // Admin & Escola
     { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, roles: ["Admin", "Escola"] },
+    
+    // Admin
     { title: "Escolas", href: "/schools", icon: Building, roles: ["Admin"] },
     
     // Escola
