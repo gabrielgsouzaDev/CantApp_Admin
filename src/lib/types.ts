@@ -24,3 +24,22 @@ export type School = {
   city: string;
   status: "active" | "inactive";
 };
+
+export type OrderStatus = "A Fazer" | "Em Preparo" | "Pronto";
+export type PaymentStatus = "Pago" | "Pendente";
+
+export type OrderItem = {
+  id: string;
+  name: string;
+  price: number;
+};
+
+export type Order = {
+  id: string;
+  studentName: string;
+  time: number; // Store as timestamp
+  items: OrderItem[];
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  total: number;
+};

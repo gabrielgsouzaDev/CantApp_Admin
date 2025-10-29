@@ -1,11 +1,10 @@
-
 "use client";
 
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Cookie, Soup, CreditCard } from "lucide-react";
-import { useState, DragEvent } from "react";
+import { Clock, Cookie, Soup, CreditCard, Loader2 } from "lucide-react";
+import { useState, DragEvent, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
@@ -15,31 +14,9 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
-
-type OrderStatus = "A Fazer" | "Em Preparo" | "Pronto";
-type PaymentStatus = "Pago" | "Pendente";
-
-type OrderItem = {
-  name: string;
-  icon: React.ElementType;
-};
-
-type Order = {
-  id: string;
-  studentName: string;
-  time: string;
-  items: OrderItem[];
-  status: OrderStatus;
-  paymentStatus: PaymentStatus;
-};
-
-const mockOrders: Order[] = [
-  { id: "ORD001", studentName: "João Silva", time: "10:30", items: [{name: "Pão de Queijo", icon: Cookie}, {name: "Suco de Laranja", icon: Soup}], status: "A Fazer", paymentStatus: "Pago" },
-  { id: "ORD002", studentName: "Maria Clara", time: "10:32", items: [{name: "Misto Quente", icon: Cookie}], status: "A Fazer", paymentStatus: "Pendente" },
-  { id: "ORD003", studentName: "Pedro Alves", time: "10:35", items: [{name: "Bolo de Chocolate", icon: Cookie}, {name: "Achocolatado", icon: Soup}], status: "Em Preparo", paymentStatus: "Pago" },
-  { id: "ORD004", studentName: "Ana Beatriz", time: "10:38", items: [{name: "Coxinha", icon: Cookie}], status: "Em Preparo", paymentStatus: "Pendente" },
-  { id: "ORD005", studentName: "Lucas Costa", time: "10:40", items: [{name: "Esfirra de Carne", icon: Cookie}], status: "Pronto", paymentStatus: "Pago" },
-];
+import { Order, OrderStatus } from "@/lib/types";
+import { getOrders, updateOrderStatus } from "@/services/orderService";
+import { onSnapshot } from "firebase/firestore";
 
 const OrderCard = ({ order }: { order: Order }) => {
   return (
@@ -55,7 +32,7 @@ const OrderCard = ({ order }: { order: Order }) => {
               <span>{order.studentName}</span>
               <span className="text-xs font-normal text-muted-foreground flex items-center gap-1">
                 <Clock className="h-3 w-3" />
-                {order.time}
+                {new Date(order.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
               </span>
             </CardTitle>
              <div className="flex items-center justify-between pt-2">
@@ -71,7 +48,7 @@ const OrderCard = ({ order }: { order: Order }) => {
             <div className="space-y-2">
               {order.items.map((item, index) => (
                 <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <item.icon className="h-4 w-4" />
+                  <Cookie className="h-4 w-4" />
                   <span>{item.name}</span>
                 </div>
               ))}
@@ -83,7 +60,7 @@ const OrderCard = ({ order }: { order: Order }) => {
         <DialogHeader>
           <DialogTitle>Pedido de {order.studentName}</DialogTitle>
           <DialogDescription>
-            Recebido às {order.time}
+            Recebido às {new Date(order.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -162,17 +139,41 @@ const KanbanColumn = ({
 };
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
   const [dragOverColumn, setDragOverColumn] = useState<OrderStatus | null>(null);
+
+  useEffect(() => {
+    const ordersQuery = getOrders();
+    const unsubscribe = onSnapshot(ordersQuery, (snapshot) => {
+      const ordersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));
+      setOrders(ordersData);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching orders: ", error);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>, status: OrderStatus) => {
     e.preventDefault();
     const orderId = e.dataTransfer.getData("orderId");
+    
+    // Optimistic update
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
         order.id === orderId ? { ...order, status } : order
       )
     );
+    
+    // Update Firestore
+    updateOrderStatus(orderId, status).catch(err => {
+      console.error("Failed to update order status", err);
+      // Revert optimistic update on error if necessary
+    });
+
     setDragOverColumn(null);
   };
 
@@ -190,6 +191,14 @@ export default function OrdersPage() {
     { title: "Em Preparo", status: "Em Preparo" },
     { title: "Pronto para Retirada", status: "Pronto" },
   ];
+
+  if (loading) {
+     return (
+      <div className="flex h-full min-h-[calc(100vh-120px)] w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <>

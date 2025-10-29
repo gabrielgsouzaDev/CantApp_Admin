@@ -2,23 +2,53 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { getOrders } from "@/services/orderService";
+import { onSnapshot } from "firebase/firestore";
+import { format, subMonths } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-const data = [
-  { name: "Jan", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Fev", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Mar", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Abr", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Mai", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Jun", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Jul", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Ago", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Set", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Out", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Nov", total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: "Dez", total: Math.floor(Math.random() * 5000) + 1000 },
-]
+interface ChartData {
+  name: string;
+  total: number;
+}
 
 export function OverviewChart() {
+  const [data, setData] = useState<ChartData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Initialize months with 0 total
+    const months: ChartData[] = Array.from({ length: 12 }, (_, i) => {
+      const date = subMonths(new Date(), 11 - i);
+      return {
+        name: format(date, "MMM", { locale: ptBR }),
+        total: 0,
+      };
+    });
+
+    const ordersQuery = getOrders();
+    const unsubscribe = onSnapshot(ordersQuery, (snapshot) => {
+      const ordersData = snapshot.docs.map(doc => doc.data());
+      
+      const processedData = months.map(month => {
+        const monthTotal = ordersData.reduce((acc, order) => {
+          const orderMonth = format(new Date(order.time), "MMM", { locale: ptBR });
+          if(orderMonth === month.name) {
+            return acc + order.total;
+          }
+          return acc;
+        }, 0);
+        return { ...month, total: monthTotal };
+      });
+
+      setData(processedData);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
      <Card className="col-span-4">
         <CardHeader>
@@ -48,6 +78,7 @@ export function OverviewChart() {
                         border: '1px solid hsl(var(--border))',
                         borderRadius: 'var(--radius)'
                     }}
+                    formatter={(value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)}
                 />
                 <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
             </BarChart>
