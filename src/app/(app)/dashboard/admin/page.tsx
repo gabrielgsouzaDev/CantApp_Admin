@@ -1,14 +1,14 @@
 "use client";
 
 import { PageHeader } from "@/components/page-header";
-import { DollarSign, Building, CreditCard } from "lucide-react";
+import { DollarSign, Building, Users } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { OverviewChart } from "@/components/dashboard/overview-chart";
 import { RecentSales } from "@/components/dashboard/recent-sales";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-type ChartView = 'revenue' | 'schools' | 'subscriptions';
+type ChartView = 'revenue' | 'schools' | 'users';
 
 export default function AdminDashboardPage() {
   const [activeChart, setActiveChart] = useState<ChartView>('revenue');
@@ -20,18 +20,10 @@ export default function AdminDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div onClick={() => setActiveChart('revenue')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'revenue' && "ring-2 ring-primary")}>
             <StatsCard 
-              title="Receita Mensal Recorrente"
+              title="Receita Mensal"
               value="R$8.493,00"
               icon={DollarSign}
               description="+R$298 no último mês"
-            />
-          </div>
-           <div onClick={() => setActiveChart('subscriptions')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'subscriptions' && "ring-2 ring-primary")}>
-            <StatsCard 
-              title="Assinaturas"
-              value="57"
-              icon={CreditCard}
-              description="Total de escolas pagantes"
             />
           </div>
            <div onClick={() => setActiveChart('schools')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'schools' && "ring-2 ring-primary")}>
@@ -40,6 +32,14 @@ export default function AdminDashboardPage() {
               value="57"
               icon={Building}
               description="+2 no último mês"
+            />
+          </div>
+           <div onClick={() => setActiveChart('users')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'users' && "ring-2 ring-primary")}>
+            <StatsCard 
+              title="Usuários Cadastrados"
+              value="+1.280"
+              icon={Users}
+              description="+150 no último mês"
             />
           </div>
       </div>
