@@ -150,7 +150,8 @@ export default function SchoolsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Nome</TableHead>
-                <TableHead>Cidade</TableHead>
+                <TableHead>CNPJ</TableHead>
+                <TableHead>Endereço</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="w-[64px]"></TableHead>
               </TableRow>
@@ -159,7 +160,8 @@ export default function SchoolsPage() {
               {schools.map((school) => (
                 <TableRow key={school.id}>
                   <TableCell className="font-medium">{school.name}</TableCell>
-                  <TableCell>{school.city}</TableCell>
+                  <TableCell>{school.cnpj}</TableCell>
+                  <TableCell>{school.address}</TableCell>
                   <TableCell>
                     <Badge variant={school.status === 'inactive' ? 'destructive' : 'default'} className={cn(school.status === 'active' && 'bg-green-600')}>
                       {school.status === 'active' ? 'Ativa' : 'Inativa'}

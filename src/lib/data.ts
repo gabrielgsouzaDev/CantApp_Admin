@@ -36,10 +36,10 @@ export const navItems: NavItem[] = [
 
 
 export const mockSchools: School[] = [
-    { id: "SCH001", name: "Escola Primária Central", city: "São Paulo", status: "active" },
-    { id: "SCH002", name: "Colégio Estadual Norte", city: "Rio de Janeiro", status: "active" },
-    { id: "SCH003", name: "Escola Secundária Sul", city: "Belo Horizonte", status: "inactive" },
-    { id: "SCH004", name: "Instituto de Educação Oeste", city: "Porto Alegre", status: "active" },
-    { id: "SCH005", name: "Centro Educacional Leste", city: "Salvador", status: "active" },
-    { id: "SCH006", name: "Error School", city: "Curitiba", status: "active" },
+    { id: "SCH001", name: "Escola Primária Central", cnpj: "11.111.111/0001-11", address: "Rua Principal, 123, São Paulo - SP", status: "active" },
+    { id: "SCH002", name: "Colégio Estadual Norte", cnpj: "22.222.222/0001-22", address: "Avenida Brasil, 456, Rio de Janeiro - RJ", status: "active" },
+    { id: "SCH003", name: "Escola Secundária Sul", cnpj: "33.333.333/0001-33", address: "Rua das Flores, 789, Belo Horizonte - MG", status: "inactive" },
+    { id: "SCH004", name: "Instituto de Educação Oeste", cnpj: "44.444.444/0001-44", address: "Av. Ipiranga, 101, Porto Alegre - RS", status: "active" },
+    { id: "SCH005", name: "Centro Educacional Leste", cnpj: "55.555.555/0001-55", address: "Rua do Pelourinho, 202, Salvador - BA", status: "active" },
+    { id: "SCH006", name: "Error School", cnpj: "66.666.666/0001-66", address: "Rua 24 Horas, 303, Curitiba - PR", status: "active" },
 ];

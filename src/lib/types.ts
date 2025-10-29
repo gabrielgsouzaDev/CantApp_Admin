@@ -21,7 +21,8 @@ export type NavItem = {
 export type School = {
   id: string;
   name: string;
-  city: string;
+  address: string;
+  cnpj: string;
   status: "active" | "inactive";
 };
 

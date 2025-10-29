@@ -25,7 +25,8 @@ import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
-  city: z.string().min(2, "A cidade deve ter pelo menos 2 caracteres."),
+  address: z.string().min(10, "O endereço deve ter pelo menos 10 caracteres."),
+  cnpj: z.string().length(18, "O CNPJ deve ter 14 dígitos (XX.XXX.XXX/XXXX-XX)."),
   status: z.enum(["active", "inactive"]),
 });
 
@@ -42,7 +43,8 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: defaultValues?.name || "",
-      city: defaultValues?.city || "",
+      address: defaultValues?.address || "",
+      cnpj: defaultValues?.cnpj || "",
       status: defaultValues?.status || "active",
     },
   });
@@ -50,10 +52,20 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
   useEffect(() => {
     form.reset({
       name: defaultValues?.name || "",
-      city: defaultValues?.city || "",
+      address: defaultValues?.address || "",
+      cnpj: defaultValues?.cnpj || "",
       status: defaultValues?.status || "active",
     });
   }, [defaultValues, form]);
+  
+  const handleCnpjChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+    value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+    value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+    value = value.replace(/(\d{4})(\d)/, "$1-$2");
+    form.setValue("cnpj", value.substring(0, 18));
+  };
 
 
   return (
@@ -74,12 +86,30 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
         />
         <FormField
           control={form.control}
-          name="city"
+          name="cnpj"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Cidade</FormLabel>
+              <FormLabel>CNPJ</FormLabel>
               <FormControl>
-                <Input placeholder="Ex: São Paulo" {...field} />
+                <Input 
+                    placeholder="XX.XXX.XXX/XXXX-XX" 
+                    {...field}
+                    onChange={handleCnpjChange}
+                    value={field.value}
+                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Endereço</FormLabel>
+              <FormControl>
+                <Input placeholder="Ex: Rua Principal, 123, São Paulo - SP" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

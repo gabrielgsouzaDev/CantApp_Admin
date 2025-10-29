@@ -55,7 +55,7 @@ export function RecentSubscriptions() {
                             <div className="ml-4 space-y-1">
                             <p className="text-sm font-medium leading-none">{sub.name}</p>
                             <p className="text-sm text-muted-foreground">
-                                {sub.city}
+                                {sub.address}
                             </p>
                             </div>
                             <div className="ml-auto font-medium">
