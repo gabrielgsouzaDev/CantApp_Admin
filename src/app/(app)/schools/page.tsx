@@ -65,7 +65,7 @@ export default function SchoolsPage() {
     fetchSchools();
   }, []);
 
-  const handleFormSubmit = async (data: Omit<School, 'id'>) => {
+  const handleFormSubmit = async (data: Omit<School, 'id' | 'ownerUid'>) => {
     try {
       if (selectedSchool) {
         await updateSchool(selectedSchool.id, data);

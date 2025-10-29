@@ -22,15 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect } from "react";
+import { SchoolFormSchema } from "@/lib/schemas";
 
-const formSchema = z.object({
-  name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
-  address: z.string().min(10, "O endereço deve ter pelo menos 10 caracteres."),
-  cnpj: z.string().length(18, "O CNPJ deve ter 14 dígitos (XX.XXX.XXX/XXXX-XX)."),
-  status: z.enum(["active", "inactive"]),
-});
 
-type SchoolFormData = z.infer<typeof formSchema>;
+type SchoolFormData = z.infer<typeof SchoolFormSchema>;
 
 interface SchoolFormProps {
   onSubmit: (data: SchoolFormData) => void;
@@ -40,7 +35,7 @@ interface SchoolFormProps {
 
 export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProps) {
   const form = useForm<SchoolFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(SchoolFormSchema),
     defaultValues: {
       name: defaultValues?.name || "",
       address: defaultValues?.address || "",
