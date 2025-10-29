@@ -17,8 +17,7 @@ type ChartView = 'revenue' | 'schools' | 'users' | 'canteens' | 'sales' | 'stude
 export default function DashboardPage() {
   const { role, loading } = useAuth();
   const router = useRouter();
-  const [activeChart, setActiveChart] = useState<ChartView>('revenue');
-
+  
   useEffect(() => {
     if (!loading && role === "Cantineiro") {
       router.replace("/orders");
@@ -33,51 +32,46 @@ export default function DashboardPage() {
     );
   }
   
-  const renderAdminDashboard = () => (
-    <>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div onClick={() => setActiveChart('revenue')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'revenue' && "ring-2 ring-primary")}>
-              <StatsCard 
-                title="Receita Total"
-                value="R$45.231,89"
-                icon={DollarSign}
-                description="+20.1% do mês passado"
-              />
-            </div>
-             <div onClick={() => setActiveChart('schools')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'schools' && "ring-2 ring-primary")}>
-              <StatsCard 
-                title="Escolas Ativas"
-                value="57"
-                icon={Building}
-                description="+19% do mês passado"
-              />
-            </div>
-             <div onClick={() => setActiveChart('canteens')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'canteens' && "ring-2 ring-primary")}>
-              <StatsCard 
-                title="Cantinas Cadastradas"
-                value="82"
-                icon={Store}
-                description="+5 no último mês"
-              />
-            </div>
-             <div onClick={() => setActiveChart('users')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'users' && "ring-2 ring-primary")}>
-              <StatsCard 
-                title="Usuários Cadastrados"
-                value="+573"
-                icon={Users}
-                description="+201 desde a última hora"
-              />
-            </div>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <OverviewChart activeView={activeChart} />
-          <RecentSales />
-        </div>
-    </>
-  );
+  const AdminDashboard = () => {
+    const [adminActiveChart, setAdminActiveChart] = useState<ChartView>('revenue');
+    
+    return (
+      <>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div onClick={() => setAdminActiveChart('revenue')} className={cn("rounded-lg cursor-pointer transition-all", adminActiveChart === 'revenue' && "ring-2 ring-primary")}>
+                <StatsCard 
+                  title="Receita Mensal"
+                  value="R$45.231,89"
+                  icon={DollarSign}
+                  description="+20.1% do mês passado"
+                />
+              </div>
+               <div onClick={() => setAdminActiveChart('schools')} className={cn("rounded-lg cursor-pointer transition-all", adminActiveChart === 'schools' && "ring-2 ring-primary")}>
+                <StatsCard 
+                  title="Escolas Ativas"
+                  value="57"
+                  icon={Building}
+                  description="+19% do mês passado"
+                />
+              </div>
+               <div onClick={() => setAdminActiveChart('canteens')} className={cn("rounded-lg cursor-pointer transition-all", adminActiveChart === 'canteens' && "ring-2 ring-primary")}>
+                <StatsCard 
+                  title="Cantinas Cadastradas"
+                  value="82"
+                  icon={Store}
+                  description="+5 no último mês"
+                />
+              </div>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <OverviewChart activeView={adminActiveChart} />
+            <RecentSales />
+          </div>
+      </>
+    );
+  }
 
-  const renderEscolaDashboard = () => {
-    // Definir o estado inicial do chart para Escola
+  const EscolaDashboard = () => {
     const [escolaActiveChart, setEscolaActiveChart] = useState<ChartView>('sales');
 
     return (
@@ -128,8 +122,8 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title="Dashboard" description="Bem-vindo ao seu painel de controle." />
-      {role === 'Admin' && renderAdminDashboard()}
-      {role === 'Escola' && renderEscolaDashboard()}
+      {role === 'Admin' && <AdminDashboard />}
+      {role === 'Escola' && <EscolaDashboard />}
     </div>
   );
 }
