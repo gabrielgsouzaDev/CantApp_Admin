@@ -2,17 +2,22 @@
 
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/page-header";
-import { DollarSign, Building, Users, ShoppingCart, BookCopy } from "lucide-react";
+import { DollarSign, Building, Users, ShoppingCart, BookCopy, Store } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { OverviewChart } from "@/components/dashboard/overview-chart";
 import { RecentSales } from "@/components/dashboard/recent-sales";
 import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type ChartView = 'revenue' | 'schools' | 'users' | 'canteens' | 'sales' | 'students';
+
 
 export default function DashboardPage() {
   const { role, loading } = useAuth();
   const router = useRouter();
+  const [activeChart, setActiveChart] = useState<ChartView>('revenue');
 
   useEffect(() => {
     if (!loading && role === "Cantineiro") {
@@ -31,72 +36,93 @@ export default function DashboardPage() {
   const renderAdminDashboard = () => (
     <>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <StatsCard 
-              title="Receita Total"
-              value="R$45.231,89"
-              icon={DollarSign}
-              description="+20.1% do mês passado"
-            />
-            <StatsCard 
-              title="Escolas Ativas"
-              value="57"
-              icon={Building}
-              description="+19% do mês passado"
-            />
-            <StatsCard 
-              title="Usuários Cadastrados"
-              value="+573"
-              icon={Users}
-              description="+201 desde a última hora"
-            />
-            <StatsCard 
-              title="Pedidos no Mês"
-              value="+2350"
-              icon={ShoppingCart}
-              description="+180.1% do mês passado"
-            />
+            <div onClick={() => setActiveChart('revenue')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'revenue' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Receita Total"
+                value="R$45.231,89"
+                icon={DollarSign}
+                description="+20.1% do mês passado"
+              />
+            </div>
+             <div onClick={() => setActiveChart('schools')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'schools' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Escolas Ativas"
+                value="57"
+                icon={Building}
+                description="+19% do mês passado"
+              />
+            </div>
+             <div onClick={() => setActiveChart('canteens')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'canteens' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Cantinas Cadastradas"
+                value="82"
+                icon={Store}
+                description="+5 no último mês"
+              />
+            </div>
+             <div onClick={() => setActiveChart('users')} className={cn("rounded-lg cursor-pointer transition-all", activeChart === 'users' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Usuários Cadastrados"
+                value="+573"
+                icon={Users}
+                description="+201 desde a última hora"
+              />
+            </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <OverviewChart />
+          <OverviewChart activeView={activeChart} />
           <RecentSales />
         </div>
     </>
   );
 
-  const renderEscolaDashboard = () => (
+  const renderEscolaDashboard = () => {
+    // Definir o estado inicial do chart para Escola
+    const [escolaActiveChart, setEscolaActiveChart] = useState<ChartView>('sales');
+
+    return (
      <>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <StatsCard 
-              title="Vendas no Mês"
-              value="R$12.345,67"
-              icon={DollarSign}
-              description="+15% do mês passado"
-            />
-            <StatsCard 
-              title="Cantinas Ativas"
-              value="2"
-              icon={BookCopy}
-              description="Total de cantinas na escola"
-            />
-             <StatsCard 
-              title="Alunos Ativos"
-              value="452"
-              icon={Users}
-              description="Alunos fazendo pedidos"
-            />
-            <StatsCard 
-              title="Pedidos Hoje"
-              value="125"
-              icon={ShoppingCart}
-              description="Pedidos realizados hoje"
-            />
+            <div onClick={() => setEscolaActiveChart('sales')} className={cn("rounded-lg cursor-pointer transition-all", escolaActiveChart === 'sales' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Vendas no Mês"
+                value="R$12.345,67"
+                icon={DollarSign}
+                description="+15% do mês passado"
+              />
+            </div>
+            <div onClick={() => setEscolaActiveChart('canteens')} className={cn("rounded-lg cursor-pointer transition-all", escolaActiveChart === 'canteens' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Cantinas Ativas"
+                value="2"
+                icon={BookCopy}
+                description="Total de cantinas na escola"
+              />
+            </div>
+            <div onClick={() => setEscolaActiveChart('students')} className={cn("rounded-lg cursor-pointer transition-all", escolaActiveChart === 'students' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Alunos Ativos"
+                value="452"
+                icon={Users}
+                description="Alunos fazendo pedidos"
+              />
+            </div>
+            <div onClick={() => setEscolaActiveChart('sales')} className={cn("rounded-lg cursor-pointer transition-all", escolaActiveChart === 'sales' && "ring-2 ring-primary")}>
+              <StatsCard 
+                title="Pedidos Hoje"
+                value="125"
+                icon={ShoppingCart}
+                description="Pedidos realizados hoje"
+              />
+            </div>
         </div>
          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <OverviewChart />
+          <OverviewChart activeView={escolaActiveChart} />
           <RecentSales />
         </div>
     </>
-  );
+    );
+  };
 
 
   return (
