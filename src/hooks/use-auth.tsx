@@ -3,13 +3,15 @@
 import { AuthContext } from "@/components/auth-provider";
 import { Role } from "@/lib/types";
 import { useContext } from "react";
+import { UserCredential } from "firebase/auth";
 
 interface AuthHook {
   user: any;
   role: Role | null;
-  login: (role: Role) => void;
-  logout: () => void;
   loading: boolean;
+  login: (email: string, password: string, role: Role) => Promise<void>;
+  register: (email: string, password: string) => Promise<UserCredential>;
+  logout: () => void;
 }
 
 export const useAuth = (): AuthHook => {
@@ -17,7 +19,5 @@ export const useAuth = (): AuthHook => {
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-  // Remove setRole from the returned object
-  const { setRole, ...rest } = context as any;
-  return rest;
+  return context;
 };

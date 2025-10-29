@@ -15,15 +15,25 @@ import { useState } from "react";
 import { Loader2, Store } from "lucide-react";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CantinaLoginPage() {
   const { login, loading } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("cantineiro@ctn.com");
+  const [password, setPassword] = useState("password");
+  const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    login("Cantineiro");
+    try {
+      await login(email, password, "Cantineiro");
+    } catch (error: any) {
+      toast({
+        title: "Erro de Login",
+        description: "Email ou senha inválidos.",
+        variant: "destructive"
+      })
+    }
   };
 
   return (

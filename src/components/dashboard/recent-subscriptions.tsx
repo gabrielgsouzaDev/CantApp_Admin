@@ -6,12 +6,16 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockSchools } from "@/lib/data";
 import { School } from "@/lib/types";
 import { useEffect, useState } from "react";
+import { getSchools } from "@/services/schoolService";
+import { Loader2 } from "lucide-react";
 
-const getRecentSubscriptions = (): (School & { planValue: number })[] => {
-  return mockSchools.slice(0, 5).map((school, index) => ({
+const getRecentSubscriptions = async (): Promise<(School & { planValue: number })[]> => {
+  // In a real app, this would fetch from a 'subscriptions' collection.
+  // For now, we fetch all schools and assign a mock plan value.
+  const schools = await getSchools();
+  return schools.slice(0, 5).map((school, index) => ({
     ...school,
     planValue: [149, 299, 149, 149, 499][index] || 149,
   }));
@@ -22,10 +26,17 @@ export function RecentSubscriptions() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // In a real app, you would fetch this from your subscriptions collection in Firestore.
-    const subsData = getRecentSubscriptions();
-    setSubscriptions(subsData);
-    setLoading(false);
+    const fetchSubscriptions = async () => {
+      try {
+        const subsData = await getRecentSubscriptions();
+        setSubscriptions(subsData);
+      } catch (error) {
+        console.error("Failed to fetch recent subscriptions:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSubscriptions();
   }, []);
 
   const getAvatarForSchool = (schoolName: string) => {
@@ -43,7 +54,9 @@ export function RecentSubscriptions() {
         </CardHeader>
         <CardContent>
             {loading ? (
-                <p>Carregando assinaturas...</p>
+                <div className="flex justify-center items-center h-full">
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                </div>
             ) : (
                 <div className="space-y-8">
                     {subscriptions.map((sub) => (

@@ -15,15 +15,25 @@ import { useState } from "react";
 import { Loader2, Shield } from "lucide-react";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminLoginPage() {
   const { login, loading } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@ctn.com"); // default for demo
+  const [password, setPassword] = useState("password"); // default for demo
+  const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    login("Admin");
+    try {
+      await login(email, password, "Admin");
+    } catch (error: any) {
+      toast({
+        title: "Erro de Login",
+        description: "Email ou senha inválidos. Apenas administradores podem acessar.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

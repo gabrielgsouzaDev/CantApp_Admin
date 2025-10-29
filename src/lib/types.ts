@@ -2,13 +2,32 @@ import type { LucideIcon } from "lucide-react";
 
 export type Role = "Admin" | "Escola" | "Cantineiro";
 
-export type User = {
-  id: string;
+// This is the user type from Firebase Authentication, simplified
+export type FirebaseUser = {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+};
+
+// This is our application-specific user profile, stored in Firestore
+export type CtnAppUser = {
+  id: string; // Document ID from Firestore
+  uid: string; // Corresponds to Firebase Auth UID
   name: string;
   email: string;
   avatar: string;
   role: Role;
 };
+
+// Deprecated User type, replaced by CtnAppUser
+export type User = {
+  id: string;
+  name:string;
+  email: string;
+  avatar: string;
+  role: Role;
+}
 
 export type NavItem = {
   title: string;
@@ -24,6 +43,7 @@ export type School = {
   address: string;
   cnpj: string;
   status: "active" | "inactive";
+  ownerUid?: string; // UID of the user who created the school
 };
 
 export type Product = {
