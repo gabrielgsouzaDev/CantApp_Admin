@@ -22,7 +22,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { SchoolAddressSchema, SchoolSchema } from "@/lib/schemas";
+import { SchoolSchema } from "@/lib/schemas";
 
 
 export default function EscolaLoginPage() {
@@ -98,9 +98,13 @@ export default function EscolaLoginPage() {
       setLoginPassword("");
 
     } catch (error: any) {
+      let errorMessage = "Não foi possível completar o cadastro.";
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = "Este email já está em uso. Tente outro.";
+      }
       toast({
         title: "Erro no Cadastro",
-        description: error.message || "Não foi possível completar o cadastro.",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -233,7 +237,7 @@ export default function EscolaLoginPage() {
                             <FormItem><FormLabel>Crie uma Senha</FormLabel><FormControl><Input type="password" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                           )} />
 
-                           <div className="space-y-2">
+                           <div className="space-y-2 pt-4">
                              <h3 className="text-sm font-medium">Endereço</h3>
                               <div className="grid grid-cols-1 gap-4">
                                 <FormField control={form.control} name="address.cep" render={({ field }) => (
@@ -242,7 +246,7 @@ export default function EscolaLoginPage() {
                                         <FormControl>
                                             <div className="relative">
                                                 <Input required disabled={currentLoading} {...field} onChange={handleCepChange} onBlur={handleCepBlur} />
-                                                {loading && <Loader2 className="animate-spin h-4 w-4 absolute right-2 top-1/2 -translate-y-1/2" />}
+                                                {loading && !authLoading && <Loader2 className="animate-spin h-4 w-4 absolute right-2 top-1/2 -translate-y-1/2" />}
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -291,3 +295,5 @@ export default function EscolaLoginPage() {
     </div>
   );
 }
+
+    

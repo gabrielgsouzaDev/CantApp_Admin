@@ -12,11 +12,15 @@ export const getSchools = async (): Promise<School[]> => {
 };
 
 export const addSchool = async (school: Omit<School, 'id'>): Promise<string> => {
+  // Ensure ownerUid is present
+  if (!school.ownerUid) {
+    throw new Error("ownerUid is required to create a school.");
+  }
   const docRef = await addDoc(schoolsCollection, school);
   return docRef.id;
 };
 
-export const updateSchool = async (id: string, school: Partial<Omit<School, 'id'>>): Promise<void> => {
+export const updateSchool = async (id: string, school: Partial<Omit<School, 'id' | 'ownerUid'>>): Promise<void> => {
   const schoolDoc = doc(adminDb, "schools", id);
   await updateDoc(schoolDoc, school);
 };
@@ -25,3 +29,5 @@ export const deleteSchool = async (id: string): Promise<void> => {
   const schoolDoc = doc(adminDb, "schools", id);
   await deleteDoc(schoolDoc);
 };
+
+    
