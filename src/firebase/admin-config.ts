@@ -1,10 +1,10 @@
 // src/firebase/admin-config.ts
 // ATENÇÃO: Substitua com as credenciais do seu projeto Firebase SECUNDÁRIO (Admin)
 export const firebaseAdminConfig = {
-  apiKey: "YOUR_ADMIN_API_KEY",
-  authDomain: "YOUR_ADMIN_AUTH_DOMAIN",
-  projectId: "YOUR_ADMIN_PROJECT_ID",
-  storageBucket: "YOUR_ADMIN_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_ADMIN_MESSAGING_SENDER_ID",
-  appId: "YOUR_ADMIN_APP_ID"
+  apiKey: "AIzaSyDQYCjCFpvW-W_eXr2OPRoLvAXNGKmDXb4",
+  authDomain: "studio-2048412062-f267f.firebaseapp.com",
+  projectId: "studio-2048412062-f267f",
+  storageBucket: "studio-2048412062-f267f.appspot.com",
+  messagingSenderId: "227001608268",
+  appId: "1:227001608268:web:c10d67ea5182c02331ace9"
 };
