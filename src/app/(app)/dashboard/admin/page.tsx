@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/page-header";
 import { DollarSign, Building, Users } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { OverviewChart } from "@/components/dashboard/overview-chart";
-import { RecentSales } from "@/components/dashboard/recent-sales";
+import { RecentSubscriptions } from "@/components/dashboard/recent-subscriptions";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +45,7 @@ export default function AdminDashboardPage() {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <OverviewChart activeView={activeChart} />
-        <RecentSales />
+        <RecentSubscriptions />
       </div>
     </div>
   );
