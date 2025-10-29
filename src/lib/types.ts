@@ -25,6 +25,18 @@ export type School = {
   status: "active" | "inactive";
 };
 
+export type Product = {
+  id: string;
+  name: string;
+  price: number;
+};
+
+export type Canteen = {
+  id: string;
+  name: string;
+  schoolId: string;
+};
+
 export type OrderStatus = "A Fazer" | "Em Preparo" | "Pronto";
 export type PaymentStatus = "Pago" | "Pendente";
 
