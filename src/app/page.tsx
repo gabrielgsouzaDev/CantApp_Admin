@@ -63,10 +63,6 @@ export default function LandingPage() {
                 <Button>Começar Agora</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleLoginAs("Admin")}>
-                   <Shield className="mr-2 h-4 w-4" />
-                  <span>Admin</span>
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleLoginAs("Escola")}>
                   <School className="mr-2 h-4 w-4" />
                   <span>Escola</span>
@@ -108,7 +104,7 @@ export default function LandingPage() {
                         <CardTitle>Área Administrativa</CardTitle>
                         <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <CardContent className="grid grid-cols-1 gap-4">
                        <Button className="justify-center" onClick={() => handleLoginAs("Escola")}>
                             <School /> Acessar como Escola
                         </Button>

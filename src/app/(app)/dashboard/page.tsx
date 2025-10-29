@@ -32,9 +32,6 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title="Dashboard" description="Bem-vindo ao seu painel de controle.">
-        {role === "Admin" && (
-          <Button variant="outline">Botão Temporário (Admin)</Button>
-        )}
       </PageHeader>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
