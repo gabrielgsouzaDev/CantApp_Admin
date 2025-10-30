@@ -1,11 +1,11 @@
 // src/services/schoolService.ts
-import { db } from "@/firebase";
+import { adminDb } from "@/firebase";
 import { School } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
 
-const schoolsCollection = collection(db, "schools");
+const schoolsCollection = collection(adminDb, "schools");
 
 export const getSchools = async (): Promise<School[]> => {
   const q = query(schoolsCollection);
@@ -31,7 +31,7 @@ export const addSchool = async (school: Omit<School, 'id'>) => {
 };
 
 export const updateSchool = async (id: string, school: Partial<Omit<School, 'id' | 'ownerUid'>>) => {
-  const schoolDoc = doc(db, "schools", id);
+  const schoolDoc = doc(adminDb, "schools", id);
   return updateDoc(schoolDoc, school)
     .catch(async (serverError) => {
       const permissionError = new FirestorePermissionError({
@@ -45,7 +45,7 @@ export const updateSchool = async (id: string, school: Partial<Omit<School, 'id'
 };
 
 export const deleteSchool = async (id: string) => {
-  const schoolDoc = doc(db, "schools", id);
+  const schoolDoc = doc(adminDb, "schools", id);
   return deleteDoc(schoolDoc)
     .catch(async (serverError) => {
       const permissionError = new FirestorePermissionError({

@@ -10,9 +10,10 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   signOut,
-  User as FirebaseUser
+  User as FirebaseUser,
+  Auth
 } from "firebase/auth";
-import { app, db } from "@/firebase";
+import { app, db, adminApp, adminDb, adminAuth } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { seedOrders } from "@/services/orderService";
 import { seedProducts } from "@/services/productService";
@@ -30,12 +31,11 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const auth = getAuth(app);
-
 // This function maps a Firebase User to our app's user type and assigns a role.
-// In a real app, this role would likely come from a custom claim or a 'roles' collection in Firestore.
-const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Role): Promise<CtnAppUser> => {
-  const userDocRef = doc(db, "users", firebaseUser.uid);
+// The `db` instance passed determines which Firestore to check (client or admin)
+const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Role, authInstance: Auth): Promise<CtnAppUser> => {
+  const firestoreInstance = authInstance === adminAuth ? adminDb : db;
+  const userDocRef = doc(firestoreInstance, "users", firebaseUser.uid);
   let userDoc = await getDoc(userDocRef);
 
   if (!userDoc.exists()) {
@@ -55,11 +55,11 @@ const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Rol
 }
 
 // --- Seeding logic ---
-const seedUser = async (email: string, pass: string, role: Role) => {
+const seedUser = async (authInstance: Auth, email: string, pass: string, role: Role) => {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        const userCredential = await createUserWithEmailAndPassword(authInstance, email, pass);
         const firebaseUser = userCredential.user;
-        const userDocRef = doc(db, "users", firebaseUser.uid);
+        const userDocRef = doc(adminDb, "users", firebaseUser.uid);
         
         const newUser: Omit<CtnAppUser, 'id'> = {
             uid: firebaseUser.uid,
@@ -80,19 +80,19 @@ const seedUser = async (email: string, pass: string, role: Role) => {
 };
 
 const runSeed = async () => {
-    // Check if seeding has been done using the main db
-    const seedFlagRef = doc(db, 'internal', 'seed_flag');
+    // Check if seeding has been done using the admin db
+    const seedFlagRef = doc(adminDb, 'internal', 'seed_flag');
     try {
         const seedFlagDoc = await getDoc(seedFlagRef);
 
         if (!seedFlagDoc.exists()) {
             console.log("First time setup: Seeding initial data...");
             
-            // Seed users
-            await seedUser("admin@ctn.com", "password", "Admin");
-            await seedUser("cantineiro@ctn.com", "password", "Cantineiro");
+            // Seed admin/canteen users in the ADMIN auth instance
+            await seedUser(adminAuth, "admin@ctn.com", "password", "Admin");
+            await seedUser(adminAuth, "cantineiro@ctn.com", "password", "Cantineiro");
             
-            // Seed other data
+            // Seed other data in the ADMIN database
             await seedProducts();
             await seedOrders();
 
@@ -115,23 +115,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initialize = async () => {
-      // Run seed only in development
       if (process.env.NODE_ENV === 'development') {
         await runSeed();
       }
 
-      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      // Determine which auth instance to listen to based on the stored role
+      const storedRole = localStorage.getItem("ctn-user-role") as Role | null;
+      const authInstance = (storedRole === "Admin" || storedRole === "Escola" || storedRole === "Cantineiro")
+        ? adminAuth
+        : auth;
+
+      const unsubscribe = onAuthStateChanged(authInstance, async (firebaseUser) => {
         if (firebaseUser) {
-          const storedRole = localStorage.getItem("ctn-user-role") as Role | null;
-          if (storedRole) {
-              const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, storedRole);
+           if (storedRole) {
+              const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, storedRole, authInstance);
               setUser(appUser);
               setRole(appUser.role);
-          } else {
-             signOut(auth);
+           } else {
+             // This case should ideally not happen if role is set on login
+             signOut(authInstance);
              setUser(null);
              setRole(null);
-          }
+           }
         } else {
           setUser(null);
           setRole(null);
@@ -151,29 +156,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string, assignedRole: Role) => {
     setLoading(true);
+    // Use adminAuth for Admin, School, and Canteen staff, and client auth for others
+    const authInstance = (assignedRole === "Admin" || assignedRole === "Escola" || assignedRole === "Cantineiro")
+        ? adminAuth
+        : auth;
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const appUser = await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole);
+      const userCredential = await signInWithEmailAndPassword(authInstance, email, password);
+      const appUser = await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole, authInstance);
       
       setUser(appUser);
       setRole(appUser.role);
-      localStorage.setItem("ctn-user-role", appUser.role); // Store role for session persistence
+      localStorage.setItem("ctn-user-role", appUser.role);
 
       const dashboardRoute = getDashboardRouteForRole(appUser.role);
       router.push(dashboardRoute);
     } catch (error) {
       console.error("Login Error:", error);
       setLoading(false);
-      throw error; // Rethrow to be caught by the UI
+      throw error;
     }
   };
 
   const register = async (email: string, password: string) => {
      setLoading(true);
      try {
-       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-       // The user profile will be created by `mapFirebaseUserToCtnAppUser` on first login
-       // or can be created here if needed.
+       // Registration for schools happens on the admin auth instance
+       const userCredential = await createUserWithEmailAndPassword(adminAuth, email, password);
        return userCredential;
      } catch (error) {
         console.error("Registration Error:", error);
@@ -185,7 +194,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     setLoading(true);
-    await signOut(auth);
+    // Log out from the correct auth instance
+    const authInstance = (role === "Admin" || role === "Escola" || role === "Cantineiro") ? adminAuth : auth;
+    await signOut(authInstance);
     localStorage.removeItem("ctn-user-role");
     setUser(null);
     setRole(null);
@@ -193,7 +204,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   };
   
-  // This effect handles the case where a logged-in user tries to access a login page
   useEffect(() => {
     const isAuthPage = pathname.includes('/login');
     if (!loading && user && isAuthPage) {

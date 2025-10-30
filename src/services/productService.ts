@@ -1,11 +1,11 @@
 // src/services/productService.ts
-import { db } from "@/firebase";
+import { adminDb } from "@/firebase";
 import { Product } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
 
-const productsCollection = collection(db, "products");
+const productsCollection = collection(adminDb, "products");
 
 export const getProducts = async (): Promise<Product[]> => {
   const q = query(productsCollection);
@@ -30,7 +30,7 @@ export const addProduct = async (product: Omit<Product, 'id'>) => {
 };
 
 export const updateProduct = async (id: string, product: Partial<Omit<Product, 'id'>>) => {
-  const productDoc = doc(db, "products", id);
+  const productDoc = doc(adminDb, "products", id);
   return updateDoc(productDoc, product)
     .catch(async (serverError) => {
       const permissionError = new FirestorePermissionError({
@@ -44,7 +44,7 @@ export const updateProduct = async (id: string, product: Partial<Omit<Product, '
 };
 
 export const deleteProduct = async (id: string) => {
-  const productDoc = doc(db, "products", id);
+  const productDoc = doc(adminDb, "products", id);
   return deleteDoc(productDoc)
     .catch(async (serverError) => {
       const permissionError = new FirestorePermissionError({

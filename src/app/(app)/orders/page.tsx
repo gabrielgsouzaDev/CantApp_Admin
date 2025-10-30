@@ -144,6 +144,11 @@ export default function OrdersPage() {
   const [dragOverColumn, setDragOverColumn] = useState<OrderStatus | null>(null);
 
   useEffect(() => {
+    // This check is to prevent errors during server-side rendering or in case `getOrders` isn't ready.
+    if (typeof getOrders !== 'function') {
+      setLoading(false);
+      return;
+    }
     const ordersQuery = getOrders();
     const unsubscribe = onSnapshot(ordersQuery, (snapshot) => {
       const ordersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));

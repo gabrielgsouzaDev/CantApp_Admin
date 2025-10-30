@@ -11,13 +11,24 @@ import { useEffect, useState } from "react";
 import { Order } from "@/lib/types";
 import { getRecentSales } from "@/services/orderService";
 import { onSnapshot } from "firebase/firestore";
-import { mockUsers } from "@/lib/data";
+
+const mockUsers: { [key: string]: { avatar: string } } = {
+  joao: { avatar: "https://i.pravatar.cc/150?u=joao" },
+  maria: { avatar: "https://i.pravatar.cc/150?u=maria" },
+  pedro: { avatar: "https://i.pravatar.cc/150?u=pedro" },
+  ana: { avatar: "https://i.pravatar.cc/150?u=ana" },
+  lucas: { avatar: "https://i.pravatar.cc/150?u=lucas" },
+};
 
 export function RecentSales() {
   const [sales, setSales] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+     if (typeof getRecentSales !== 'function') {
+      setLoading(false);
+      return;
+    }
     const salesQuery = getRecentSales();
     const unsubscribe = onSnapshot(salesQuery, (snapshot) => {
       const salesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));
@@ -33,9 +44,7 @@ export function RecentSales() {
 
   const getAvatarForStudent = (studentName: string) => {
     // Simple logic to assign avatars for demo purposes
-    const userKeys = Object.keys(mockUsers);
-    const hash = studentName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const userKey = userKeys[hash % userKeys.length];
+    const userKey = studentName.split(' ')[0].toLowerCase();
     return mockUsers[userKey]?.avatar || PlaceHolderImages.find(img => img.id === 'user-6')?.imageUrl || '';
   };
 

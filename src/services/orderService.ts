@@ -1,9 +1,9 @@
 // src/services/orderService.ts
-import { db } from "@/firebase";
+import { adminDb } from "@/firebase";
 import { OrderStatus } from "@/lib/types";
 import { collection, query, updateDoc, doc, limit, orderBy, getDocs } from "firebase/firestore";
 
-const ordersCollection = collection(db, "orders");
+const ordersCollection = collection(adminDb, "orders");
 
 export const getOrders = () => {
   return query(ordersCollection, orderBy("time", "asc"));
@@ -14,7 +14,7 @@ export const getRecentSales = () => {
 }
 
 export const updateOrderStatus = async (orderId: string, newStatus: OrderStatus) => {
-  const orderRef = doc(db, "orders", orderId);
+  const orderRef = doc(adminDb, "orders", orderId);
   await updateDoc(orderRef, {
     status: newStatus
   });
