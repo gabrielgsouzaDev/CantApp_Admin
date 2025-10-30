@@ -1,5 +1,10 @@
 import type {NextConfig} from 'next';
 
+// Run seed script in development
+if (process.env.NODE_ENV === 'development') {
+  require('./src/lib/seed.ts');
+}
+
 const nextConfig: NextConfig = {
   /* config options here */
   typescript: {

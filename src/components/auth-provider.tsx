@@ -29,7 +29,7 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // This function maps a Firebase User to our app's user type and assigns a role.
-const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Role, authInstance: Auth): Promise<CtnAppUser> => {
+const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Role): Promise<CtnAppUser> => {
   // Always read/write user profile from the adminDB for consistency
   const firestoreInstance = adminDb;
   const userDocRef = doc(firestoreInstance, "users", firebaseUser.uid);
@@ -55,6 +55,12 @@ const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Rol
   return { id: userDoc.id, ...userData, role: finalRole } as CtnAppUser;
 }
 
+const getAuthInstanceByRole = (role: Role | null): Auth => {
+    return (role === "Admin" || role === "Escola" || role === "Cantineiro")
+      ? adminAuth
+      : auth;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<CtnAppUser | null>(null);
   const [role, setRole] = useState<Role | null>(null);
@@ -63,47 +69,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Determine which auth instance to listen to based on the stored role
-    const storedRole = localStorage.getItem("ctn-user-role") as Role | null;
-    const authInstance = (storedRole === "Admin" || storedRole === "Escola" || storedRole === "Cantineiro")
-      ? adminAuth
-      : auth;
+    // We need to check both auth instances
+    const listenToAuth = (authInstance: Auth, roleScope: Role[] | null) => {
+        return onAuthStateChanged(authInstance, async (firebaseUser) => {
+            const storedRole = localStorage.getItem("ctn-user-role") as Role | null;
 
-    const unsubscribe = onAuthStateChanged(authInstance, async (firebaseUser) => {
-      if (firebaseUser && storedRole) {
-          try {
-            const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, storedRole, authInstance);
-            setUser(appUser);
-            setRole(appUser.role);
-          } catch (error) {
-            console.error("Error mapping user, signing out:", error);
-            // If mapping fails, sign out to prevent inconsistent state
-            await signOut(authInstance);
-            setUser(null);
-            setRole(null);
-          }
-      } else {
-        setUser(null);
-        setRole(null);
-      }
-      setLoading(false);
-    });
+            // Only proceed if the user exists and the stored role is in the scope of this auth instance
+            if (firebaseUser && storedRole && (roleScope === null || roleScope.includes(storedRole))) {
+                try {
+                    const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, storedRole);
+                    setUser(appUser);
+                    setRole(appUser.role);
+                } catch (error) {
+                    console.error("Error mapping user, signing out:", error);
+                    await signOut(authInstance);
+                    setUser(null);
+                    setRole(null);
+                }
+            }
+            setLoading(false);
+        });
+    };
 
-    return () => unsubscribe();
-  }, []);
+    const adminRoles: Role[] = ["Admin", "Escola", "Cantineiro"];
+    
+    // Unsubscribe functions
+    const unsubAdmin = listenToAuth(adminAuth, adminRoles);
+    const unsubClient = listenToAuth(auth, null); // Client auth handles any other roles or public users
+
+    // On component unmount, unsubscribe from both listeners
+    return () => {
+        unsubAdmin();
+        unsubClient();
+    };
+}, []);
+
 
   const login = async (email: string, password: string, assignedRole: Role) => {
     setLoading(true);
-    // Use adminAuth for Admin, School, and Canteen staff, and client auth for others
-    const authInstance = (assignedRole === "Admin" || assignedRole === "Escola" || assignedRole === "Cantineiro")
-        ? adminAuth
-        : auth;
+    const authInstance = getAuthInstanceByRole(assignedRole);
 
     try {
+      // Sign out from all instances first to prevent conflicts
+      await signOut(auth);
+      await signOut(adminAuth);
+
       const userCredential = await signInWithEmailAndPassword(authInstance, email, password);
-      const appUser = await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole, authInstance);
+      const appUser = await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole);
       
-      // Use the role from the DB as the source of truth
       const finalRole = appUser.role;
 
       setUser(appUser);
@@ -135,8 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     setLoading(true);
-    // Log out from the correct auth instance
-    const authInstance = (role === "Admin" || role === "Escola" || role === "Cantineiro") ? adminAuth : auth;
+    const authInstance = getAuthInstanceByRole(role);
     await signOut(authInstance);
     localStorage.removeItem("ctn-user-role");
     setUser(null);
