@@ -30,7 +30,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // This function maps a Firebase User to our app's user type and assigns a role.
 const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Role): Promise<CtnAppUser> => {
-  const firestoreInstance = adminDb;
+  const firestoreInstance = adminDb; // User profiles are always in the admin DB
   const userDocRef = doc(firestoreInstance, "users", firebaseUser.uid);
   let userDoc = await getDoc(userDocRef);
 
@@ -50,13 +50,20 @@ const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Rol
   const userData = userDoc.data();
   const finalRole = userData?.role || role;
 
+  // Set custom claims for security rules if the user is an admin type
+  if (["Admin", "Escola", "Cantineiro"].includes(finalRole)) {
+      // In a real app, this would be a server-side function call
+      // For this demo, we assume claims are set on user creation/role change.
+  }
+
   return { id: userDoc.id, ...userData, role: finalRole } as CtnAppUser;
 }
 
 const getAuthInstanceByRole = (role: Role | null): Auth => {
+    // Admin, Escola, and Cantineiro always use the adminAuth instance
     return (role === "Admin" || role === "Escola" || role === "Cantineiro")
       ? adminAuth
-      : auth;
+      : auth; // Default to client auth
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
