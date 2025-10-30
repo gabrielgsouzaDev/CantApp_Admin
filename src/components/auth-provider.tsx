@@ -14,6 +14,8 @@ import {
 } from "firebase/auth";
 import { app, db, adminDb } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { seedOrders } from "@/services/orderService";
+import { seedProducts } from "@/services/productService";
 
 interface AuthContextType {
   user: CtnAppUser | null;
@@ -50,6 +52,58 @@ const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Rol
   return { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
 }
 
+// --- Seeding logic ---
+const seedUser = async (email: string, pass: string, role: Role) => {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        const firebaseUser = userCredential.user;
+        const userDocRef = doc(db, "users", firebaseUser.uid);
+        
+        const newUser: Omit<CtnAppUser, 'id'> = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email || "",
+            name: firebaseUser.displayName || role,
+            role: role,
+            avatar: firebaseUser.photoURL || `https://i.pravatar.cc/150?u=${firebaseUser.uid}`,
+        };
+        await setDoc(userDocRef, newUser);
+        console.log(`Successfully seeded ${role} user: ${email}`);
+    } catch (error: any) {
+        if (error.code === 'auth/email-already-in-use') {
+            console.log(`${role} user (${email}) already exists. Skipping seed.`);
+        } else {
+            console.error(`Error seeding ${role} user:`, error);
+        }
+    }
+};
+
+const runSeed = async () => {
+    // Check if seeding has been done using the adminDb
+    const seedFlagRef = doc(adminDb, 'internal', 'seed_flag');
+    try {
+        const seedFlagDoc = await getDoc(seedFlagRef);
+
+        if (!seedFlagDoc.exists()) {
+            console.log("First time setup: Seeding initial data...");
+            
+            // Seed users
+            await seedUser("admin@ctn.com", "password", "Admin");
+            await seedUser("cantineiro@ctn.com", "password", "Cantineiro");
+            
+            // Seed other data
+            await seedProducts();
+            await seedOrders();
+
+            // Set flag to prevent future seeding
+            await setDoc(seedFlagRef, { completed: true, timestamp: new Date() });
+            console.log("Initial data seeding complete.");
+        }
+    } catch (e) {
+      console.error("Error checking or running seed:", e);
+    }
+};
+
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<CtnAppUser | null>(null);
   const [role, setRole] = useState<Role | null>(null);
@@ -58,30 +112,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // User is signed in.
-        // For now, we'll try to get the role from localStorage or default.
-        const storedRole = localStorage.getItem("ctn-user-role") as Role | null;
-        if (storedRole) {
-            const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, storedRole);
-            setUser(appUser);
-            setRole(appUser.role);
-        } else {
-           // If no role, sign out. This case should ideally not happen in normal flow.
-           signOut(auth);
-           setUser(null);
-           setRole(null);
-        }
-      } else {
-        // User is signed out.
-        setUser(null);
-        setRole(null);
+    const initialize = async () => {
+      // Run seed only in development
+      if (process.env.NODE_ENV === 'development') {
+        await runSeed();
       }
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
+      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
+          const storedRole = localStorage.getItem("ctn-user-role") as Role | null;
+          if (storedRole) {
+              const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, storedRole);
+              setUser(appUser);
+              setRole(appUser.role);
+          } else {
+             signOut(auth);
+             setUser(null);
+             setRole(null);
+          }
+        } else {
+          setUser(null);
+          setRole(null);
+        }
+        setLoading(false);
+      });
+
+      return unsubscribe;
+    };
+
+    const unsubscribePromise = initialize();
+
+    return () => {
+      unsubscribePromise.then(unsubscribe => unsubscribe && unsubscribe());
+    };
   }, []);
 
   const login = async (email: string, password: string, assignedRole: Role) => {
