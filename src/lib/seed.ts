@@ -1,5 +1,5 @@
 // src/lib/seed.ts
-import { adminAuth, adminDb } from '@/firebase';
+import { adminAuth, adminDb } from '../firebase';
 import { CtnAppUser, Role } from '@/lib/types';
 import {
   createUserWithEmailAndPassword,
