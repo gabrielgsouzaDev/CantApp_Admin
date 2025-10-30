@@ -9,7 +9,7 @@ import { SiteSidebar } from "@/components/layout/site-sidebar";
 import { Loader2 } from "lucide-react";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading, role } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,13 +26,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Se o utilizador aceder à raiz da área autenticada, redirecione-o para o seu painel de controlo específico.
+  // If the user lands on the root of the authenticated area, redirect to the admin dashboard.
   if (typeof window !== 'undefined' && (window.location.pathname === '/dashboard' || window.location.pathname === '/dashboard/')) {
-     let dashboardRoute = '/';
-     if (role === 'GlobalAdmin') dashboardRoute = '/dashboard/admin';
-     if (role === 'EscolaAdmin') dashboardRoute = '/dashboard/escola';
-     if (role === 'Cantineiro') dashboardRoute = '/orders';
-     
+     const dashboardRoute = '/dashboard/admin';
      router.replace(dashboardRoute);
      return (
        <div className="flex min-h-screen items-center justify-center">

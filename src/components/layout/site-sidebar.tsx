@@ -18,13 +18,15 @@ import { Separator } from "../ui/separator";
 import { LogOutConfirmationDialog } from "./logout-confirmation-dialog";
 import { Settings, LogOut } from "lucide-react";
 import { Role } from "@/lib/types";
-import { getDashboardRouteForRole } from "@/lib/utils";
 
 export function SiteSidebar() {
-  const { role, user } = useAuth();
+  const { user } = useAuth();
   const pathname = usePathname();
 
-  if (!role || !user) {
+  // In a standalone admin app, we can assume the role is always GlobalAdmin for navigation purposes.
+  const role: Role = "GlobalAdmin";
+
+  if (!user) {
     return null;
   }
 
@@ -36,7 +38,7 @@ export function SiteSidebar() {
   };
 
   const { mainNavs, settingsNav } = filterNavItems(role);
-  const dashboardRoute = getDashboardRouteForRole(role);
+  const dashboardRoute = "/dashboard/admin";
 
 
   return (

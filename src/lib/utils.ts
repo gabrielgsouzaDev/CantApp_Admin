@@ -8,14 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 
 
 export function getDashboardRouteForRole(role: Role | null) {
-  switch (role) {
-    case 'GlobalAdmin':
-      return '/dashboard/admin';
-    case 'EscolaAdmin':
-      return '/dashboard/escola';
-    case 'Cantineiro':
-      return '/orders';
-    default:
-      return '/';
+  // Simplified for the admin-only app.
+  // Any logged in user is directed to the admin dashboard.
+  if (role) {
+    return '/dashboard/admin';
   }
+  return '/';
 }
