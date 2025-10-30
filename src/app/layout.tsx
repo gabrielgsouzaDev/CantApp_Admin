@@ -3,15 +3,15 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { AuthProvider } from '@/components/auth-provider';
 import { Toaster } from '@/components/ui/toaster';
-import { Inter } from 'next/font/google';
+import { Nunito } from 'next/font/google';
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-nunito',
 });
 
 export const metadata: Metadata = {
-  title: 'CTNAPP - Gestão Inteligente para Cantinas Escolares',
+  title: 'bemmu. - Gestão Inteligente para Cantinas Escolares',
   description: 'Otimize pedidos, pagamentos e estoque da sua cantina escolar. Menos filas, mais controle e segurança para pais, alunos e escolas.',
 };
 
@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-body antialiased`}>
+      <body className={`${nunito.variable} font-body antialiased`}>
         <ThemeProvider 
           attribute="class" 
           defaultTheme="light" 

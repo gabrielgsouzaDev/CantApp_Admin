@@ -18,9 +18,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['var(--font-inter)', ...fontFamily.sans],
-        headline: ['var(--font-inter)', ...fontFamily.sans],
-        sans: ['var(--font-inter)', ...fontFamily.sans],
+        body: ['var(--font-nunito)', ...fontFamily.sans],
+        headline: ['var(--font-nunito)', ...fontFamily.sans],
+        sans: ['var(--font-nunito)', ...fontFamily.sans],
         code: ['monospace'],
       },
       colors: {

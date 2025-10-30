@@ -100,7 +100,7 @@ export default function LandingPage() {
               <span className="text-primary">inteligente e centralizada</span>.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl">
-              CTNAPP é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle e resultados para todos.
+              bemmu. é a plataforma completa para Escolas e Cantinas que buscam otimizar a gestão de pedidos, pagamentos e produtos. Menos filas, mais controle e resultados para todos.
             </p>
              <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="text-left border-primary/20">
@@ -191,7 +191,7 @@ export default function LandingPage() {
               </DialogTrigger>
               <DialogContent className="max-w-4xl">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-headline">A Jornada do Pedido no CTNAPP</DialogTitle>
+                  <DialogTitle className="text-2xl font-headline">A Jornada do Pedido no bemmu.</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="h-[70vh] pr-6">
                   <div className="relative py-8">
@@ -305,7 +305,7 @@ export default function LandingPage() {
               <div className="text-center sm:text-left">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Vantagens para Todos</h2>
                 <p className="text-muted-foreground text-lg mt-2 max-w-2xl">
-                  Descubra como o CTNAPP transforma a gestão para cada perfil.
+                  Descubra como o bemmu. transforma a gestão para cada perfil.
                 </p>
               </div>
                <Select value={advantageView} onValueChange={(value) => setAdvantageView(value as AdvantageView)}>
@@ -389,7 +389,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
-                <p className="text-muted-foreground text-lg">Use o CTNAPP no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
+                <p className="text-muted-foreground text-lg">Use o bemmu. no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start">
                    <Button asChild variant="outline" className="h-auto justify-center p-0 border-primary text-primary hover:bg-primary/10 hover:text-primary">
                     <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-2">
@@ -437,7 +437,7 @@ export default function LandingPage() {
                           Para evitar filas, o aluno pode usar o aplicativo para reservar o pedido com antecedência e apenas retirá-lo no intervalo.
                         </p>
                         <p className="mt-2">
-                          Ele também pode comprar diretamente no intervalo, pagando com Pix ou com o saldo pré-pago disponível em sua conta CTNAPP.
+                          Ele também pode comprar diretamente no intervalo, pagando com Pix ou com o saldo pré-pago disponível em sua conta bemmu..
                         </p>
                       </div>
                     </AccordionContent>
@@ -446,7 +446,7 @@ export default function LandingPage() {
                     <AccordionTrigger>Como posso gerenciar a alimentação do meu filho?</AccordionTrigger>
                     <AccordionContent>
                       <div className="prose prose-sm text-muted-foreground max-w-none">
-                       O CTNAPP oferece ferramentas para que você gerencie os hábitos alimentares do seu filho de forma personalizada:
+                       O bemmu. oferece ferramentas para que você gerencie os hábitos alimentares do seu filho de forma personalizada:
                         <ul className="mt-2 list-disc pl-5 space-y-1">
                           <li><strong>Controle de Produtos:</strong> Defina quais itens do cardápio seu filho pode ou não pode consumir. Essa restrição pode ser configurada para dias específicos da semana.</li>
                           <li><strong>Limite de Gastos Diário:</strong> Estabeleça um valor máximo para as compras diárias. Se o limite for atingido, o sistema impede novas compras, ajudando no controle do orçamento.</li>
@@ -456,7 +456,7 @@ export default function LandingPage() {
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-3">
-                    <AccordionTrigger>Quero usar o CTNAPP, quanto custa?</AccordionTrigger>
+                    <AccordionTrigger>Quero usar o bemmu., quanto custa?</AccordionTrigger>
                     <AccordionContent>
                       <p className="text-muted-foreground">Para pais e alunos, o aplicativo é gratuito. A escola contrata o serviço e o nosso plano básico começa em R$149,00 por mês.</p>
                     </AccordionContent>
@@ -470,7 +470,7 @@ export default function LandingPage() {
       </main>
       <footer className="border-t">
         <div className="container mx-auto py-8 text-center text-sm text-muted-foreground px-4 sm:px-6 lg:px-8">
-          © {new Date().getFullYear()} CTNAPP. Todos os direitos reservados.
+          © {new Date().getFullYear()} bemmu.. Todos os direitos reservados.
         </div>
       </footer>
     </div>
