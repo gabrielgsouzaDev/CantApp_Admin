@@ -8,7 +8,7 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { seedOrders } from '../services/orderService';
 import { seedProducts } from '../services/productService';
-import { setRole } from '@/ai/flows/llm-error-handling';
+import { setRole } from '../ai/flows/llm-error-handling';
 
 
 const seedUser = async (
