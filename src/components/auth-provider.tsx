@@ -12,7 +12,7 @@ import {
   signOut,
   User as FirebaseUser
 } from "firebase/auth";
-import { app, db, adminDb } from "@/firebase";
+import { app, db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { seedOrders } from "@/services/orderService";
 import { seedProducts } from "@/services/productService";
@@ -80,8 +80,8 @@ const seedUser = async (email: string, pass: string, role: Role) => {
 };
 
 const runSeed = async () => {
-    // Check if seeding has been done using the adminDb
-    const seedFlagRef = doc(adminDb, 'internal', 'seed_flag');
+    // Check if seeding has been done using the main db
+    const seedFlagRef = doc(db, 'internal', 'seed_flag');
     try {
         const seedFlagDoc = await getDoc(seedFlagRef);
 

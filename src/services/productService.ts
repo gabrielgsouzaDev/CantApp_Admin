@@ -1,11 +1,11 @@
 // src/services/productService.ts
-import { adminDb } from "@/firebase";
+import { db } from "@/firebase";
 import { Product } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
 
-const productsCollection = collection(adminDb, "products");
+const productsCollection = collection(db, "products");
 
 export const getProducts = async (): Promise<Product[]> => {
   const q = query(productsCollection);
@@ -30,7 +30,7 @@ export const addProduct = async (product: Omit<Product, 'id'>) => {
 };
 
 export const updateProduct = async (id: string, product: Partial<Omit<Product, 'id'>>) => {
-  const productDoc = doc(adminDb, "products", id);
+  const productDoc = doc(db, "products", id);
   return updateDoc(productDoc, product)
     .catch(async (serverError) => {
       const permissionError = new FirestorePermissionError({
@@ -44,7 +44,7 @@ export const updateProduct = async (id: string, product: Partial<Omit<Product, '
 };
 
 export const deleteProduct = async (id: string) => {
-  const productDoc = doc(adminDb, "products", id);
+  const productDoc = doc(db, "products", id);
   return deleteDoc(productDoc)
     .catch(async (serverError) => {
       const permissionError = new FirestorePermissionError({
@@ -57,7 +57,7 @@ export const deleteProduct = async (id: string) => {
 };
 
 
-// Função para popular dados no banco de dados ADMIN
+// Função para popular dados no banco de dados
 export const seedProducts = async () => {
     const mockProducts: Omit<Product, 'id'>[] = [
         { name: "Pão de Queijo", price: 5.00 },
@@ -74,7 +74,7 @@ export const seedProducts = async () => {
       for (const product of mockProducts) {
           await addDoc(productsCollection, product);
       }
-      console.log("Seeded products in ADMIN DB successfully!");
+      console.log("Seeded products in DB successfully!");
     } else {
         console.log("Products collection is not empty. Skipping seed.");
     }
