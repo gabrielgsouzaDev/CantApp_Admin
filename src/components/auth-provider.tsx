@@ -15,6 +15,7 @@ import {
 import { auth, db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
+import { setRole as setRoleOnBackend } from "@/ai/flows/llm-error-handling";
 
 interface AuthContextType {
   user: CtnAppUser | null;
@@ -30,14 +31,18 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const createFirestoreUser = async (firebaseUser: FirebaseUser, assignedRole: Role, schoolId?: string): Promise<CtnAppUser> => {
     const userDocRef = doc(db, "users", firebaseUser.uid);
     
-    // Check if document already exists to avoid overwriting role on re-login
     const docSnap = await getDoc(userDocRef);
     if (docSnap.exists()) {
-        console.log(`User doc for ${firebaseUser.email} already exists.`);
-        return { id: docSnap.id, ...docSnap.data() } as CtnAppUser;
+        const existingUser = { id: docSnap.id, ...docSnap.data() } as CtnAppUser;
+        if (existingUser.role !== assignedRole) {
+            console.warn(`User ${firebaseUser.email} exists with role ${existingUser.role}, but is logging in as ${assignedRole}. Role will be updated in Firestore.`);
+        } else {
+             console.log(`User doc for ${firebaseUser.email} already exists with correct role.`);
+             return existingUser;
+        }
     }
 
-    console.log(`Creating Firestore doc for ${firebaseUser.email} with role ${assignedRole}.`);
+    console.log(`Creating/Updating Firestore doc for ${firebaseUser.email} with role ${assignedRole}.`);
     const newUser: Omit<CtnAppUser, 'id'> = {
       uid: firebaseUser.uid,
       email: firebaseUser.email || "",
@@ -46,7 +51,7 @@ const createFirestoreUser = async (firebaseUser: FirebaseUser, assignedRole: Rol
       avatar: firebaseUser.photoURL || `https://i.pravatar.cc/150?u=${firebaseUser.uid}`,
       ...(schoolId && { schoolId }),
     };
-    await setDoc(userDocRef, newUser);
+    await setDoc(userDocRef, newUser, { merge: true });
     
     return { id: userDocRef.id, ...newUser } as CtnAppUser;
 }
@@ -62,17 +67,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         if (firebaseUser) {
             try {
+                // Force refresh the token to get custom claims
+                const idTokenResult = await firebaseUser.getIdTokenResult(true);
+                const userRole = idTokenResult.claims.role as Role;
+
                 const userDocRef = doc(db, "users", firebaseUser.uid);
                 const userDoc = await getDoc(userDocRef);
                 
                 if (userDoc.exists()) {
                   const appUser = { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
-                  setUser(appUser);
-                  setRole(appUser.role);
+                  // Ensure the role in the doc matches the claim
+                  if (appUser.role !== userRole) {
+                     console.warn(`Role mismatch for ${appUser.email}. Token says ${userRole}, DB says ${appUser.role}. Re-logging to fix.`);
+                     await signOut(auth);
+                     setUser(null);
+                     setRole(null);
+                  } else {
+                    setUser(appUser);
+                    setRole(appUser.role);
+                  }
                 } else {
-                  // This case might happen if the Firestore doc creation failed after registration
-                  // Or if a user exists in Auth but not in Firestore.
-                  // For this app, we'll log out the user to force a clean flow.
                    console.warn(`User ${firebaseUser.uid} exists in Auth but not in Firestore. Logging out.`);
                    await signOut(auth);
                    setUser(null);
@@ -100,17 +114,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
       
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userDoc = await getDoc(userDocRef);
-      let appUser;
-
-      if (userDoc.exists()) {
-        appUser = { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
-      } else {
-         // This can happen if a user was created in Auth but the Firestore doc creation failed.
-         // We create it now.
-         appUser = await createFirestoreUser(firebaseUser, assignedRole, 'default_school_id');
+      // Set the custom claim BEFORE creating the firestore user or navigating
+      const roleResult = await setRoleOnBackend({ uid: firebaseUser.uid, role: assignedRole });
+      if (!roleResult.success) {
+        throw new Error(roleResult.error || "Failed to set user role on the backend.");
       }
+
+      // Force a token refresh to get the new claim on the client
+      await firebaseUser.getIdTokenResult(true);
+
+      const appUser = await createFirestoreUser(firebaseUser, assignedRole, 'default_school_id');
       
       setUser(appUser);
       setRole(appUser.role);
@@ -129,9 +142,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      try {
        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
        const firebaseUser = userCredential.user;
+
+       // Set the custom claim on the backend
+       const roleResult = await setRoleOnBackend({ uid: firebaseUser.uid, role: assignedRole });
+       if (!roleResult.success) {
+           // This is a critical failure. We should probably delete the user or handle this case.
+           throw new Error(roleResult.error || "Failed to set user role after registration.");
+       }
        
        await createFirestoreUser(firebaseUser, assignedRole, 'default_school_id');
-       // The onAuthStateChanged listener will pick up the new user and set state.
+       
+       // The onAuthStateChanged listener will handle setting user state after re-login
+       // Forcing a sign out to ensure a clean login with the new token
+       await signOut(auth);
+       
        return userCredential;
      } catch (error) {
         console.error("Registration Error:", error);
