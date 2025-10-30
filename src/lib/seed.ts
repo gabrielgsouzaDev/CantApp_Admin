@@ -1,18 +1,17 @@
 // src/lib/seed.ts
-import { auth, db } from '../firebase';
+import { auth, db } from '@/firebase';
 import { CtnAppUser, Role } from './types';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { seedOrders } from '../services/orderService';
-import { seedProducts } from '../services/productService';
 
-const seedUser = async (
+const createFirestoreUser = async (
   email: string,
   pass: string,
-  role: Role
+  role: Role,
+  schoolId?: string
 ) => {
   let firebaseUser;
   try {
@@ -55,9 +54,10 @@ const seedUser = async (
     const newUser: Omit<CtnAppUser, 'id'> = {
       uid: firebaseUser.uid,
       email: firebaseUser.email || '',
-      name: firebaseUser.displayName || role,
+      name: role,
       role: role,
-      avatar: firebaseUser.photoURL || `https://i.pravatar.cc/150?u=${firebaseUser.uid}`,
+      avatar: `https://i.pravatar.cc/150?u=${firebaseUser.uid}`,
+      ...(schoolId && { schoolId }),
     };
     await setDoc(userDocRef, newUser, { merge: true });
     console.log(`Seed: Ensured Firestore doc for ${email} with role ${role}`);
@@ -80,12 +80,11 @@ const runSeed = async () => {
 
     console.log('Seed: First time setup, seeding initial data...');
 
-    await seedUser('admin@ctn.com', 'password', 'GlobalAdmin');
-    await seedUser('escola@ctn.com', 'password', 'EscolaAdmin');
-    await seedUser('cantineiro@ctn.com', 'password', 'Cantineiro');
+    await createFirestoreUser('admin@ctn.com', 'password', 'GlobalAdmin');
+    await createFirestoreUser('escola@ctn.com', 'password', 'EscolaAdmin', 'default_school_id');
+    await createFirestoreUser('cantineiro@ctn.com', 'password', 'Cantineiro', 'default_school_id');
 
-    await seedProducts();
-    await seedOrders();
+    // No need to seed products or orders from here, let services handle it if needed
 
     await setDoc(seedFlagRef, { completed: true, timestamp: new Date() });
     console.log('Seed: Initial data seeding complete.');
@@ -95,4 +94,8 @@ const runSeed = async () => {
   }
 };
 
-runSeed();
+// We don't want to run this automatically on every dev server start anymore
+// as it can cause race conditions. It should be run manually if needed.
+// if (process.env.NODE_ENV === 'development') {
+//     runSeed();
+// }

@@ -15,17 +15,13 @@ import { firebaseAdminConfig } from '@/firebase/admin-config';
 // --- Admin App Initialization ---
 // This initializes the Firebase Admin SDK. It's safe to run multiple times.
 let adminApp: App;
-try {
-  if (!getApps().some(app => app.name === 'admin')) {
+if (!getApps().length) {
     adminApp = initializeApp({
       ...firebaseAdminConfig
     }, 'admin');
   } else {
     adminApp = getApps().find(app => app.name === 'admin')!;
   }
-} catch (e) {
-  console.error("Admin App initialization failed", e);
-}
 
 
 const adminAuth = getAuth(adminApp);
@@ -35,15 +31,13 @@ const SetRoleSchema = z.object({
   role: z.nativeEnum(Role),
 });
 
-export const setRole = ai.defineFlow(
+export const setRoleFlow = ai.defineFlow(
   {
-    name: 'setRole',
+    name: 'setRoleFlow',
     inputSchema: SetRoleSchema,
     outputSchema: z.object({ success: z.boolean() }),
   },
   async ({ uid, role }) => {
-    // This flow is not actively called by the AuthProvider anymore,
-    // but the logic is kept here for reference.
     try {
       await adminAuth.setCustomUserClaims(uid, { role });
       return { success: true };

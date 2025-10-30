@@ -1,5 +1,5 @@
 // src/services/schoolService.ts
-import { db } from "../firebase";
+import { db } from "@/firebase";
 import { School } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
@@ -14,7 +14,6 @@ export const getSchools = async (): Promise<School[]> => {
 };
 
 export const addSchool = async (school: Omit<School, 'id'>) => {
-  // ownerUid is now optional, only required for EscolaAdmin registration
   return addDoc(schoolsCollection, school)
     .then(docRef => docRef.id)
     .catch(async (serverError) => {

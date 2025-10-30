@@ -1,9 +1,11 @@
 import type {NextConfig} from 'next';
 
 // Run seed script in development
-if (process.env.NODE_ENV === 'development') {
-  require('./src/lib/seed.ts');
-}
+// if (process.env.NODE_ENV === 'development') {
+//   // We require it this way to avoid it being bundled in production.
+//   // The script needs to be in the `src` folder for the paths to resolve correctly.
+//   require('./src/lib/seed.ts');
+// }
 
 const nextConfig: NextConfig = {
   /* config options here */

@@ -27,15 +27,6 @@ export type CtnAppUser = {
   schoolId?: string; // Associated school for EscolaAdmin and Cantineiro
 };
 
-// Deprecated User type, replaced by CtnAppUser
-export type User = {
-  id: string;
-  name:string;
-  email: string;
-  avatar: string;
-  role: Role;
-}
-
 export type NavItem = {
   title: string;
   href: string;

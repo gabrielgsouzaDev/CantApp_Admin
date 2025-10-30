@@ -19,7 +19,7 @@ import { useEffect } from "react";
 const formSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
   price: z.coerce.number().positive("O preço deve ser um número positivo."),
-  schoolId: z.string(), // Hidden field
+  schoolId: z.string().min(1, "ID da Escola é obrigatório"),
 });
 
 type ProductFormData = z.infer<typeof formSchema>;
