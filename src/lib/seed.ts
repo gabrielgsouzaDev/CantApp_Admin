@@ -6,8 +6,8 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { seedOrders } from '@/services/orderService';
-import { seedProducts } from '@/services/productService';
+import { seedOrders } from '../services/orderService';
+import { seedProducts } from '../services/productService';
 
 const seedUser = async (
   email: string,
