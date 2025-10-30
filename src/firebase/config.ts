@@ -1,10 +1,10 @@
 // src/firebase/config.ts
 // ATENÇÃO: Substitua com as credenciais do seu projeto Firebase PRINCIPAL (Cliente)
 export const firebaseConfig = {
-  apiKey: "AIzaSyA1TTmel-lC9RQuoH6Lzch0ZJr7z4RuJfA",
-  authDomain: "studio-1780973414-c81ce.firebaseapp.com",
-  projectId: "studio-1780973414-c81ce",
-  storageBucket: "studio-1780973414-c81ce.appspot.com",
-  messagingSenderId: "1047852794873",
-  appId: "1:1047852794873:web:a166890fe404df18977328"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "studio-2048412062-f267f.firebaseapp.com",
+  projectId: "studio-2048412062-f267f",
+  storageBucket: "studio-2048412062-f267f.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
