@@ -5,7 +5,6 @@ import { useRouter, usePathname } from "next/navigation";
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { getDashboardRouteForRole } from "@/lib/utils";
 import { 
-  getAuth, 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
@@ -13,7 +12,7 @@ import {
   User as FirebaseUser,
   Auth
 } from "firebase/auth";
-import { app, db, adminApp, adminDb, adminAuth } from "@/firebase";
+import { auth, adminDb, adminAuth } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
 
