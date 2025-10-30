@@ -15,6 +15,8 @@ import {
 import { auth, db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
+import { setRole as setRoleFlow } from "@/ai/flows/llm-error-handling";
+
 
 interface AuthContextType {
   user: CtnAppUser | null;
@@ -38,20 +40,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         if (firebaseUser) {
             try {
+                // Force refresh the token to get the latest custom claims.
+                const idTokenResult = await firebaseUser.getIdTokenResult(true);
+                const claims = idTokenResult.claims;
+                const userRole = claims.role as Role;
+
                 const userDocRef = doc(db, "users", firebaseUser.uid);
                 const userDoc = await getDoc(userDocRef);
-
+                
                 if (userDoc.exists()) {
                   const appUser = { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
+                  // Ensure the role in the user object is consistent with the token
+                  if (appUser.role !== userRole) {
+                    appUser.role = userRole;
+                  }
                   setUser(appUser);
-                  setRole(appUser.role);
+                  setRole(userRole);
                 } else {
-                   // This can happen if the user is authenticated but the Firestore doc hasn't been created yet
-                   // The login/register functions are responsible for creating the doc.
-                   // We'll wait for them to do their job.
+                   // This can happen on first registration before the doc is created.
+                   // The login/register functions will handle this.
                 }
             } catch (error) {
                 console.error("Error during auth state change:", error);
+                await signOut(auth); // Sign out if there's an error fetching profile/claims
                 setUser(null);
                 setRole(null);
             }
@@ -67,21 +78,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const createFirestoreUser = async (firebaseUser: FirebaseUser, assignedRole: Role): Promise<CtnAppUser> => {
       const userDocRef = doc(db, "users", firebaseUser.uid);
-      let userDoc = await getDoc(userDocRef);
-
-      if (!userDoc.exists()) {
-        const newUser: Omit<CtnAppUser, 'id'> = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email || "",
-          name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuário",
-          role: assignedRole,
-          avatar: firebaseUser.photoURL || `https://i.pravatar.cc/150?u=${firebaseUser.uid}`,
-        };
-        await setDoc(userDocRef, newUser);
-        userDoc = await getDoc(userDocRef); // Re-fetch the doc to get the created data
-      }
       
-      return { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
+      const newUser: Omit<CtnAppUser, 'id'> = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email || "",
+        name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuário",
+        role: assignedRole,
+        avatar: firebaseUser.photoURL || `https://i.pravatar.cc/150?u=${firebaseUser.uid}`,
+      };
+      await setDoc(userDocRef, newUser, { merge: true });
+      
+      return { id: userDocRef.id, ...newUser } as CtnAppUser;
   }
 
 
@@ -89,7 +96,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const appUser = await createFirestoreUser(userCredential.user, assignedRole);
+      const firebaseUser = userCredential.user;
+      
+      // Set the custom claim for the role
+      await setRoleFlow({ uid: firebaseUser.uid, role: assignedRole });
+
+      // Force refresh the token to get the new claim
+      await firebaseUser.getIdTokenResult(true);
+      
+      const appUser = await createFirestoreUser(firebaseUser, assignedRole);
       
       setUser(appUser);
       setRole(appUser.role);
@@ -107,7 +122,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      setLoading(true);
      try {
        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-       await createFirestoreUser(userCredential.user, assignedRole);
+       const firebaseUser = userCredential.user;
+       
+       // Set the custom claim for the role
+       await setRoleFlow({ uid: firebaseUser.uid, role: assignedRole });
+
+       // Force refresh the token to get the new claim
+       await firebaseUser.getIdTokenResult(true);
+       
+       await createFirestoreUser(firebaseUser, assignedRole);
        // The onAuthStateChanged listener will pick up the new user and set state.
        return userCredential;
      } catch (error) {

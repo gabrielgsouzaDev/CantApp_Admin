@@ -1,9 +1,9 @@
 // src/services/orderService.ts
-import { db } from "../firebase";
+import { db } from "@/firebase";
 import { OrderStatus } from "@/lib/types";
-import { collection, query, updateDoc, doc, limit, orderBy, getDocs } from "firebase/firestore";
-import { errorEmitter } from "../firebase/error-emitter";
-import { FirestorePermissionError } from "../firebase/errors";
+import { collection, query, updateDoc, doc, limit, orderBy, getDocs, addDoc } from "firebase/firestore";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 const ordersCollection = collection(db, "orders");
 
@@ -33,7 +33,6 @@ export const updateOrderStatus = async (orderId: string, newStatus: OrderStatus)
 // Exemplo de como você pode popular dados iniciais, se necessário.
 // Pode ser chamado de um script separado ou de uma função de admin.
 export const seedOrders = async () => {
-    const { addDoc } = await import("firebase/firestore");
     const mockOrders = [
         { studentName: "João Silva", time: Date.now() - 500000, items: [{id: 'pao-queijo', name: "Pão de Queijo", price: 5}, {id: 'suco-laranja', name: "Suco de Laranja", price: 4}], status: "A Fazer", paymentStatus: "Pago", total: 9 },
         { studentName: "Maria Clara", time: Date.now() - 400000, items: [{id: 'misto-quente', name: "Misto Quente", price: 7}], status: "A Fazer", paymentStatus: "Pendente", total: 7 },

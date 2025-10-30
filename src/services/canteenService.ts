@@ -1,9 +1,9 @@
 // src/services/canteenService.ts
-import { db } from "../firebase";
+import { db } from "@/firebase";
 import { Canteen } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { errorEmitter } from "../firebase/error-emitter";
-import { FirestorePermissionError } from "../firebase/errors";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 const canteensCollection = collection(db, "canteens");
 

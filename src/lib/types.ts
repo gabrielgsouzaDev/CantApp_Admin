@@ -1,6 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 
-export type Role = "GlobalAdmin" | "EscolaAdmin" | "Cantineiro";
+export const Role = {
+  GlobalAdmin: "GlobalAdmin",
+  EscolaAdmin: "EscolaAdmin",
+  Cantineiro: "Cantineiro",
+} as const;
+export type Role = typeof Role[keyof typeof Role];
+
 
 // This is the user type from Firebase Authentication, simplified
 export type FirebaseUser = {
