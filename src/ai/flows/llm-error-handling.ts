@@ -8,7 +8,7 @@
  * - AnalyzeApiErrorOutput - The return type for the analyzeApiError function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '../genkit';
 import {z} from 'genkit';
 import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps } from 'firebase-admin/app';
