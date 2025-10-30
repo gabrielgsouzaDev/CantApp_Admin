@@ -65,27 +65,15 @@ export default function LandingPage() {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => router.push("/escola/login")}>
                   <School className="mr-2 h-4 w-4" />
-                  <span>Escola</span>
+                  <span>Sou uma Escola</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/cantina/login")}>
                    <Store className="mr-2 h-4 w-4" />
-                  <span>Cantina</span>
+                  <span>Sou uma Cantina</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                   <GraduationCap className="mr-2 h-4 w-4" />
-                  <span>Aluno</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                   <User className="mr-2 h-4 w-4" />
-                  <span>Responsável</span>
-                </DropdownMenuItem>
-                 <DropdownMenuItem>
-                   <Briefcase className="mr-2 h-4 w-4" />
-                   <span>Funcionário</span>
-                </DropdownMenuItem>
-                 <DropdownMenuItem onClick={() => router.push("/admin/login")}>
+                <DropdownMenuItem onClick={() => router.push("/admin/login")}>
                    <Shield className="mr-2 h-4 w-4" />
-                   <span>Admin</span>
+                   <span>Sou Admin</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -124,7 +112,7 @@ export default function LandingPage() {
                     </CardHeader>
                     <CardContent>
                        <Button variant="outline" className="w-full justify-center">
-                            Acessar como Aluno, Responsável ou Funcionário
+                            Acessar como Aluno ou Responsável
                         </Button>
                     </CardContent>
                 </Card>
@@ -363,30 +351,7 @@ export default function LandingPage() {
         <section id="cta" className="py-20 md:py-24 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-16 items-center">
-              <div className="relative order-last md:order-first">
-                {/* {appLaptopImage && (
-                  <Image
-                    src={appLaptopImage.imageUrl}
-                    alt={appLaptopImage.description}
-                    width={1024}
-                    height={768}
-                    className="rounded-lg shadow-2xl"
-                    data-ai-hint={appLaptopImage.imageHint}
-                  />
-                )}
-                {appMobileImage && (
-                  <div className="absolute -bottom-12 -right-12 w-48 md:w-56">
-                    <Image
-                      src={appMobileImage.imageUrl}
-                      alt={appMobileImage.description}
-                      width={300}
-                      height={600}
-                      className="rounded-lg shadow-2xl border-4 border-background"
-                      data-ai-hint={appMobileImage.imageHint}
-                    />
-                  </div>
-                )} */}
-              </div>
+              <div></div>
               <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
                 <p className="text-muted-foreground text-lg">Use o bemmu. no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
@@ -408,7 +373,7 @@ export default function LandingPage() {
                     </a>
                   </Button>
                 </div>
-                 <Button size="lg" className="w-full sm:w-auto mt-2" onClick={() => router.push('/login')}>
+                 <Button size="lg" className="w-full sm:w-auto mt-2" onClick={() => router.push('/escola/login')}>
                   Acessar via Web
                   <ArrowRight className="ml-2" />
                 </Button>
@@ -423,7 +388,7 @@ export default function LandingPage() {
               <div className="flex flex-col gap-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Dúvidas?</h2>
                 <p className="text-muted-foreground text-lg">Ainda tem dúvidas? Queremos te ouvir, clique no botão abaixo e entre em contato com nossa equipe.</p>
-                <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push('/login')}>
+                <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push('/escola/login')}>
                   Fale com nossa equipe
                 </Button>
               </div>

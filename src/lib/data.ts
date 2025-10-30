@@ -1,4 +1,4 @@
-import { NavItem, Role } from "@/lib/types";
+import { NavItem } from "@/lib/types";
 import { LayoutDashboard, Building, UtensilsCrossed, ShoppingCart, Users, FileText, Settings, BookCopy } from "lucide-react";
 
 export const navItems: NavItem[] = [
@@ -10,7 +10,7 @@ export const navItems: NavItem[] = [
     
     // Escola
     { title: "Cantinas", href: "/canteens", icon: BookCopy, roles: ["Escola"] },
-    { title: "Estoque", href: "/products", icon: UtensilsCrossed, roles: ["Escola"] },
+    { title: "Produtos", href: "/products", icon: UtensilsCrossed, roles: ["Escola"] },
     { title: "Usuários", href: "/users", icon: Users, roles: ["Admin", "Escola"] },
     
     // Cantineiro
