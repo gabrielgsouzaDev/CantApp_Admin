@@ -12,7 +12,7 @@ import {ai} from '../genkit';
 import {z} from 'genkit';
 import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps } from 'firebase-admin/app';
-import { firebaseAdminConfig } from '@/firebase/admin-config';
+import { firebaseAdminConfig } from '../../firebase/admin-config';
 
 // Ensure Firebase Admin is initialized only once.
 if (!getApps().length) {
