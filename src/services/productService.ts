@@ -2,6 +2,8 @@
 import { adminDb } from "@/firebase";
 import { Product } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 const productsCollection = collection(adminDb, "products");
 
@@ -11,20 +13,49 @@ export const getProducts = async (): Promise<Product[]> => {
   return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
 };
 
-export const addProduct = async (product: Omit<Product, 'id'>): Promise<string> => {
-  const docRef = await addDoc(productsCollection, product);
-  return docRef.id;
+export const addProduct = async (product: Omit<Product, 'id'>) => {
+  return addDoc(productsCollection, product)
+    .then(docRef => docRef.id)
+    .catch(async (serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: productsCollection.path,
+        operation: 'create',
+        requestResourceData: product,
+      });
+      errorEmitter.emit('permission-error', permissionError);
+      // We still throw the original error for other potential consumers,
+      // but the UI will primarily react to the emitted event.
+      throw serverError;
+    });
 };
 
-export const updateProduct = async (id: string, product: Partial<Omit<Product, 'id'>>): Promise<void> => {
+export const updateProduct = async (id: string, product: Partial<Omit<Product, 'id'>>) => {
   const productDoc = doc(adminDb, "products", id);
-  await updateDoc(productDoc, product);
+  return updateDoc(productDoc, product)
+    .catch(async (serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: productDoc.path,
+        operation: 'update',
+        requestResourceData: product,
+      });
+      errorEmitter.emit('permission-error', permissionError);
+      throw serverError;
+    });
 };
 
-export const deleteProduct = async (id: string): Promise<void> => {
+export const deleteProduct = async (id: string) => {
   const productDoc = doc(adminDb, "products", id);
-  await deleteDoc(productDoc);
+  return deleteDoc(productDoc)
+    .catch(async (serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: productDoc.path,
+        operation: 'delete',
+      });
+      errorEmitter.emit('permission-error', permissionError);
+      throw serverError;
+    });
 };
+
 
 // Função para popular dados no banco de dados ADMIN
 export const seedProducts = async () => {

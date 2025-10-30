@@ -16,6 +16,8 @@ import { app, db, adminDb } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { seedOrders } from "@/services/orderService";
 import { seedProducts } from "@/services/productService";
+import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
+
 
 interface AuthContextType {
   user: CtnAppUser | null;
@@ -202,7 +204,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ user, role, login, register, logout, loading }}>
-      {children}
+        {children}
+        <FirebaseErrorListener />
     </AuthContext.Provider>
   );
 }
