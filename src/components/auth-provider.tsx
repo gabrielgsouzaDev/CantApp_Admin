@@ -3,7 +3,6 @@
 import { Role, CtnAppUser } from "@/lib/types";
 import { useRouter, usePathname } from "next/navigation";
 import React, { createContext, useState, ReactNode, useEffect } from "react";
-import { getDashboardRouteForRole } from "@/lib/utils";
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
@@ -14,29 +13,34 @@ import {
 } from "firebase/auth";
 import { auth, db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
+import { getDashboardRouteForRole } from "@/lib/utils";
 
 interface AuthContextType {
   user: CtnAppUser | null;
-  role: Role | null;
+  role: Role | null; // Manter para navegação, mas não para segurança
   loading: boolean;
-  login: (email: string, password: string, role: Role) => Promise<void>;
-  register: (email: string, password: string, role: Role, schoolId?: string) => Promise<UserCredential>;
+  login: (email: string, password: string, roleHint?: Role) => Promise<void>;
+  register: (email: string, password: string, role: Role) => Promise<UserCredential>;
   logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Função auxiliar para criar/atualizar o documento do utilizador no Firestore
 const createFirestoreUser = async (firebaseUser: FirebaseUser, assignedRole: Role, schoolId?: string): Promise<CtnAppUser> => {
     const userDocRef = doc(db, "users", firebaseUser.uid);
     const docSnap = await getDoc(userDocRef);
 
     if (docSnap.exists()) {
-        console.log(`User doc for ${firebaseUser.email} already exists.`);
-        return { id: docSnap.id, ...docSnap.data() } as CtnAppUser;
+        const existingUser = { id: docSnap.id, ...docSnap.data() } as CtnAppUser;
+        // Se o papel for diferente, atualize-o. Isso pode acontecer se o mesmo email for usado para diferentes portais.
+        if (existingUser.role !== assignedRole) {
+            await setDoc(userDocRef, { role: assignedRole }, { merge: true });
+            existingUser.role = assignedRole;
+        }
+        return existingUser;
     }
 
-    console.log(`Creating Firestore doc for ${firebaseUser.email} with role ${assignedRole}.`);
     const newUser: Omit<CtnAppUser, 'id'> = {
       uid: firebaseUser.uid,
       email: firebaseUser.email || "",
@@ -67,10 +71,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 if (userDoc.exists()) {
                   const appUser = { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
                   setUser(appUser);
-                  setRole(appUser.role);
+                  setRole(appUser.role); // O papel vem do Firestore
                 } else {
-                   // This case can happen if a user is created in Auth but Firestore doc creation fails.
-                   // Or if a user is deleted from Firestore but not Auth.
+                   // Utilizador existe no Auth mas não no Firestore. Provavelmente um registo interrompido.
+                   // Vamos tentar criar o documento. Se não tivermos um papel, deslogamos.
                    console.warn(`User ${firebaseUser.uid} exists in Auth but not in Firestore. Logging out.`);
                    await signOut(auth);
                    setUser(null);
@@ -92,29 +96,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string, assignedRole: Role) => {
+  const login = async (email: string, password: string, roleHint: Role = 'Cantineiro') => {
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // onAuthStateChanged will handle setting the user state and redirecting
+      // Após o login, onAuthStateChanged vai buscar os dados do Firestore e definir o estado
+      // Podemos forçar uma verificação do documento do Firestore aqui se necessário, mas onAuthStateChanged deve ser suficiente
+      const userDocRef = doc(db, "users", userCredential.user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if(userDoc.exists()) {
+        const appUser = {id: userDoc.id, ...userDoc.data()} as CtnAppUser;
+        // Opcional: Se o papel estiver errado (ex: logou no portal admin com conta de cantineiro), podemos forçar uma atualização
+        if (appUser.role !== roleHint && (roleHint === 'GlobalAdmin' || roleHint === 'EscolaAdmin' || roleHint === 'Cantineiro')) {
+            await setDoc(userDocRef, { role: roleHint }, { merge: true });
+            appUser.role = roleHint;
+        }
+        setUser(appUser);
+        setRole(appUser.role);
+      }
     } catch (error) {
       console.error("Login Error:", error);
       setLoading(false);
       throw error;
     }
+    // setLoading(false) é chamado no useEffect de onAuthStateChanged
   };
 
-  const register = async (email: string, password: string, assignedRole: Role, schoolId?: string) => {
+  const register = async (email: string, password: string, assignedRole: Role) => {
      setLoading(true);
      try {
        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
        const firebaseUser = userCredential.user;
        
-       // Create the user document in Firestore immediately after successful auth creation
-       await createFirestoreUser(firebaseUser, assignedRole, schoolId);
+       await createFirestoreUser(firebaseUser, assignedRole);
        
-       // For a better UX, sign the user out and let them log in,
-       // which ensures the onAuthStateChanged logic runs cleanly.
        await signOut(auth);
        
        return userCredential;
@@ -132,7 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setRole(null);
     router.push("/");
-    setLoading(false);
+    // setLoading(false) é chamado no useEffect
   };
   
   useEffect(() => {
@@ -141,7 +156,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const dashboardRoute = getDashboardRouteForRole(role);
         router.replace(dashboardRoute);
     }
-     if (!loading && !user && !isAuthPage && pathname !== '/') {
+     if (!loading && !user && !isAuthPage) {
         router.replace('/');
     }
   }, [user, loading, role, router, pathname]);
@@ -149,7 +164,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{ user, role, login, register, logout, loading }}>
         {children}
-        <FirebaseErrorListener />
     </AuthContext.Provider>
   );
 }

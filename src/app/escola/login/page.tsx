@@ -32,8 +32,8 @@ export default function EscolaLoginPage() {
   const { toast } = useToast();
 
   // Login state
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("escola@ctn.com");
+  const [loginPassword, setLoginPassword] = useState("password");
 
   const form = useForm<z.infer<typeof SchoolSchema>>({
     resolver: zodResolver(SchoolSchema),
@@ -79,7 +79,6 @@ export default function EscolaLoginPage() {
       const { street, number, complement, neighborhood, city, state, cep } = values.address;
       const fullAddress = `${street}, ${number}${complement ? ` - ${complement}` : ''} - ${neighborhood}, ${city} - ${state}, CEP: ${cep}`;
 
-      // Create school data first to get its ID
       const schoolData = {
         name: values.name,
         cnpj: values.cnpj,
@@ -88,10 +87,7 @@ export default function EscolaLoginPage() {
         ownerUid: user.uid,
       };
       
-      const schoolId = await addSchool(schoolData);
-
-      // Now register the user with the schoolId
-      await register(values.email, values.password, "EscolaAdmin", schoolId);
+      await addSchool(schoolData);
       
       toast({
         title: "Cadastro realizado com sucesso!",

@@ -5,10 +5,9 @@ export const Role = {
   EscolaAdmin: "EscolaAdmin",
   Cantineiro: "Cantineiro",
 } as const;
-export type Role = typeof Role[keyof typeof Role];
+export type Role = (typeof Role)[keyof typeof Role];
 
-
-// This is the user type from Firebase Authentication, simplified
+// Este é o tipo de utilizador da Autenticação do Firebase, simplificado
 export type FirebaseUser = {
   uid: string;
   email: string | null;
@@ -16,15 +15,15 @@ export type FirebaseUser = {
   photoURL: string | null;
 };
 
-// This is our application-specific user profile, stored in Firestore
+// Este é o nosso perfil de utilizador específico da aplicação, armazenado no Firestore
 export type CtnAppUser = {
-  id: string; // Document ID from Firestore
-  uid: string; // Corresponds to Firebase Auth UID
+  id: string; // ID do Documento do Firestore
+  uid: string; // Corresponde ao UID da Autenticação do Firebase
   name: string;
   email: string;
   avatar: string;
   role: Role;
-  schoolId?: string; // Associated school for EscolaAdmin and Cantineiro
+  schoolId?: string; // Escola associada para EscolaAdmin e Cantineiro
 };
 
 export type NavItem = {
@@ -41,14 +40,14 @@ export type School = {
   address: string;
   cnpj: string;
   status: "active" | "inactive";
-  ownerUid?: string; // UID of the user who created the school
+  ownerUid?: string; // UID do utilizador que criou a escola
 };
 
 export type Product = {
   id: string;
   name: string;
   price: number;
-  schoolId: string; // All products belong to a school
+  schoolId: string; // Todos os produtos pertencem a uma escola
 };
 
 export type Canteen = {
@@ -69,9 +68,12 @@ export type OrderItem = {
 export type Order = {
   id: string;
   studentName: string;
-  time: number; // Store as timestamp
+  time: number; // Armazenar como timestamp
   items: OrderItem[];
   status: OrderStatus;
   paymentStatus: PaymentStatus;
   total: number;
 };
+
+// Removemos a referência ao User genérico para evitar confusão com CtnAppUser
+// export type User = CtnAppUser;

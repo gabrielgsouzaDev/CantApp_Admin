@@ -9,8 +9,8 @@ interface AuthHook {
   user: any;
   role: Role | null;
   loading: boolean;
-  login: (email: string, password: string, role: Role) => Promise<void>;
-  register: (email: string, password: string, role: Role, schoolId?: string) => Promise<UserCredential>;
+  login: (email: string, password: string, roleHint?: Role) => Promise<void>;
+  register: (email: string, password: string, role: Role) => Promise<UserCredential>;
   logout: () => void;
 }
 

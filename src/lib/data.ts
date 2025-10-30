@@ -10,7 +10,7 @@ export const navItems: NavItem[] = [
     
     // Escola
     { title: "Cantinas", href: "/canteens", icon: BookCopy, roles: ["EscolaAdmin"] },
-    { title: "Produtos", href: "/products", icon: UtensilsCrossed, roles: ["EscolaAdmin"] },
+    { title: "Produtos", href: "/products", icon: UtensilsCrossed, roles: ["EscolaAdmin", "GlobalAdmin"] },
     { title: "Usuários", href: "/users", icon: Users, roles: ["GlobalAdmin", "EscolaAdmin"] },
     
     // Cantineiro
