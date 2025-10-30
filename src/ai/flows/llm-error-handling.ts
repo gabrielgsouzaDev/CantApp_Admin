@@ -10,6 +10,14 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { getAuth } from 'firebase-admin/auth';
+import { initializeApp, getApps } from 'firebase-admin/app';
+import { firebaseAdminConfig } from '@/firebase/admin-config';
+
+// Ensure Firebase Admin is initialized only once.
+if (!getApps().length) {
+  initializeApp(firebaseAdminConfig);
+}
 
 const AnalyzeApiErrorInputSchema = z.object({
   errorDescription: z.string().describe('Detailed description of the API error.'),
@@ -25,6 +33,25 @@ const AnalyzeApiErrorOutputSchema = z.object({
   firestoreSecurityAlert: z.string().optional().describe('Alert indicating potential Firestore security rule issues, if applicable.'),
 });
 export type AnalyzeApiErrorOutput = z.infer<typeof AnalyzeApiErrorOutputSchema>;
+
+
+export const setRole = ai.defineFlow(
+  {
+    name: 'setRole',
+    inputSchema: z.object({ uid: z.string(), role: z.string() }),
+    outputSchema: z.object({ success: z.boolean() }),
+  },
+  async ({ uid, role }) => {
+    try {
+      await getAuth().setCustomUserClaims(uid, { role });
+      return { success: true };
+    } catch (error) {
+      console.error('Error setting custom claims:', error);
+      return { success: false };
+    }
+  }
+);
+
 
 export async function analyzeApiError(input: AnalyzeApiErrorInput): Promise<AnalyzeApiErrorOutput> {
   return analyzeApiErrorFlow(input);

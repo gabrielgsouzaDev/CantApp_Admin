@@ -8,6 +8,8 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { seedOrders } from '../services/orderService';
 import { seedProducts } from '../services/productService';
+import { setRole } from '@/ai/flows/llm-error-handling';
+
 
 const seedUser = async (
   email: string,
@@ -38,8 +40,11 @@ const seedUser = async (
       pass
     );
     const firebaseUser = userCredential.user;
-    const userDocRef = doc(db, 'users', firebaseUser.uid);
 
+    // Set custom claim
+    await setRole({ uid: firebaseUser.uid, role });
+
+    const userDocRef = doc(db, 'users', firebaseUser.uid);
     const newUser: Omit<CtnAppUser, 'id'> = {
       uid: firebaseUser.uid,
       email: firebaseUser.email || '',

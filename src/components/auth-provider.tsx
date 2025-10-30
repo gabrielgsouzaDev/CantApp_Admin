@@ -10,11 +10,11 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   User as FirebaseUser,
-  Auth
 } from "firebase/auth";
 import { auth, db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
+import { setRole as setRoleFlow } from "@/ai/flows/llm-error-handling";
 
 interface AuthContextType {
   user: CtnAppUser | null;
@@ -61,20 +61,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         if (firebaseUser) {
             try {
-                // Fetch the user profile from Firestore to get their role
+                // Force refresh the token to get custom claims
+                const idTokenResult = await firebaseUser.getIdTokenResult(true);
+                const claims = idTokenResult.claims;
+                const userRole = claims.role as Role;
+                
                 const userDocRef = doc(db, "users", firebaseUser.uid);
                 const userDoc = await getDoc(userDocRef);
+
                 if (userDoc.exists()) {
                   const appUser = { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
+                  // The role from the token is the ultimate source of truth
+                  appUser.role = userRole || appUser.role;
                   setUser(appUser);
                   setRole(appUser.role);
                 } else {
-                  // If there's a Firebase user but no profile, they are effectively logged out of our app
-                  setUser(null);
-                  setRole(null);
+                   // This might happen if Firestore doc creation failed.
+                   // We can attempt to create it again.
+                   const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, userRole || 'Cantineiro');
+                   setUser(appUser);
+                   setRole(appUser.role);
                 }
             } catch (error) {
-                console.error("Error fetching user profile:", error);
+                console.error("Error during auth state change:", error);
                 setUser(null);
                 setRole(null);
             }
@@ -93,10 +102,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // After login, we map the user, which also creates their profile if it doesn't exist.
-      // We pass the role from the login form to ensure they get the correct role on first login.
-      const appUser = await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole);
       
+      // Set the custom claim on the backend
+      await setRoleFlow({ uid: userCredential.user.uid, role: assignedRole });
+
+      // The onAuthStateChanged listener will handle the rest by fetching the new token
+      // But we can eagerly update the UI
+      const appUser = await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole);
       setUser(appUser);
       setRole(appUser.role);
 
@@ -113,8 +125,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      setLoading(true);
      try {
        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-       // Create the user profile in Firestore immediately after registration
+       
+       // Set the custom claim on the backend
+       await setRoleFlow({ uid: userCredential.user.uid, role: assignedRole });
+       
+       // Create the user profile in Firestore
        await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole);
+       
+       // The onAuthStateChanged listener will pick up the new user.
        return userCredential;
      } catch (error) {
         console.error("Registration Error:", error);
