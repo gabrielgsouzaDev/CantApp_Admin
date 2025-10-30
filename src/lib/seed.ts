@@ -1,15 +1,13 @@
 // src/lib/seed.ts
-import { auth, db } from '@/firebase';
-import { CtnAppUser, Role } from '@/lib/types';
+import { auth, db } from '../firebase';
+import { CtnAppUser, Role } from './types';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { seedOrders } from '@/services/orderService';
-import { seedProducts } from '@/services/productService';
-import { setRole as setRoleFlow } from '@/ai/flows/llm-error-handling';
-
+import { seedOrders } from '../services/orderService';
+import { seedProducts } from '../services/productService';
 
 const seedUser = async (
   email: string,
@@ -21,7 +19,7 @@ const seedUser = async (
     // Try to sign in to see if user exists
     const userCredential = await signInWithEmailAndPassword(auth, email, pass);
     firebaseUser = userCredential.user;
-    console.log(`Seed: User ${email} already exists. Verifying claims and doc.`);
+    console.log(`Seed: User ${email} already exists. Verifying doc.`);
   } catch (error: any) {
     if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
       // User doesn't exist, create them
@@ -52,10 +50,7 @@ const seedUser = async (
   }
 
   try {
-    // Set custom claim for the role
-    await setRoleFlow({ uid: firebaseUser.uid, role });
-
-    // Create or update the Firestore document
+    // Create or update the Firestore document with the correct role
     const userDocRef = doc(db, 'users', firebaseUser.uid);
     const newUser: Omit<CtnAppUser, 'id'> = {
       uid: firebaseUser.uid,
@@ -65,10 +60,10 @@ const seedUser = async (
       avatar: firebaseUser.photoURL || `https://i.pravatar.cc/150?u=${firebaseUser.uid}`,
     };
     await setDoc(userDocRef, newUser, { merge: true });
-    console.log(`Seed: Ensured Firestore doc and custom claim for ${email}`);
+    console.log(`Seed: Ensured Firestore doc for ${email} with role ${role}`);
 
   } catch (error) {
-    console.error(`Seed: Error setting claims or doc for ${email}:`, error);
+    console.error(`Seed: Error setting doc for ${email}:`, error);
   }
 };
 
