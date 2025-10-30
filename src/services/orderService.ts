@@ -2,6 +2,8 @@
 import { db } from "../firebase";
 import { OrderStatus } from "@/lib/types";
 import { collection, query, updateDoc, doc, limit, orderBy, getDocs } from "firebase/firestore";
+import { errorEmitter } from "../firebase/error-emitter";
+import { FirestorePermissionError } from "../firebase/errors";
 
 const ordersCollection = collection(db, "orders");
 
@@ -15,9 +17,17 @@ export const getRecentSales = () => {
 
 export const updateOrderStatus = async (orderId: string, newStatus: OrderStatus) => {
   const orderRef = doc(db, "orders", orderId);
-  await updateDoc(orderRef, {
+  return updateDoc(orderRef, {
     status: newStatus
-  });
+  }).catch(async (serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: orderRef.path,
+        operation: 'update',
+        requestResourceData: { status: newStatus },
+      });
+      errorEmitter.emit('permission-error', permissionError);
+      throw serverError;
+    });
 };
 
 // Exemplo de como você pode popular dados iniciais, se necessário.

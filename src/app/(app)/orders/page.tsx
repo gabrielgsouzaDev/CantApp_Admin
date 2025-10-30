@@ -142,6 +142,7 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [dragOverColumn, setDragOverColumn] = useState<OrderStatus | null>(null);
+  const [originalOrders, setOriginalOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     // This check is to prevent errors during server-side rendering or in case `getOrders` isn't ready.
@@ -153,9 +154,10 @@ export default function OrdersPage() {
     const unsubscribe = onSnapshot(ordersQuery, (snapshot) => {
       const ordersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));
       setOrders(ordersData);
+      setOriginalOrders(ordersData); // Keep a copy of the original state
       setLoading(false);
     }, (error) => {
-      console.error("Error fetching orders: ", error);
+      // Errors will be handled by the global error listener
       setLoading(false);
     });
 
@@ -177,9 +179,8 @@ export default function OrdersPage() {
     try {
       await updateOrderStatus(orderId, status);
     } catch (err) {
-       console.error("Failed to update order status", err);
-       // Revert optimistic update on error if necessary
-       // For simplicity, we are not reverting here, but in a real app you should.
+       // The error is now handled globally, but we can revert the UI here if we want.
+       setOrders(originalOrders);
     }
 
     setDragOverColumn(null);
