@@ -19,13 +19,14 @@ import { useEffect } from "react";
 const formSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
   price: z.coerce.number().positive("O preço deve ser um número positivo."),
+  schoolId: z.string(), // Hidden field
 });
 
 type ProductFormData = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
   onSubmit: (data: ProductFormData) => void;
-  defaultValues?: Product | null;
+  defaultValues?: Partial<Product> | null;
   onCancel: () => void;
 }
 
@@ -35,6 +36,7 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
     defaultValues: {
       name: defaultValues?.name || "",
       price: defaultValues?.price || 0,
+      schoolId: defaultValues?.schoolId || "",
     },
   });
 
@@ -42,6 +44,7 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
     form.reset({
       name: defaultValues?.name || "",
       price: defaultValues?.price || 0,
+      schoolId: defaultValues?.schoolId || "",
     });
   }, [defaultValues, form]);
 
@@ -75,9 +78,22 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="schoolId"
+          render={({ field }) => (
+            <FormItem className="hidden">
+              <FormLabel>ID da Escola</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={onCancel}>Cancelar</Button>
-            <Button type="submit">{defaultValues ? 'Salvar Alterações' : 'Criar Produto'}</Button>
+            <Button type="submit">{defaultValues?.id ? 'Salvar Alterações' : 'Criar Produto'}</Button>
         </div>
       </form>
     </Form>

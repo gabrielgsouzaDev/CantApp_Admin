@@ -24,6 +24,7 @@ export type CtnAppUser = {
   email: string;
   avatar: string;
   role: Role;
+  schoolId?: string; // Associated school for EscolaAdmin and Cantineiro
 };
 
 // Deprecated User type, replaced by CtnAppUser
@@ -56,6 +57,7 @@ export type Product = {
   id: string;
   name: string;
   price: number;
+  schoolId: string; // All products belong to a school
 };
 
 export type Canteen = {

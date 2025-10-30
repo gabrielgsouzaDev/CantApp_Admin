@@ -1,5 +1,5 @@
 // src/services/productService.ts
-import { db } from "@/firebase";
+import { db } from "../firebase";
 import { Product } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
@@ -59,7 +59,7 @@ export const deleteProduct = async (id: string) => {
 
 // Função para popular dados no banco de dados
 export const seedProducts = async () => {
-    const mockProducts: Omit<Product, 'id'>[] = [
+    const mockProducts: Omit<Product, 'id' | 'schoolId'>[] = [
         { name: "Pão de Queijo", price: 5.00 },
         { name: "Suco de Laranja", price: 4.00 },
         { name: "Misto Quente", price: 7.00 },
@@ -72,7 +72,7 @@ export const seedProducts = async () => {
     const currentProducts = await getDocs(productsCollection);
     if (currentProducts.empty) {
       for (const product of mockProducts) {
-          await addDoc(productsCollection, product);
+          await addDoc(productsCollection, { ...product, schoolId: "default_school" }); // Add a default schoolId for seeding
       }
       console.log("Seeded products in DB successfully!");
     } else {

@@ -32,8 +32,10 @@ import {
 import { ProductForm } from "@/components/products/product-form";
 import { useToast } from "@/hooks/use-toast";
 import { DeleteConfirmationDialog } from "@/components/delete-confirmation-dialog";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function ProductsPage() {
+  const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -64,20 +66,26 @@ export default function ProductsPage() {
 
   const handleFormSubmit = async (data: Omit<Product, 'id'>) => {
     try {
+      const productData = { ...data, schoolId: user?.schoolId || '' };
+      
+      if (!productData.schoolId) {
+        throw new Error("ID da escola não encontrado. Não é possível adicionar o produto.");
+      }
+
       if (selectedProduct) {
-        await updateProduct(selectedProduct.id, data);
+        await updateProduct(selectedProduct.id, productData);
         toast({ title: "Produto atualizado!", description: "Os dados do produto foram atualizados com sucesso." });
       } else {
-        await addProduct(data);
+        await addProduct(productData);
         toast({ title: "Produto adicionado!", description: "O novo produto foi cadastrado com sucesso." });
       }
       setIsFormOpen(false);
       setSelectedProduct(null);
       fetchProducts(); // Refresh data
-    } catch (error) {
+    } catch (error: any) {
        toast({
         title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar os dados do produto.",
+        description: error.message || "Ocorreu um erro ao salvar os dados do produto.",
         variant: "destructive"
       });
     }
@@ -133,7 +141,7 @@ export default function ProductsPage() {
             </DialogHeader>
             <ProductForm 
               onSubmit={handleFormSubmit}
-              defaultValues={selectedProduct}
+              defaultValues={{...selectedProduct, schoolId: user?.schoolId || ''}}
               onCancel={() => setIsFormOpen(false)}
             />
           </DialogContent>
