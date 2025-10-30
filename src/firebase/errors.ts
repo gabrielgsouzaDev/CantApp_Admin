@@ -1,7 +1,6 @@
 // src/firebase/errors.ts
 
-import { getAuth } from "firebase/auth";
-import { adminAuth } from "../firebase";
+import { auth } from ".";
 
 export type SecurityRuleContext = {
   path: string;
@@ -10,7 +9,6 @@ export type SecurityRuleContext = {
 };
 
 function formatFirestoreError(context: SecurityRuleContext): string {
-  const auth = adminAuth; // Always use adminAuth for context generation
   const user = auth.currentUser;
 
   const requestBody = {

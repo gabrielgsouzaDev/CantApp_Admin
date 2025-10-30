@@ -9,9 +9,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getDashboardRouteForRole(role: Role | null) {
   switch (role) {
-    case 'Admin':
+    case 'GlobalAdmin':
       return '/dashboard/admin';
-    case 'Escola':
+    case 'EscolaAdmin':
       return '/dashboard/escola';
     case 'Cantineiro':
       return '/orders';

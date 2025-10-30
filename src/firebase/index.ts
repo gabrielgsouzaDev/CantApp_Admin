@@ -3,32 +3,19 @@ import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
 import { getFirestore, Firestore } from "firebase/firestore";
 import { getAuth, Auth } from "firebase/auth";
 import { firebaseConfig } from "./config";
-import { firebaseAdminConfig } from "./admin-config";
 
-// --- Client App Initialization ---
-// This app is used for public-facing data and end-user authentication (parents, students)
+// --- Unified App Initialization ---
+// All parts of the app will use this single Firebase project.
 let app: FirebaseApp;
-// Ensure we're not re-initializing the 'client' app
-if (!getApps().some(app => app.name === 'client')) {
-  app = initializeApp(firebaseConfig, 'client');
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
 } else {
-  app = getApp('client');
+  app = getApp();
 }
+
 const db: Firestore = getFirestore(app);
 const auth: Auth = getAuth(app);
 
-
-// --- Admin App Initialization ---
-// This app is used for administrative tasks and data management (Admin, School, Canteen staff)
-let adminApp: FirebaseApp;
-// Ensure we're not re-initializing the 'admin' app
-if (!getApps().some(app => app.name === 'admin')) {
-  adminApp = initializeApp(firebaseAdminConfig, 'admin');
-} else {
-  adminApp = getApp('admin');
-}
-const adminDb: Firestore = getFirestore(adminApp);
-const adminAuth: Auth = getAuth(adminApp);
-
-
-export { app, db, auth, adminApp, adminDb, adminAuth };
+// Legacy admin exports are removed to avoid confusion.
+// All services should import `db` and `auth` from this file.
+export { app, db, auth };

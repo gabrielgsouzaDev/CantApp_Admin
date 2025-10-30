@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password, "Admin");
+      await login(email, password, "GlobalAdmin");
     } catch (error: any) {
       toast({
         title: "Erro de Login",
@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await register(registerEmail, registerPassword, "Admin");
+      await register(registerEmail, registerPassword, "GlobalAdmin");
       toast({
         title: "Cadastro realizado!",
         description: "Agora você pode fazer o login com suas credenciais."

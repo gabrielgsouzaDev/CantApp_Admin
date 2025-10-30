@@ -12,10 +12,9 @@ import {
   User as FirebaseUser,
   Auth
 } from "firebase/auth";
-import { auth, adminDb, adminAuth } from "@/firebase";
+import { auth, db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
-
 
 interface AuthContextType {
   user: CtnAppUser | null;
@@ -28,14 +27,11 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// This function maps a Firebase User to our app's user type and assigns a role.
 const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Role): Promise<CtnAppUser> => {
-  const firestoreInstance = adminDb; // User profiles are always in the admin DB
-  const userDocRef = doc(firestoreInstance, "users", firebaseUser.uid);
+  const userDocRef = doc(db, "users", firebaseUser.uid);
   let userDoc = await getDoc(userDocRef);
 
   if (!userDoc.exists()) {
-    // If user doc doesn't exist, create it.
     const newUser: Omit<CtnAppUser, 'id'> = {
       uid: firebaseUser.uid,
       email: firebaseUser.email || "",
@@ -48,22 +44,10 @@ const mapFirebaseUserToCtnAppUser = async (firebaseUser: FirebaseUser, role: Rol
   }
   
   const userData = userDoc.data();
+  // The role from the document is the source of truth after creation.
   const finalRole = userData?.role || role;
 
-  // Set custom claims for security rules if the user is an admin type
-  if (["Admin", "Escola", "Cantineiro"].includes(finalRole)) {
-      // In a real app, this would be a server-side function call
-      // For this demo, we assume claims are set on user creation/role change.
-  }
-
   return { id: userDoc.id, ...userData, role: finalRole } as CtnAppUser;
-}
-
-const getAuthInstanceByRole = (role: Role | null): Auth => {
-    // Admin, Escola, and Cantineiro always use the adminAuth instance
-    return (role === "Admin" || role === "Escola" || role === "Cantineiro")
-      ? adminAuth
-      : auth; // Default to client auth
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -74,21 +58,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const storedRole = localStorage.getItem("ctn-user-role") as Role | null;
-    const authInstance = getAuthInstanceByRole(storedRole);
-
-    const unsubscribe = onAuthStateChanged(authInstance, async (firebaseUser) => {
-        if (firebaseUser && storedRole) {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
             try {
-                const appUser = await mapFirebaseUserToCtnAppUser(firebaseUser, storedRole);
-                setUser(appUser);
-                setRole(appUser.role);
+                // Fetch the user profile from Firestore to get their role
+                const userDocRef = doc(db, "users", firebaseUser.uid);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                  const appUser = { id: userDoc.id, ...userDoc.data() } as CtnAppUser;
+                  setUser(appUser);
+                  setRole(appUser.role);
+                } else {
+                  // If there's a Firebase user but no profile, they are effectively logged out of our app
+                  setUser(null);
+                  setRole(null);
+                }
             } catch (error) {
-                console.error("Error mapping user, signing out:", error);
-                await signOut(authInstance);
+                console.error("Error fetching user profile:", error);
                 setUser(null);
                 setRole(null);
-                localStorage.removeItem("ctn-user-role");
             }
         } else {
             setUser(null);
@@ -103,25 +91,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string, assignedRole: Role) => {
     setLoading(true);
-    const authInstance = getAuthInstanceByRole(assignedRole);
-
     try {
-      // Sign out from all instances first to prevent conflicts
-      await signOut(auth).catch(() => {});
-      await signOut(adminAuth).catch(() => {});
-      localStorage.removeItem("ctn-user-role");
-
-
-      const userCredential = await signInWithEmailAndPassword(authInstance, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      // After login, we map the user, which also creates their profile if it doesn't exist.
+      // We pass the role from the login form to ensure they get the correct role on first login.
       const appUser = await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole);
       
-      const finalRole = appUser.role;
-
       setUser(appUser);
-      setRole(finalRole);
-      localStorage.setItem("ctn-user-role", finalRole);
+      setRole(appUser.role);
 
-      const dashboardRoute = getDashboardRouteForRole(finalRole);
+      const dashboardRoute = getDashboardRouteForRole(appUser.role);
       router.push(dashboardRoute);
     } catch (error) {
       console.error("Login Error:", error);
@@ -132,9 +111,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (email: string, password: string, assignedRole: Role) => {
      setLoading(true);
-     const authInstance = getAuthInstanceByRole(assignedRole);
      try {
-       const userCredential = await createUserWithEmailAndPassword(authInstance, email, password);
+       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+       // Create the user profile in Firestore immediately after registration
        await mapFirebaseUserToCtnAppUser(userCredential.user, assignedRole);
        return userCredential;
      } catch (error) {
@@ -147,9 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     setLoading(true);
-    const authInstance = getAuthInstanceByRole(role);
-    await signOut(authInstance);
-    localStorage.removeItem("ctn-user-role");
+    await signOut(auth);
     setUser(null);
     setRole(null);
     router.push("/");

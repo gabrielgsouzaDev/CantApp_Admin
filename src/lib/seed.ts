@@ -1,5 +1,5 @@
 // src/lib/seed.ts
-import { adminAuth, adminDb } from '../firebase';
+import { auth, db } from '../firebase';
 import { CtnAppUser, Role } from '@/lib/types';
 import {
   createUserWithEmailAndPassword,
@@ -15,11 +15,10 @@ const seedUser = async (
   role: Role
 ) => {
   try {
-    // Check if user exists by trying to sign in
     try {
-      await signInWithEmailAndPassword(adminAuth, email, pass);
+      await signInWithEmailAndPassword(auth, email, pass);
       console.log(`Seed: ${role} user (${email}) already exists. Skipping.`);
-      return; // User exists, no need to create
+      return;
     } catch (error: any) {
       if (
         error.code !== 'auth/user-not-found' &&
@@ -34,12 +33,12 @@ const seedUser = async (
     }
 
     const userCredential = await createUserWithEmailAndPassword(
-      adminAuth,
+      auth,
       email,
       pass
     );
     const firebaseUser = userCredential.user;
-    const userDocRef = doc(adminDb, 'users', firebaseUser.uid);
+    const userDocRef = doc(db, 'users', firebaseUser.uid);
 
     const newUser: Omit<CtnAppUser, 'id'> = {
       uid: firebaseUser.uid,
@@ -63,7 +62,7 @@ const seedUser = async (
 };
 
 const runSeed = async () => {
-  const seedFlagRef = doc(adminDb, 'internal', 'seed_flag');
+  const seedFlagRef = doc(db, 'internal', 'seed_flag');
   try {
     const seedFlagDoc = await getDoc(seedFlagRef);
 
@@ -74,7 +73,7 @@ const runSeed = async () => {
 
     console.log('Seed: First time setup, seeding initial data...');
 
-    await seedUser('admin@ctn.com', 'password', 'Admin');
+    await seedUser('admin@ctn.com', 'password', 'GlobalAdmin');
     await seedUser('cantineiro@ctn.com', 'password', 'Cantineiro');
 
     await seedProducts();
@@ -88,5 +87,4 @@ const runSeed = async () => {
   }
 };
 
-// Run the seed process
 runSeed();
