@@ -79,6 +79,7 @@ export default function EscolaLoginPage() {
       const { street, number, complement, neighborhood, city, state, cep } = values.address;
       const fullAddress = `${street}, ${number}${complement ? ` - ${complement}` : ''} - ${neighborhood}, ${city} - ${state}, CEP: ${cep}`;
 
+      // Create school data first to get its ID
       const schoolData = {
         name: values.name,
         cnpj: values.cnpj,
@@ -87,7 +88,10 @@ export default function EscolaLoginPage() {
         ownerUid: user.uid,
       };
       
-      await addSchool(schoolData);
+      const schoolId = await addSchool(schoolData);
+
+      // Now register the user with the schoolId
+      await register(values.email, values.password, "EscolaAdmin", schoolId);
       
       toast({
         title: "Cadastro realizado com sucesso!",
@@ -97,7 +101,8 @@ export default function EscolaLoginPage() {
       setLoginEmail(values.email);
       setLoginPassword("");
 
-    } catch (error: any) {
+    } catch (error: any)
+     {
       let errorMessage = "Não foi possível completar o cadastro.";
       if (error.code === 'auth/email-already-in-use') {
         errorMessage = "Este email já está em uso. Tente outro.";
