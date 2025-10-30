@@ -1,5 +1,5 @@
 // src/services/orderService.ts
-import { adminDb } from "@/firebase";
+import { adminDb } from "../firebase";
 import { OrderStatus } from "@/lib/types";
 import { collection, query, updateDoc, doc, limit, orderBy, getDocs } from "firebase/firestore";
 

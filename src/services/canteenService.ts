@@ -1,5 +1,5 @@
 // src/services/canteenService.ts
-import { adminDb } from "@/firebase";
+import { adminDb } from "../firebase";
 import { Canteen } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 

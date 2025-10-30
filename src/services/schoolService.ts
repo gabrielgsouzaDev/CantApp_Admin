@@ -1,9 +1,9 @@
 // src/services/schoolService.ts
-import { adminDb } from "@/firebase";
+import { adminDb } from "../firebase";
 import { School } from "@/lib/types";
 import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
+import { errorEmitter } from "../firebase/error-emitter";
+import { FirestorePermissionError } from "../firebase/errors";
 
 const schoolsCollection = collection(adminDb, "schools");
 
