@@ -10,15 +10,13 @@ import { Role } from '@/lib/types';
 import { z } from 'zod';
 import { initializeApp, getApps, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { firebaseAdminConfig } from '@/firebase/admin-config';
 
 // --- Admin App Initialization ---
 // This initializes the Firebase Admin SDK. It's safe to run multiple times.
+// In a secure server environment, the SDK discovers credentials automatically.
 let adminApp: App;
 if (!getApps().length) {
-    adminApp = initializeApp({
-      ...firebaseAdminConfig
-    }, 'admin');
+    adminApp = initializeApp({}, 'admin');
   } else {
     adminApp = getApps().find(app => app.name === 'admin')!;
   }
