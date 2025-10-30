@@ -8,8 +8,6 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { seedOrders } from '../services/orderService';
 import { seedProducts } from '../services/productService';
-import { setRole } from '../ai/flows/llm-error-handling';
-
 
 const seedUser = async (
   email: string,
@@ -18,8 +16,27 @@ const seedUser = async (
 ) => {
   try {
     try {
+      // Check if user exists by trying to sign in
       await signInWithEmailAndPassword(auth, email, pass);
-      console.log(`Seed: ${role} user (${email}) already exists. Skipping.`);
+      console.log(`Seed: ${role} user (${email}) already exists. Skipping creation.`);
+      // Ensure firestore doc exists
+       const userQuery = await signInWithEmailAndPassword(auth, email, pass);
+       const fbUser = userQuery.user;
+       const userDocRef = doc(db, 'users', fbUser.uid);
+       const userDoc = await getDoc(userDocRef);
+       if (!userDoc.exists()) {
+          const newUser: Omit<CtnAppUser, 'id'> = {
+            uid: fbUser.uid,
+            email: fbUser.email || '',
+            name: fbUser.displayName || role,
+            role: role,
+            avatar:
+              fbUser.photoURL || `https://i.pravatar.cc/150?u=${fbUser.uid}`,
+          };
+          await setDoc(userDocRef, newUser);
+          console.log(`Seed: Created Firestore doc for existing user ${email}`);
+       }
+
       return;
     } catch (error: any) {
       if (
@@ -34,15 +51,13 @@ const seedUser = async (
       }
     }
 
+    // If user does not exist, create them
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
       pass
     );
     const firebaseUser = userCredential.user;
-
-    // Set custom claim
-    await setRole({ uid: firebaseUser.uid, role });
 
     const userDocRef = doc(db, 'users', firebaseUser.uid);
     const newUser: Omit<CtnAppUser, 'id'> = {
