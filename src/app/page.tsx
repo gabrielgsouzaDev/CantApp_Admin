@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Logo } from "@/components/logo";
 import { useRouter } from "next/navigation";
@@ -102,6 +102,9 @@ export default function LandingPage() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
+                <SheetHeader>
+                    <SheetTitle className="sr-only">Navegação Principal</SheetTitle>
+                </SheetHeader>
                 <nav className="grid gap-6 text-lg font-medium mt-8">
                    <Link href="/" className="flex items-center gap-2 text-lg font-semibold mb-4">
                      <Logo />
