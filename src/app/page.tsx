@@ -20,7 +20,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Logo } from "@/components/logo";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, ClipboardList, Smartphone, ShoppingBag, CreditCard, ShoppingCart, Menu } from "lucide-react";
+import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, ClipboardList, Smartphone, ShoppingBag, CreditCard, ShoppingCart, Menu, ImageIcon } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useState } from "react";
 import {
@@ -402,7 +402,12 @@ export default function LandingPage() {
         <section id="cta" className="py-20 md:py-24 bg-secondary/50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-16 items-center">
-              <div></div>
+              <div className="flex items-center justify-center bg-muted/60 h-full min-h-[300px] rounded-lg border-2 border-dashed border-border text-muted-foreground">
+                <div className="text-center">
+                  <ImageIcon className="h-16 w-16 mx-auto mb-4" />
+                  <p>Imagem do App</p>
+                </div>
+              </div>
               <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Acesse de qualquer lugar.</h2>
                 <p className="text-muted-foreground text-lg">Use o CantApp no seu computador ou baixe o aplicativo para celular e tenha a gestão da cantina sempre à mão.</p>
