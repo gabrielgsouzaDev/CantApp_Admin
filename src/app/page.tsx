@@ -83,13 +83,15 @@ export default function LandingPage() {
                         <CardTitle>Área Administrativa</CardTitle>
                         <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex flex-col sm:flex-row gap-4">
-                       <Button asChild className="justify-center w-full">
-                          <Link href="/escola/login"><School />Acessar como Escola</Link>
-                        </Button>
-                        <Button asChild className="justify-center w-full">
-                          <Link href="/cantina/login"><Store />Acessar como Cantina</Link>
-                        </Button>
+                    <CardContent>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                         <Button asChild className="justify-center">
+                            <Link href="/escola/login"><School />Acessar como Escola</Link>
+                          </Button>
+                          <Button asChild className="justify-center">
+                            <Link href="/cantina/login"><Store />Acessar como Cantina</Link>
+                          </Button>
+                      </div>
                     </CardContent>
                 </Card>
                 <Card className="text-left border-border">
