@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dialog";
 import { Order, OrderStatus } from "@/lib/types";
 import { getOrders, updateOrderStatus } from "@/services/orderService";
-import { onSnapshot } from "firebase/firestore";
 
 const OrderCard = ({ order }: { order: Order }) => {
   return (
@@ -24,12 +23,12 @@ const OrderCard = ({ order }: { order: Order }) => {
       <DialogTrigger asChild>
         <Card
           draggable
-          onDragStart={(e) => e.dataTransfer.setData("orderId", order.id)}
+          onDragStart={(e) => e.dataTransfer.setData("orderId", String(order.id))}
           className="mb-4 cursor-grab active:cursor-grabbing bg-card hover:bg-accent transition-colors"
         >
           <CardHeader className="p-4">
             <CardTitle className="text-base flex justify-between items-center">
-              <span>{order.studentName}</span>
+              <span>{order.student_name}</span>
               <span className="text-xs font-normal text-muted-foreground flex items-center gap-1">
                 <Clock className="h-3 w-3" />
                 {new Date(order.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
@@ -37,10 +36,10 @@ const OrderCard = ({ order }: { order: Order }) => {
             </CardTitle>
              <div className="flex items-center justify-between pt-2">
                 <Badge
-                    variant={order.paymentStatus === "Pendente" ? "destructive" : "default"}
-                    className={cn(order.paymentStatus === "Pago" && "bg-green-600 text-white")}
+                    variant={order.payment_status === "Pendente" ? "destructive" : "default"}
+                    className={cn(order.payment_status === "Pago" && "bg-green-600 text-white")}
                 >
-                    {order.paymentStatus}
+                    {order.payment_status}
                 </Badge>
             </div>
           </CardHeader>
@@ -58,7 +57,7 @@ const OrderCard = ({ order }: { order: Order }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Pedido de {order.studentName}</DialogTitle>
+          <DialogTitle>Pedido de {order.student_name}</DialogTitle>
           <DialogDescription>
             Recebido às {new Date(order.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
           </DialogDescription>
@@ -73,11 +72,11 @@ const OrderCard = ({ order }: { order: Order }) => {
              <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Status do Pagamento</span>
                  <Badge
-                    variant={order.paymentStatus === "Pendente" ? "destructive" : "default"}
-                    className={cn("flex items-center gap-1.5", order.paymentStatus === "Pago" && "bg-green-600 text-white")}
+                    variant={order.payment_status === "Pendente" ? "destructive" : "default"}
+                    className={cn("flex items-center gap-1.5", order.payment_status === "Pago" && "bg-green-600 text-white")}
                 >
                     <CreditCard className="h-3.5 w-3.5" />
-                    {order.paymentStatus}
+                    {order.payment_status}
                 </Badge>
             </div>
             <div className="space-y-2">
@@ -145,29 +144,29 @@ export default function OrdersPage() {
   const [originalOrders, setOriginalOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    // This check is to prevent errors during server-side rendering or in case `getOrders` isn't ready.
-    if (typeof getOrders !== 'function') {
-      setLoading(false);
-      return;
+    const fetchOrders = async () => {
+        try {
+            const ordersData = await getOrders();
+            setOrders(ordersData);
+            setOriginalOrders(ordersData); // Keep a copy of the original state
+        } catch (error) {
+            console.error("Failed to fetch orders", error);
+            // Here you would show a toast to the user
+        } finally {
+            setLoading(false);
+        }
     }
-    const ordersQuery = getOrders();
-    const unsubscribe = onSnapshot(ordersQuery, (snapshot) => {
-      const ordersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));
-      setOrders(ordersData);
-      setOriginalOrders(ordersData); // Keep a copy of the original state
-      setLoading(false);
-    }, (error) => {
-      // Errors will be handled by the global error listener
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    fetchOrders();
+    // In a real REST API scenario, you might use polling or WebSockets to get live updates.
+    // For this demo, we just fetch once.
   }, []);
 
   const handleDrop = async (e: DragEvent<HTMLDivElement>, status: OrderStatus) => {
     e.preventDefault();
-    const orderId = e.dataTransfer.getData("orderId");
+    const orderId = Number(e.dataTransfer.getData("orderId"));
     
+    setOriginalOrders(orders); // Save current state before optimistic update
+
     // Optimistic update
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
@@ -175,11 +174,11 @@ export default function OrdersPage() {
       )
     );
     
-    // Update Firestore
     try {
       await updateOrderStatus(orderId, status);
     } catch (err) {
-       // The error is now handled globally, but we can revert the UI here if we want.
+       console.error("Failed to update order status", err);
+       // Revert UI on error
        setOrders(originalOrders);
     }
 

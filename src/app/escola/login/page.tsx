@@ -17,7 +17,6 @@ import { Loader2, School } from "lucide-react";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import { addSchool } from "@/services/schoolService";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -58,7 +57,7 @@ export default function EscolaLoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await login(loginEmail, loginPassword, "EscolaAdmin");
+      await login(loginEmail, loginPassword);
     } catch (error: any) {
       toast({
         title: "Erro de Login",
@@ -73,8 +72,6 @@ export default function EscolaLoginPage() {
   const handleRegister = async (values: z.infer<typeof SchoolSchema>) => {
     setLoading(true);
     try {
-      const userCredential = await register(values.email, values.password, "EscolaAdmin");
-      const user = userCredential.user;
       
       const { street, number, complement, neighborhood, city, state, cep } = values.address;
       const fullAddress = `${street}, ${number}${complement ? ` - ${complement}` : ''} - ${neighborhood}, ${city} - ${state}, CEP: ${cep}`;
@@ -83,11 +80,13 @@ export default function EscolaLoginPage() {
         name: values.name,
         cnpj: values.cnpj,
         address: fullAddress,
-        status: "active" as "active" | "inactive",
-        ownerUid: user.uid,
+        status: "active",
+        email: values.email,
+        password: values.password,
+        role: "EscolaAdmin"
       };
       
-      await addSchool(schoolData);
+      await register(schoolData);
       
       toast({
         title: "Cadastro realizado com sucesso!",

@@ -1,55 +1,46 @@
-// src/services/schoolService.ts
-import { db } from "@/firebase";
+import { api } from "@/lib/api";
+import { mockSchools } from "@/lib/mocks";
 import { School } from "@/lib/types";
-import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
 
-const schoolsCollection = collection(db, "schools");
+// For demo purposes, we'll use a mock latency
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const getSchools = async (): Promise<School[]> => {
-  const q = query(schoolsCollection);
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
+  console.log("Fetching schools from API...");
+  // REAL: return api.get<School[]>('/schools');
+  await sleep(500); // Simulate network delay
+  return Promise.resolve(mockSchools);
 };
 
-export const addSchool = async (school: Omit<School, 'id'>) => {
-  return addDoc(schoolsCollection, school)
-    .then(docRef => docRef.id)
-    .catch(async (serverError) => {
-      const permissionError = new FirestorePermissionError({
-        path: schoolsCollection.path,
-        operation: 'create',
-        requestResourceData: school,
-      });
-      errorEmitter.emit('permission-error', permissionError);
-      throw serverError;
-    });
+export const addSchool = async (school: Omit<School, 'id'>): Promise<School> => {
+  console.log("Adding school via API:", school);
+  // REAL: return api.post<School>('/schools', school);
+  await sleep(500);
+  const newSchool: School = { id: Math.random(), ...school };
+  mockSchools.push(newSchool);
+  return Promise.resolve(newSchool);
 };
 
-export const updateSchool = async (id: string, school: Partial<Omit<School, 'id' | 'ownerUid'>>) => {
-  const schoolDoc = doc(db, "schools", id);
-  return updateDoc(schoolDoc, school)
-    .catch(async (serverError) => {
-      const permissionError = new FirestorePermissionError({
-        path: schoolDoc.path,
-        operation: 'update',
-        requestResourceData: school,
-      });
-      errorEmitter.emit('permission-error', permissionError);
-      throw serverError;
-    });
+export const updateSchool = async (id: number, school: Partial<Omit<School, 'id' | 'ownerUid'>>): Promise<School> => {
+  console.log(`Updating school ${id} via API with:`, school);
+  // REAL: return api.put<School>(`/schools/${id}`, school);
+  await sleep(500);
+  const index = mockSchools.findIndex(s => s.id === id);
+  if (index > -1) {
+    mockSchools[index] = { ...mockSchools[index], ...school };
+    return Promise.resolve(mockSchools[index]);
+  }
+  throw new Error("School not found");
 };
 
-export const deleteSchool = async (id: string) => {
-  const schoolDoc = doc(db, "schools", id);
-  return deleteDoc(schoolDoc)
-    .catch(async (serverError) => {
-      const permissionError = new FirestorePermissionError({
-        path: schoolDoc.path,
-        operation: 'delete',
-      });
-      errorEmitter.emit('permission-error', permissionError);
-      throw serverError;
-    });
+export const deleteSchool = async (id: number): Promise<void> => {
+  console.log(`Deleting school ${id} via API`);
+  // REAL: return api.delete<void>(`/schools/${id}`);
+  await sleep(500);
+  const index = mockSchools.findIndex(s => s.id === id);
+  if (index > -1) {
+    mockSchools.splice(index, 1);
+    return Promise.resolve();
+  }
+  throw new Error("School not found");
 };

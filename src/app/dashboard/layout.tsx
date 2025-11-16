@@ -26,9 +26,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // If the user lands on the root of the authenticated area, redirect to the admin dashboard.
+  // If the user lands on the root of the authenticated area, redirect based on role.
   if (typeof window !== 'undefined' && (window.location.pathname === '/dashboard' || window.location.pathname === '/dashboard/')) {
-     const dashboardRoute = '/dashboard/admin';
+     const dashboardRoute = user.role === 'GlobalAdmin' ? '/dashboard/admin' : 
+                            user.role === 'EscolaAdmin' ? '/dashboard/escola' :
+                            '/orders'; // Cantineiro goes to orders
      router.replace(dashboardRoute);
      return (
        <div className="flex min-h-screen items-center justify-center">

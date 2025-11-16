@@ -1,15 +1,13 @@
 "use client";
 
 import { AuthContext } from "@/components/auth-provider";
-import { Role } from "@/lib/types";
 import { useContext } from "react";
-import { UserCredential } from "firebase/auth";
 
 interface AuthHook {
   user: any;
   loading: boolean;
-  login: (email: string, password: string, roleHint?: Role) => Promise<void>;
-  register: (email: string, password: string, role: Role) => Promise<UserCredential>;
+  login: (email: string, password: string) => Promise<void>;
+  register: (data: any) => Promise<void>;
   logout: () => void;
 }
 

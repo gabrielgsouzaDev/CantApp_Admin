@@ -1,27 +1,21 @@
-// src/services/userService.ts
-import { db } from "@/firebase";
-import { CtnAppUser } from "@/lib/types"; // Alterado para CtnAppUser
-import { collection, getDocs, query, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+// This service is not fully implemented in the UI yet,
+// but here is the structure for it.
 
-const usersCollection = collection(db, "users");
+import { api } from "@/lib/api";
+import { CtnAppUser } from "@/lib/types"; 
 
 export const getUsers = async (): Promise<CtnAppUser[]> => {
-  const q = query(usersCollection);
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CtnAppUser));
+  return api.get<CtnAppUser[]>('/users');
 };
 
-export const addUser = async (user: Omit<CtnAppUser, 'id'>): Promise<string> => {
-  const docRef = await addDoc(usersCollection, user);
-  return docRef.id;
+export const addUser = async (user: Omit<CtnAppUser, 'id'>): Promise<CtnAppUser> => {
+  return api.post<CtnAppUser>('/users', user);
 };
 
-export const updateUser = async (id: string, user: Partial<Omit<CtnAppUser, 'id'>>): Promise<void> => {
-  const userDoc = doc(db, "users", id);
-  return updateDoc(userDoc, user);
+export const updateUser = async (id: number, user: Partial<Omit<CtnAppUser, 'id'>>): Promise<CtnAppUser> => {
+  return api.put<CtnAppUser>(`/users/${id}`, user);
 };
 
-export const deleteUser = async (id: string): Promise<void> => {
-  const userDoc = doc(db, "users", id);
-  return deleteDoc(userDoc);
+export const deleteUser = async (id: number): Promise<void> => {
+  return api.delete<void>(`/users/${id}`);
 };

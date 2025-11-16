@@ -1,53 +1,37 @@
-// src/services/orderService.ts
-import { db } from "@/firebase";
-import { OrderStatus } from "@/lib/types";
-import { collection, query, updateDoc, doc, limit, orderBy, getDocs, addDoc } from "firebase/firestore";
-import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
+import { api } from "@/lib/api";
+import { mockOrders } from "@/lib/mocks";
+import { Order, OrderStatus } from "@/lib/types";
 
-const ordersCollection = collection(db, "orders");
+// For demo purposes, we'll use a mock latency
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const getOrders = () => {
-  return query(ordersCollection, orderBy("time", "asc"));
+// In a real REST API, you'd probably poll for updates or use WebSockets.
+// For the demo, we just fetch the initial mock data.
+export const getOrders = async (): Promise<Order[]> => {
+  console.log("Fetching orders from API...");
+  // REAL: return api.get<Order[]>('/orders');
+  await sleep(500);
+  // sort by time
+  const sortedOrders = [...mockOrders].sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+  return Promise.resolve(sortedOrders);
 };
 
-export const getRecentSales = () => {
-    return query(ordersCollection, orderBy("time", "desc"), limit(5));
+export const getRecentSales = async (): Promise<Order[]> => {
+  console.log("Fetching recent sales from API...");
+  // REAL: return api.get<Order[]>('/orders?limit=5&sort=desc');
+  await sleep(500);
+  const sortedSales = [...mockOrders].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+  return Promise.resolve(sortedSales.slice(0, 5));
 }
 
-export const updateOrderStatus = async (orderId: string, newStatus: OrderStatus) => {
-  const orderRef = doc(db, "orders", orderId);
-  return updateDoc(orderRef, {
-    status: newStatus
-  }).catch(async (serverError) => {
-      const permissionError = new FirestorePermissionError({
-        path: orderRef.path,
-        operation: 'update',
-        requestResourceData: { status: newStatus },
-      });
-      errorEmitter.emit('permission-error', permissionError);
-      throw serverError;
-    });
+export const updateOrderStatus = async (orderId: number, newStatus: OrderStatus): Promise<Order> => {
+  console.log(`Updating order ${orderId} status to ${newStatus} via API`);
+  // REAL: return api.patch<Order>(`/orders/${orderId}`, { status: newStatus });
+  await sleep(200);
+  const index = mockOrders.findIndex(o => o.id === orderId);
+  if (index > -1) {
+    mockOrders[index].status = newStatus;
+    return Promise.resolve(mockOrders[index]);
+  }
+  throw new Error("Order not found");
 };
-
-// Exemplo de como você pode popular dados iniciais, se necessário.
-// Pode ser chamado de um script separado ou de uma função de admin.
-export const seedOrders = async () => {
-    const mockOrders = [
-        { studentName: "João Silva", time: Date.now() - 500000, items: [{id: 'pao-queijo', name: "Pão de Queijo", price: 5}, {id: 'suco-laranja', name: "Suco de Laranja", price: 4}], status: "A Fazer", paymentStatus: "Pago", total: 9 },
-        { studentName: "Maria Clara", time: Date.now() - 400000, items: [{id: 'misto-quente', name: "Misto Quente", price: 7}], status: "A Fazer", paymentStatus: "Pendente", total: 7 },
-        { studentName: "Pedro Alves", time: Date.now() - 300000, items: [{id: 'bolo-choco', name: "Bolo de Chocolate", price: 6}, {id: 'achocolatado', name: "Achocolatado", price: 4}], status: "Em Preparo", paymentStatus: "Pago", total: 10 },
-        { studentName: "Ana Beatriz", time: Date.now() - 200000, items: [{id: 'coxinha', name: "Coxinha", price: 5}], status: "Em Preparo", paymentStatus: "Pendente", total: 5 },
-        { studentName: "Lucas Costa", time: Date.now() - 100000, items: [{id: 'esfirra-carne', name: "Esfirra de Carne", price: 6}], status: "Pronto", paymentStatus: "Pago", total: 6 },
-    ];
-
-    const currentOrders = await getDocs(ordersCollection);
-    if (currentOrders.empty) {
-      for (const order of mockOrders) {
-          await addDoc(ordersCollection, order);
-      }
-      console.log("Seeded orders successfully!");
-    } else {
-      console.log("Orders collection is not empty. Skipping seed.");
-    }
-}

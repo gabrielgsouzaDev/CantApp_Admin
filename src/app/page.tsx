@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,13 +18,10 @@ import {
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Logo } from "@/components/logo";
-import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { Role } from "@/lib/types";
-import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, User, Briefcase, GraduationCap, ClipboardList, Smartphone, ShoppingBag, CreditCard, ShoppingCart } from "lucide-react";
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { ArrowRight, Wallet, School, Store, BarChart, Package, Shield, Apple, Settings, Zap, ClipboardList, Smartphone, ShoppingBag, CreditCard, ShoppingCart } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -36,20 +32,11 @@ import {
 
 type AdvantageView = 'admin' | 'user';
 
+
 export default function LandingPage() {
-  const { login } = useAuth();
   const router = useRouter();
   const [advantageView, setAdvantageView] = useState<AdvantageView>('admin');
 
-
-  const handleLoginAs = (role: Role) => {
-    login(role);
-    router.push("/dashboard");
-  };
-
-  const appLaptopImage = PlaceHolderImages.find(img => img.id === 'app-laptop');
-  const appMobileImage = PlaceHolderImages.find(img => img.id === 'app-mobile');
-  
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">

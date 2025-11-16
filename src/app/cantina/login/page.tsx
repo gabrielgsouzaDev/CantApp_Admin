@@ -26,7 +26,7 @@ export default function CantinaLoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password, "Cantineiro");
+      await login(email, password);
     } catch (error: any) {
       toast({
         title: "Erro de Login",

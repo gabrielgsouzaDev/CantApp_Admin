@@ -10,7 +10,6 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useEffect, useState } from "react";
 import { Order } from "@/lib/types";
 import { getRecentSales } from "@/services/orderService";
-import { onSnapshot } from "firebase/firestore";
 
 const mockUsers: { [key: string]: { avatar: string } } = {
   joao: { avatar: "https://i.pravatar.cc/150?u=joao" },
@@ -25,21 +24,17 @@ export function RecentSales() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-     if (typeof getRecentSales !== 'function') {
-      setLoading(false);
-      return;
-    }
-    const salesQuery = getRecentSales();
-    const unsubscribe = onSnapshot(salesQuery, (snapshot) => {
-      const salesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));
-      setSales(salesData);
-      setLoading(false);
-    }, (error) => {
-      console.error("Error fetching recent sales: ", error);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+     const fetchSales = async () => {
+        try {
+            const salesData = await getRecentSales();
+            setSales(salesData);
+        } catch (error) {
+            console.error("Failed to fetch recent sales", error);
+        } finally {
+            setLoading(false);
+        }
+     }
+    fetchSales();
   }, []);
 
   const getAvatarForStudent = (studentName: string) => {
@@ -62,13 +57,13 @@ export function RecentSales() {
                     {sales.map((sale) => (
                         <div key={sale.id} className="flex items-center">
                             <Avatar className="h-9 w-9">
-                            <AvatarImage src={getAvatarForStudent(sale.studentName)} alt="Avatar" data-ai-hint="avatar person" />
-                            <AvatarFallback>{sale.studentName.charAt(0)}</AvatarFallback>
+                            <AvatarImage src={getAvatarForStudent(sale.student_name)} alt="Avatar" data-ai-hint="avatar person" />
+                            <AvatarFallback>{sale.student_name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div className="ml-4 space-y-1">
-                            <p className="text-sm font-medium leading-none">{sale.studentName}</p>
+                            <p className="text-sm font-medium leading-none">{sale.student_name}</p>
                             <p className="text-sm text-muted-foreground">
-                                {sale.id}
+                                Pedido #{sale.id}
                             </p>
                             </div>
                             <div className="ml-auto font-medium">

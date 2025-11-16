@@ -67,16 +67,18 @@ export default function ProductsPage() {
   const handleFormSubmit = async (data: Omit<Product, 'id'>) => {
     try {
       if (!user?.schoolId) {
+        // In a real app, you might not even allow this form to be shown
+        // if there's no schoolId.
         throw new Error("ID da escola não encontrado. Não é possível adicionar o produto.");
       }
       
+      const productData = { ...data, school_id: user.schoolId };
+
       if (selectedProduct) {
-        // When updating, we don't need to pass the schoolId again if it's not changing
-        const { schoolId, ...updateData } = data;
-        await updateProduct(selectedProduct.id, updateData);
+        await updateProduct(selectedProduct.id, productData);
         toast({ title: "Produto atualizado!", description: "Os dados do produto foram atualizados com sucesso." });
       } else {
-        await addProduct(data);
+        await addProduct(productData);
         toast({ title: "Produto adicionado!", description: "O novo produto foi cadastrado com sucesso." });
       }
       setIsFormOpen(false);
@@ -141,7 +143,7 @@ export default function ProductsPage() {
             </DialogHeader>
             <ProductForm 
               onSubmit={handleFormSubmit}
-              defaultValues={selectedProduct ? selectedProduct : { schoolId: user?.schoolId || "" }}
+              defaultValues={selectedProduct}
               onCancel={() => setIsFormOpen(false)}
             />
           </DialogContent>

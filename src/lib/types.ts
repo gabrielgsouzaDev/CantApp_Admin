@@ -7,23 +7,14 @@ export const Role = {
 } as const;
 export type Role = (typeof Role)[keyof typeof Role];
 
-// Este é o tipo de utilizador da Autenticação do Firebase, simplificado
-export type FirebaseUser = {
-  uid: string;
-  email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
-};
-
-// Este é o nosso perfil de utilizador específico da aplicação, armazenado no Firestore
+// Este é o nosso perfil de utilizador específico da aplicação, vindo da API Laravel
 export type CtnAppUser = {
-  id: string; // ID do Documento do Firestore
-  uid: string; // Corresponde ao UID da Autenticação do Firebase
+  id: number;
   name: string;
   email: string;
   avatar: string;
   role: Role;
-  schoolId?: string; // Escola associada para EscolaAdmin e Cantineiro
+  schoolId?: number; // ID da escola associada para EscolaAdmin e Cantineiro
 };
 
 export type NavItem = {
@@ -35,45 +26,42 @@ export type NavItem = {
 };
 
 export type School = {
-  id: string;
+  id: number;
   name: string;
   address: string;
   cnpj: string;
   status: "active" | "inactive";
-  ownerUid?: string; // UID do utilizador que criou a escola
+  ownerUid?: string; // Mantido por compatibilidade, pode ser o ID do utilizador dono
 };
 
 export type Product = {
-  id: string;
+  id: number;
   name: string;
   price: number;
-  schoolId: string; // Todos os produtos pertencem a uma escola
+  school_id: number; 
 };
 
 export type Canteen = {
-  id: string;
+  id: number;
   name: string;
-  schoolId: string;
+  school_id: number;
 };
 
 export type OrderStatus = "A Fazer" | "Em Preparo" | "Pronto";
 export type PaymentStatus = "Pago" | "Pendente";
 
 export type OrderItem = {
-  id: string;
+  id: number;
   name: string;
   price: number;
 };
 
 export type Order = {
-  id: string;
-  studentName: string;
-  time: number; // Armazenar como timestamp
+  id: number;
+  student_name: string;
+  time: string; // Armazenar como ISO string date
   items: OrderItem[];
   status: OrderStatus;
-  paymentStatus: PaymentStatus;
+  payment_status: PaymentStatus;
   total: number;
 };
-
-// Removemos a referência ao User genérico para evitar confusão com CtnAppUser
-// export type User = CtnAppUser;

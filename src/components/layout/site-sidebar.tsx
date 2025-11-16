@@ -23,22 +23,31 @@ export function SiteSidebar() {
   const { user } = useAuth();
   const pathname = usePathname();
 
-  // In a standalone admin app, we can assume the role is always GlobalAdmin for navigation purposes.
-  const role: Role = "GlobalAdmin";
-
   if (!user) {
     return null;
   }
+  
+  const role: Role = user.role;
 
   const filterNavItems = (userRole: Role) => {
-    const allNavs = navItems.filter(item => item.roles.includes(userRole));
-    const mainNavs = allNavs.filter(item => item.title !== "Configurações");
-    const settingsNav = allNavs.find(item => item.title === "Configurações");
-    return { mainNavs, settingsNav };
+    // If GlobalAdmin, show all navs except 'Pedidos'
+    if (userRole === 'GlobalAdmin') {
+        return navItems.filter(item => item.roles.includes(userRole));
+    }
+    // For other roles, show only their specific navs
+    return navItems.filter(item => item.roles.includes(userRole));
   };
+  
+  const getDashboardRouteForRole = (userRole: Role | null) => {
+    if (userRole === 'GlobalAdmin') return '/dashboard/admin';
+    if (userRole === 'EscolaAdmin') return '/dashboard/escola';
+    return '/';
+  }
 
-  const { mainNavs, settingsNav } = filterNavItems(role);
-  const dashboardRoute = "/dashboard/admin";
+  const availableNavs = filterNavItems(role);
+  const mainNavs = availableNavs.filter(item => item.title !== "Configurações");
+  const settingsNav = availableNavs.find(item => item.title === "Configurações");
+  const dashboardRoute = getDashboardRouteForRole(role);
 
 
   return (
@@ -52,7 +61,7 @@ export function SiteSidebar() {
       <SidebarContent>
         <SidebarMenu>
           {mainNavs.map((item) => {
-            const href = item.href.includes('/dashboard') ? dashboardRoute : item.href;
+            const href = item.href;
             return (
                 <SidebarMenuItem key={item.href}>
                 <Link href={href}>

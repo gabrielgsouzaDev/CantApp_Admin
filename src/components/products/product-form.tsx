@@ -19,7 +19,7 @@ import { useEffect } from "react";
 const formSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
   price: z.coerce.number().positive("O preço deve ser um número positivo."),
-  schoolId: z.string().min(1, "ID da Escola é obrigatório"),
+  // school_id is now handled in the parent component
 });
 
 type ProductFormData = z.infer<typeof formSchema>;
@@ -36,7 +36,6 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
     defaultValues: {
       name: defaultValues?.name || "",
       price: defaultValues?.price || 0,
-      schoolId: defaultValues?.schoolId || "",
     },
   });
 
@@ -44,7 +43,6 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
     form.reset({
       name: defaultValues?.name || "",
       price: defaultValues?.price || 0,
-      schoolId: defaultValues?.schoolId || "",
     });
   }, [defaultValues, form]);
 
@@ -73,19 +71,6 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
               <FormLabel>Preço (em R$)</FormLabel>
               <FormControl>
                 <Input type="number" step="0.01" placeholder="Ex: 5.50" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="schoolId"
-          render={({ field }) => (
-            <FormItem className="hidden">
-              <FormLabel>ID da Escola</FormLabel>
-              <FormControl>
-                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
