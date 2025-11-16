@@ -83,11 +83,11 @@ export default function LandingPage() {
                         <CardTitle>Área Administrativa</CardTitle>
                         <CardDescription>Gerencie sua operação, cardápios e finanças.</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                       <Button asChild className="justify-center">
+                    <CardContent className="flex flex-col sm:flex-row gap-4">
+                       <Button asChild className="justify-center w-full">
                           <Link href="/escola/login"><School />Acessar como Escola</Link>
                         </Button>
-                        <Button asChild className="justify-center">
+                        <Button asChild className="justify-center w-full">
                           <Link href="/cantina/login"><Store />Acessar como Cantina</Link>
                         </Button>
                     </CardContent>
@@ -98,7 +98,7 @@ export default function LandingPage() {
                         <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                       <Button variant="outline" className="w-full justify-center">
+                       <Button variant="outline" className="w-full justify-center border-2 border-input hover:border-primary">
                             Acessar como Aluno ou Responsável
                         </Button>
                     </CardContent>
