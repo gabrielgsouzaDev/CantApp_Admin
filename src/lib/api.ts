@@ -12,7 +12,7 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app/api';
   }
 
   setToken(token: string | null) {
@@ -42,13 +42,23 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
 
+      // if (!response.ok) {
+      //   const errorData: ApiError = await response.json().catch(() => ({
+      //       message: response.statusText || 'An unknown error occurred'
+      //   }));
+      //   // You might want to create a custom error class for this
+      //   throw new Error(errorData.message || 'API request failed');
+      // }
+      
+      // Handle Laravel validation errors (422) or other errors
       if (!response.ok) {
-        const errorData: ApiError = await response.json().catch(() => ({
-            message: response.statusText || 'An unknown error occurred'
-        }));
-        // You might want to create a custom error class for this
-        throw new Error(errorData.message || 'API request failed');
+        const errorData = await response.json();
+        const errorMessage = errorData.message || 'Ocorreu um erro na requisição.';
+        console.error('API Error:', errorMessage, 'Details:', errorData.errors);
+        throw { message: errorMessage, errors: errorData.errors };
       }
+
+
       // For DELETE or other methods that might not return a body
       if (response.status === 204) {
         return {} as T;
