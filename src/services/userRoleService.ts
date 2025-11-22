@@ -7,6 +7,6 @@ interface UserRolePayload {
 
 export const assignRole = async (payload: UserRolePayload): Promise<any> => {
   // Your backend's UserRoleController@store expects this payload.
-  const response = await api.post<any>('/api/user-roles', payload);
+  const response = await api.post<any>('/api/user-role', payload);
   return response;
 };
