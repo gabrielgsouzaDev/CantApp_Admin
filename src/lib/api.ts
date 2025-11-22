@@ -12,7 +12,7 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
-    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app/api/';
+    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app/api';
   }
 
   setToken(token: string | null) {
@@ -23,7 +23,7 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const url = `${this.baseURL}/${endpoint}`;
+    const url = `${this.baseURL}${endpoint}`;
     
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
