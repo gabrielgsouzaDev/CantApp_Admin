@@ -1,12 +1,10 @@
 // src/lib/api.ts
 
-// A simple type for API error responses
 export interface ApiError {
   message: string;
   errors?: Record<string, string[]>;
 }
 
-// A simple wrapper around fetch to handle REST API calls
 class ApiClient {
   private baseURL: string;
   private token: string | null = null;
@@ -30,13 +28,6 @@ class ApiClient {
       'Accept': 'application/json',
     };
 
-    if (options.headers) {
-      const customHeaders = new Headers(options.headers);
-      customHeaders.forEach((value, key) => {
-        headers[key] = value;
-      });
-    }
-
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
@@ -56,23 +47,19 @@ class ApiClient {
         throw { message: errorMessage, errors: errorData.errors };
       }
       
+      // Handle empty responses for DELETE, etc.
       if (response.status === 204 || response.headers.get('Content-Length') === '0') {
         return {} as T;
       }
 
       const responseData = await response.json();
       
-      // Special handling for login response which doesn't have a 'data' wrapper
-      if (endpoint === '/api/login' || endpoint === '/api/logout') {
-        return responseData as T;
-      }
-
-      // For all other CRUD endpoints, data is expected inside a 'data' wrapper
+      // For all standard CRUD endpoints, data is expected inside a 'data' wrapper.
       if (responseData && typeof responseData === 'object' && 'data' in responseData) {
           return responseData.data as T;
       }
       
-      // Fallback for responses that might not be wrapped in 'data' but aren't login
+      // This path handles special cases like logout that return a message object directly
       return responseData as T;
 
     } catch (error) {

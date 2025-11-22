@@ -36,7 +36,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error("Failed to parse user from localStorage", error);
-      // Clear corrupted data
       localStorage.removeItem('sessionToken');
       localStorage.removeItem('user');
     } finally {
@@ -53,13 +52,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const response = await api.post<{ token: string; usuario: any }>('/api/login', loginPayload);
-      const { token, usuario: loggedInUser } = response;
-      
-      if (!loggedInUser) {
-        throw new Error("Resposta de login inválida: usuário não encontrado.");
+      const response = await fetch('https://cantappbackendlaravel-production.up.railway.app/api/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          body: JSON.stringify(loginPayload),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Erro de login");
       }
 
+      const { token, usuario: loggedInUser } = responseData;
+      
+      if (!token || !loggedInUser) {
+        throw new Error("Resposta de login inválida: token ou usuário não encontrado.");
+      }
+      
       sessionToken = token;
       if (typeof window !== 'undefined') {
         localStorage.setItem('sessionToken', token);
@@ -69,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       const userRole = (loggedInUser.roles && Array.isArray(loggedInUser.roles) && loggedInUser.roles.length > 0)
         ? loggedInUser.roles[0]?.nome as Role
-        : 'Cantineiro'; // Fallback role
+        : 'Cantineiro';
 
       const finalUser: CtnAppUser = {
         id: loggedInUser.id,
@@ -85,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       const dashboardRoute = finalUser.role === Role.GlobalAdmin ? '/dashboard/admin' : 
                              finalUser.role === Role.EscolaAdmin ? '/dashboard/escola' :
-                             '/orders'; // Cantineiro goes to orders
+                             '/orders';
       router.push(dashboardRoute);
     } catch (error) {
       console.error("Login Error:", error);
