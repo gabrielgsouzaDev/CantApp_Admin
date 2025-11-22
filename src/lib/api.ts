@@ -25,12 +25,15 @@ class ApiClient {
   ): Promise<T> {
     const url = `${this.baseURL}/${endpoint}`;
     
-    // Correctly typed headers
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      ...options.headers,
     };
+
+    if (options.headers) {
+      // Manually merge headers to avoid type issues
+      Object.assign(headers, options.headers);
+    }
 
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
