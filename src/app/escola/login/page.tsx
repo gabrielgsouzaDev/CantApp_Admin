@@ -25,7 +25,6 @@ import { SchoolRegistrationSchema } from "@/lib/schemas";
 import { addSchool } from "@/services/schoolService";
 import { addAddress } from "@/services/addressService";
 import { addUser } from "@/services/userService";
-import { assignRole } from "@/services/userRoleService";
 
 
 export default function EscolaLoginPage() {
@@ -99,12 +98,13 @@ export default function EscolaLoginPage() {
         throw new Error("Falha ao criar a escola. O ID não foi retornado.");
       }
 
-      // 3. Register the Admin User for that School
+      // 3. Register the Admin User for that School and assign role
       const userPayload = {
         nome: values.adminName,
         email: values.adminEmail,
         senha: values.adminPassword,
         id_escola: newSchool.id_escola,
+        id_role: 5, // Role de "Escola" definida pelo contexto deste formulário
         ativo: true,
       };
       
@@ -112,10 +112,6 @@ export default function EscolaLoginPage() {
        if (!newUser || !newUser.id) {
         throw new Error("Falha ao criar o usuário administrador.");
       }
-
-      // 4. Assign the "Escola" role to the new user
-      // The role ID for "Escola" is 5, as per the database image.
-      await assignRole({ id_user: newUser.id, id_role: 5 });
       
       toast({
         title: "Cadastro realizado com sucesso!",
@@ -128,11 +124,9 @@ export default function EscolaLoginPage() {
     } catch (error: any) {
       let errorMessage = "Não foi possível completar o cadastro.";
       if (error && (error as any).errors) {
-        // If API returns a Laravel validation error object
         const firstErrorKey = Object.keys((error as any).errors)[0];
         errorMessage = (error as any).errors[firstErrorKey][0];
       } else if (error && (error as any).message) {
-        // If it's an error thrown by our code or a generic API message
         errorMessage = (error as any).message;
       }
       

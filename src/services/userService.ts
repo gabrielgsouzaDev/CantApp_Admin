@@ -4,9 +4,7 @@
 import { api } from "@/lib/api";
 import { CtnAppUser } from "@/lib/types"; 
 
-type UserResponse = CtnAppUser & {
-    senha_hash: string;
-};
+type UserCreationPayload = Partial<CtnAppUser & { senha?: string; id_role?: number }>;
 
 const mapUserData = (user: any): CtnAppUser => ({
   id: user.id,
@@ -25,7 +23,7 @@ export const getUsers = async (): Promise<CtnAppUser[]> => {
   return response.data.map(mapUserData);
 };
 
-export const addUser = async (user: Partial<CtnAppUser & { senha?: string }>): Promise<CtnAppUser> => {
+export const addUser = async (user: UserCreationPayload): Promise<CtnAppUser> => {
   const response = await api.post<{ data: any }>('/api/users', user);
   return mapUserData(response.data);
 };
