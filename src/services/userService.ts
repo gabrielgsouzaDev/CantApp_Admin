@@ -45,6 +45,6 @@ export const deleteUser = async (id: number): Promise<void> => {
 export const getUserRoles = async (): Promise<UserRole[]> => {
     const response = await api.get<any[]>('/api/roles');
     // Filter out roles that are not relevant for a school admin to assign
-    const relevantRoles = response.filter(role => ['EscolaAdmin', 'Cantineiro'].includes(role.nome));
+    const relevantRoles = response.filter(role => ['EscolaAdmin', 'Cantineiro', 'Aluno', 'Responsavel', 'Funcionario'].includes(role.nome));
     return relevantRoles;
 };

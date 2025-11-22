@@ -6,6 +6,7 @@ export const Role = {
   Cantineiro: "Cantina",
   Responsavel: "Responsavel",
   Aluno: "Aluno",
+  Funcionario: "Funcionario",
 } as const;
 export type Role = (typeof Role)[keyof typeof Role];
 

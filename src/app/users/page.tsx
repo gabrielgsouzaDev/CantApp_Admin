@@ -123,12 +123,13 @@ export default function UsersPage() {
   };
   
   // A map to show friendly role names
-  const roleNames: Record<Role, string> = {
-    [Role.GlobalAdmin]: "Admin Global",
-    [Role.EscolaAdmin]: "Admin da Escola",
-    [Role.Cantineiro]: "Cantina",
-    [Role.Responsavel]: "Responsável",
-    [Role.Aluno]: "Aluno",
+  const roleNames: Record<string, string> = {
+    Admin: "Admin Global",
+    Escola: "Admin da Escola",
+    Cantina: "Cantina",
+    Responsavel: "Responsável",
+    Aluno: "Aluno",
+    Funcionario: "Funcionário",
   }
 
   return (
