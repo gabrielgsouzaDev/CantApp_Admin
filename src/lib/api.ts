@@ -62,12 +62,17 @@ class ApiClient {
 
       const responseData = await response.json();
       
-      // If the response has a 'data' key, return that. Otherwise, return the whole response.
-      // This handles both login (no 'data' key) and other CRUD endpoints (with 'data' key).
-      if (responseData && typeof responseData === 'object' && 'data' in responseData && endpoint !== '/api/login') {
+      // Special handling for login response which doesn't have a 'data' wrapper
+      if (endpoint === '/api/login' || endpoint === '/api/logout') {
+        return responseData as T;
+      }
+
+      // For all other CRUD endpoints, data is expected inside a 'data' wrapper
+      if (responseData && typeof responseData === 'object' && 'data' in responseData) {
           return responseData.data as T;
       }
       
+      // Fallback for responses that might not be wrapped in 'data' but aren't login
       return responseData as T;
 
     } catch (error) {
