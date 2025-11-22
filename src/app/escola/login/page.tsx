@@ -77,32 +77,32 @@ export default function EscolaLoginPage() {
     try {
       // 1. Create Address
       const newAddress = await addAddress(values.address);
-      if (!newAddress || !newAddress.id) {
-        throw new Error("Falha ao criar o endereço.");
+      if (!newAddress || !newAddress.id_endereco) {
+        throw new Error("Falha ao criar o endereço. A resposta da API não contém um ID.");
       }
 
       // 2. Create the School
       const schoolPayload = {
         nome: values.schoolName,
         cnpj: values.cnpj,
-        id_endereco: newAddress.id,
-        status: 'active',
+        id_endereco: newAddress.id_endereco,
+        status: 'ativa', // 'ativa' instead of 'active' to match ENUM
         qtd_alunos: 0, // Default value
       };
       
       const newSchool = await addSchool(schoolPayload);
 
-      if (!newSchool || !newSchool.id) {
+      if (!newSchool || !newSchool.id_escola) {
         throw new Error("Falha ao criar a escola. O ID não foi retornado.");
       }
 
       // 3. Register the Admin User for that School
       const userPayload = {
-        name: values.adminName,
+        nome: values.adminName,
         email: values.adminEmail,
-        password: values.adminPassword,
-        id_escola: newSchool.id,
-        role: "EscolaAdmin"
+        senha: values.adminPassword,
+        id_escola: newSchool.id_escola,
+        role: "EscolaAdmin" // Assigning the role
       };
       
       await register(userPayload);
@@ -117,12 +117,17 @@ export default function EscolaLoginPage() {
 
     } catch (error: any)
      {
+      // Improved error handling to show detailed messages from API
       let errorMessage = "Não foi possível completar o cadastro.";
-      if (error.code === 'auth/email-already-in-use' || (error.message && error.message.includes('unique'))) {
-        errorMessage = "Este email já está em uso. Tente outro.";
+      if (error.errors) {
+        // Laravel validation errors
+        const firstErrorKey = Object.keys(error.errors)[0];
+        errorMessage = error.errors[firstErrorKey][0];
       } else if (error.message) {
+        // General API errors or client-side errors
         errorMessage = error.message;
       }
+      
       toast({
         title: "Erro no Cadastro",
         description: errorMessage,
@@ -294,11 +299,11 @@ export default function EscolaLoginPage() {
                                         <FormItem><FormLabel>Número</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={form.control} name="address.complemento" render={({ field }) => (
-                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormMessage>
                                     )} />
                                 </div>
                                 <FormField control={form.control} name="address.bairro" render={({ field }) => (
-                                    <FormItem><FormLabel>Bairro</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                    <FormItem><FormLabel>Bairro</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
                                 <div className="grid grid-cols-3 gap-4">
                                      <FormField control={form.control} name="address.cidade" render={({ field }) => (

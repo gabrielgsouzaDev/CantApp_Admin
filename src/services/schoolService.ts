@@ -1,10 +1,15 @@
 import { api } from "@/lib/api";
 import { School } from "@/lib/types";
 
+
+type SchoolResponse = School & {
+  id_escola: number;
+}
+
 // Helper to map backend data to frontend data
-const mapSchoolData = (school: any): School => ({
+const mapSchoolData = (school: any): SchoolResponse => ({
   ...school,
-  id: school.id,
+  id: school.id_escola,
   name: school.nome, // map 'nome' to 'name'
   address: school.endereco, // map 'endereco' to 'address'
   qtd_alunos: school.qtd_alunos,
@@ -15,7 +20,7 @@ export const getSchools = async (): Promise<School[]> => {
   return response.data.map(mapSchoolData);
 };
 
-export const addSchool = async (school: Partial<Omit<School, 'id' | 'name'>> & { nome: string }): Promise<School> => {
+export const addSchool = async (school: Partial<Omit<School, 'id' | 'name'>> & { nome: string }): Promise<SchoolResponse> => {
   // Map frontend `name` to backend `nome`
   const payload = { 
       nome: school.nome,

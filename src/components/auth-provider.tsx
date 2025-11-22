@@ -26,14 +26,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const fetchUser = useCallback(async () => {
-    // This function is tricky without a /me endpoint that uses the token.
-    // For now, we rely on the user object from login.
-    // A real implementation would verify the token with the backend.
-    setLoading(false);
-  }, []);
-
-
   useEffect(() => {
     const token = localStorage.getItem('sessionToken');
     const userJson = localStorage.getItem('user');
@@ -63,11 +55,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('user', JSON.stringify(loggedInUser));
       }
       api.setToken(token);
-      setUser(loggedInUser);
       
-      const dashboardRoute = loggedInUser.role === 'GlobalAdmin' ? '/dashboard/admin' : 
-                             loggedInUser.role === 'EscolaAdmin' ? '/dashboard/escola' :
-                             '/orders';
+      // The role comes from the API as `nome_role`, let's map it to `role`
+      const finalUser = {
+        ...loggedInUser,
+        role: loggedInUser.role || (loggedInUser as any).nome_role,
+        name: loggedInUser.name || loggedInUser.nome
+      }
+      setUser(finalUser);
+      
+      const dashboardRoute = finalUser.role === 'Admin' ? '/dashboard/admin' : 
+                             finalUser.role === 'Escola' ? '/dashboard/escola' :
+                             '/orders'; // Cantineiro goes to orders
       router.push(dashboardRoute);
     } catch (error) {
       console.error("Login Error:", error);
@@ -79,13 +78,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (data: any) => {
     setLoading(true);
     try {
-      // The backend `store` method expects `nome` and `senha`, not `name` and `password`.
       const registerPayload = {
-        nome: data.name,
+        nome: data.nome,
         email: data.email,
-        senha: data.password,
+        senha: data.senha,
         id_escola: data.id_escola,
-        ativo: true
+        ativo: true, // Field required by the database
+        // Your backend needs to handle assigning the role based on context
+        // For now, we are just creating the user.
+        // You might need to create another endpoint or logic in the backend
+        // to assign a role, e.g. using the id_role from tb_role.
       };
       await api.post('/api/users', registerPayload);
     } catch (error) {
@@ -128,8 +130,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!isAuthenticated && !isAuthPage) {
       router.push('/');
     } else if (isAuthenticated && isAuthPage) {
-      const dashboardRoute = user.role === 'GlobalAdmin' ? '/dashboard/admin' : 
-                             user.role === 'EscolaAdmin' ? '/dashboard/escola' :
+      const dashboardRoute = user.role === 'Admin' ? '/dashboard/admin' : 
+                             user.role === 'Escola' ? '/dashboard/escola' :
                              '/orders';
       router.push(dashboardRoute);
     }

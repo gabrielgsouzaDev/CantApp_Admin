@@ -1,9 +1,11 @@
 import type { LucideIcon } from "lucide-react";
 
 export const Role = {
-  GlobalAdmin: "GlobalAdmin",
-  EscolaAdmin: "EscolaAdmin",
-  Cantineiro: "Cantineiro",
+  GlobalAdmin: "Admin",
+  EscolaAdmin: "Escola",
+  Cantineiro: "Cantina",
+  Responsavel: "Responsavel",
+  Aluno: "Aluno",
 } as const;
 export type Role = (typeof Role)[keyof typeof Role];
 
@@ -21,23 +23,25 @@ export type CtnAppUser = {
 
 export type Address = {
   id: number;
+  id_endereco: number; // PK from backend
   cep: string;
   logradouro: string;
-  numero: string;
+  numero?: string;
   complemento?: string;
-  bairro: string;
+  bairro?: string;
   cidade: string;
   estado: string;
 }
 
 export type School = {
   id: number;
+  id_escola: number; // PK from backend
   name: string;
   nome: string; // from laravel
   address?: string; // This is a display-only field now
   endereco?: string; // from laravel
   cnpj: string;
-  status: "active" | "inactive";
+  status: "ativa" | "inativa" | "pendente";
   id_endereco?: number;
   id_plano?: number;
   qtd_alunos?: number;
@@ -45,6 +49,7 @@ export type School = {
 
 export type Product = {
   id: number;
+  id_produto: number; // PK from backend
   name: string;
   nome: string; // from laravel
   price: number;
@@ -55,6 +60,7 @@ export type Product = {
 
 export type Canteen = {
   id: number;
+  id_cantina: number; // PK from backend
   name: string;
   nome: string; // from laravel
   id_escola: number;
@@ -65,6 +71,7 @@ export type PaymentStatus = "Pago" | "Pendente";
 
 export type OrderItem = {
   id: number;
+  id_item: number; // PK from backend
   name: string;
   nome: string; // from laravel
   price: number;
@@ -73,6 +80,7 @@ export type OrderItem = {
 
 export type Order = {
   id: number;
+  id_pedido: number; // PK from backend
   student_name: string; // from laravel
   time: string; // Keep as ISO string date
   items: OrderItem[];
