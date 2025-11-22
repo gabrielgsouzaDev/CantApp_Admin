@@ -23,7 +23,7 @@ export type CtnAppUser = {
 
 export type Address = {
   id: number;
-  id_endereco: number; // PK from backend
+  id_endereco?: number; // PK from backend, optional on creation
   cep: string;
   logradouro: string;
   numero?: string;
@@ -41,7 +41,7 @@ export type School = {
   address?: string; // This is a display-only field now
   endereco?: string; // from laravel
   cnpj: string;
-  status: "ativa" | "inativa" | "pendente";
+  status: "ativa" | "inativa" | "pendente" | string;
   id_endereco?: number;
   id_plano?: number;
   qtd_alunos?: number;
