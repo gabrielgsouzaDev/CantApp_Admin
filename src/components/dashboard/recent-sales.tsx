@@ -6,18 +6,10 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useEffect, useState } from "react";
 import { Order } from "@/lib/types";
 import { getRecentSales } from "@/services/orderService";
-
-const mockUsers: { [key: string]: { avatar: string } } = {
-  joao: { avatar: "https://i.pravatar.cc/150?u=joao" },
-  maria: { avatar: "https://i.pravatar.cc/150?u=maria" },
-  pedro: { avatar: "https://i.pravatar.cc/150?u=pedro" },
-  ana: { avatar: "https://i.pravatar.cc/150?u=ana" },
-  lucas: { avatar: "https://i.pravatar.cc/150?u=lucas" },
-};
+import { Loader2 } from "lucide-react";
 
 export function RecentSales() {
   const [sales, setSales] = useState<Order[]>([]);
@@ -25,7 +17,9 @@ export function RecentSales() {
 
   useEffect(() => {
      const fetchSales = async () => {
+        setLoading(true);
         try {
+            // This service already fetches real data
             const salesData = await getRecentSales();
             setSales(salesData);
         } catch (error) {
@@ -37,11 +31,9 @@ export function RecentSales() {
     fetchSales();
   }, []);
 
-  const getAvatarForStudent = (studentName: string) => {
-    // Simple logic to assign avatars for demo purposes
-    const userKey = studentName.split(' ')[0].toLowerCase();
-    return mockUsers[userKey]?.avatar || PlaceHolderImages.find(img => img.id === 'user-6')?.imageUrl || '';
-  };
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+  }
 
   return (
     <Card className="col-span-3">
@@ -51,14 +43,17 @@ export function RecentSales() {
         </CardHeader>
         <CardContent>
             {loading ? (
-                <p>Carregando vendas...</p>
+                <div className="flex justify-center items-center h-[200px]">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                </div>
             ) : (
                 <div className="space-y-8">
                     {sales.map((sale) => (
                         <div key={sale.id} className="flex items-center">
                             <Avatar className="h-9 w-9">
-                            <AvatarImage src={getAvatarForStudent(sale.student_name)} alt="Avatar" data-ai-hint="avatar person" />
-                            <AvatarFallback>{sale.student_name.charAt(0)}</AvatarFallback>
+                              {/* Future: Replace with real avatar if available */}
+                              <AvatarImage src={`https://avatar.vercel.sh/${sale.student_name}.png`} alt="Avatar" data-ai-hint="avatar person" />
+                              <AvatarFallback>{getInitials(sale.student_name)}</AvatarFallback>
                             </Avatar>
                             <div className="ml-4 space-y-1">
                             <p className="text-sm font-medium leading-none">{sale.student_name}</p>
@@ -71,6 +66,9 @@ export function RecentSales() {
                             </div>
                         </div>
                     ))}
+                     {sales.length === 0 && (
+                        <p className="text-sm text-muted-foreground text-center py-10">Nenhuma venda recente encontrada.</p>
+                     )}
                 </div>
             )}
         </CardContent>
