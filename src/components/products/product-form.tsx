@@ -13,13 +13,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Product } from "@/lib/types";
-import { useEffect } from "react";
+import { Canteen, Product } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { getCanteens } from "@/services/canteenService";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
   price: z.coerce.number().positive("O preço deve ser um número positivo."),
-  // school_id is now handled in the parent component
+  id_cantina: z.coerce.number().int().positive("Selecione uma cantina."),
 });
 
 type ProductFormData = z.infer<typeof formSchema>;
@@ -28,21 +31,40 @@ interface ProductFormProps {
   onSubmit: (data: ProductFormData) => void;
   defaultValues?: Partial<Product> | null;
   onCancel: () => void;
+  schoolId?: number | null;
 }
 
-export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormProps) {
+export function ProductForm({ onSubmit, defaultValues, onCancel, schoolId }: ProductFormProps) {
+  const [canteens, setCanteens] = useState<Canteen[]>([]);
+  const { toast } = useToast();
+
   const form = useForm<ProductFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: defaultValues?.name || "",
-      price: defaultValues?.price || 0,
+      name: "",
+      price: 0,
+      id_cantina: undefined,
     },
   });
+
+  useEffect(() => {
+    if (schoolId) {
+      getCanteens(schoolId).then(setCanteens).catch(err => {
+        toast({
+          title: "Erro ao buscar cantinas",
+          description: "Não foi possível carregar a lista de cantinas.",
+          variant: "destructive"
+        })
+      });
+    }
+  }, [schoolId, toast]);
+  
 
   useEffect(() => {
     form.reset({
       name: defaultValues?.name || defaultValues?.nome || "",
       price: defaultValues?.price || defaultValues?.preco || 0,
+      id_cantina: defaultValues?.id_cantina,
     });
   }, [defaultValues, form]);
 
@@ -50,6 +72,30 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+         <FormField
+          control={form.control}
+          name="id_cantina"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cantina</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione a cantina" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {canteens.map(canteen => (
+                    <SelectItem key={canteen.id} value={String(canteen.id)}>
+                      {canteen.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"

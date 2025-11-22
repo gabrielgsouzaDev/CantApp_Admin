@@ -18,9 +18,10 @@ export const addProduct = async (product: Omit<Product, 'id'>): Promise<Product>
   const payload = {
     nome: product.name,
     preco: product.price,
-    id_escola: product.id_escola
+    id_cantina: product.id_cantina,
+    ativo: product.ativo,
   };
-  const response = await api.post<any>('/produtos', payload);
+  const response = await api.post<{ data: any }>('/produtos', payload);
   return mapProductData(response.data);
 };
 
@@ -28,9 +29,10 @@ export const updateProduct = async (id: number, product: Partial<Omit<Product, '
     const payload = {
     nome: product.name,
     preco: product.price,
-    id_escola: product.id_escola
+    id_cantina: product.id_cantina,
+    ativo: product.ativo
   };
-  const response = await api.put<any>(`/produtos/${id}`, payload);
+  const response = await api.put<{ data: any }>(`/produtos/${id}`, payload);
   return mapProductData(response.data);
 };
 

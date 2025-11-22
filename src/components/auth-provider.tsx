@@ -54,7 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const { token, user: loggedInUser } = await api.post<{ token: string; user: CtnAppUser }>('/login', loginPayload);
+      const response = await api.post<{ data: { token: string; user: CtnAppUser } }>('/login', loginPayload);
+      const { token, user: loggedInUser } = response.data;
       
       sessionToken = token;
       if (typeof window !== 'undefined') {
@@ -83,8 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         nome: data.name,
         email: data.email,
         senha: data.password,
-        id_escola: data.schoolId, 
-        // Any other fields required by your backend
+        id_escola: data.id_escola,
+        ativo: true
       };
       await api.post('/users', registerPayload);
     } catch (error) {

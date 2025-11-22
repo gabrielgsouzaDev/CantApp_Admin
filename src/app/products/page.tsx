@@ -64,13 +64,10 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const handleFormSubmit = async (data: Omit<Product, 'id' | 'nome' | 'preco'>) => {
+  const handleFormSubmit = async (data: Omit<Product, 'id' | 'nome' | 'preco'> & { id_cantina: number }) => {
     try {
-      if (!user?.id_escola) {
-        throw new Error("ID da escola não encontrado. Não é possível adicionar o produto.");
-      }
-      
-      const productData = { ...data, id_escola: user.id_escola };
+      // id_cantina is now passed in the data object from the form
+      const productData = { ...data, ativo: true };
 
       if (selectedProduct) {
         await updateProduct(selectedProduct.id, productData);
@@ -143,6 +140,7 @@ export default function ProductsPage() {
               onSubmit={handleFormSubmit}
               defaultValues={selectedProduct}
               onCancel={() => setIsFormOpen(false)}
+              schoolId={user?.id_escola}
             />
           </DialogContent>
         </Dialog>

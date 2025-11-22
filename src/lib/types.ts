@@ -19,19 +19,22 @@ export type CtnAppUser = {
   id_cantina?: number;
 };
 
-export type NavItem = {
-  title: string;
-  href: string;
-  icon: LucideIcon;
-  roles: Role[];
-  children?: NavItem[];
-};
+export type Address = {
+  id: number;
+  cep: string;
+  logradouro: string;
+  numero: string;
+  complemento?: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+}
 
 export type School = {
   id: number;
   name: string;
   nome: string; // from laravel
-  address?: string; 
+  address?: string; // This is a display-only field now
   endereco?: string; // from laravel
   cnpj: string;
   status: "active" | "inactive";
@@ -46,7 +49,8 @@ export type Product = {
   nome: string; // from laravel
   price: number;
   preco: number; // from laravel
-  id_escola: number; 
+  id_cantina: number; 
+  ativo: boolean;
 };
 
 export type Canteen = {

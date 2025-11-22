@@ -15,22 +15,22 @@ export const getSchools = async (): Promise<School[]> => {
   return response.data.map(mapSchoolData);
 };
 
-export const addSchool = async (school: Partial<Omit<School, 'id'>>): Promise<School> => {
+export const addSchool = async (school: Partial<Omit<School, 'id' | 'name'>> & { nome: string }): Promise<School> => {
   // Map frontend `name` to backend `nome`
   const payload = { 
-      nome: school.name,
+      nome: school.nome,
       cnpj: school.cnpj,
-      endereco: school.address,
+      id_endereco: school.id_endereco,
       status: school.status,
       qtd_alunos: school.qtd_alunos,
   };
-  const response = await api.post<any>('escolas', payload);
+  const response = await api.post<{ data: any }>('escolas', payload);
   return mapSchoolData(response.data);
 };
 
 export const updateSchool = async (id: number, school: Partial<Omit<School, 'id'>>): Promise<School> => {
   const payload = { ...school, nome: school.name };
-  const response = await api.put<any>(`escolas/${id}`, payload);
+  const response = await api.put<{ data: any }>(`escolas/${id}`, payload);
   return mapSchoolData(response.data);
 };
 

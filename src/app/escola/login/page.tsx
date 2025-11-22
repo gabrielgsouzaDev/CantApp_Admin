@@ -23,6 +23,7 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { SchoolRegistrationSchema } from "@/lib/schemas";
 import { addSchool } from "@/services/schoolService";
+import { addAddress } from "@/services/addressService";
 
 
 export default function EscolaLoginPage() {
@@ -45,12 +46,12 @@ export default function EscolaLoginPage() {
       adminPassword: "",
       address: {
         cep: "",
-        street: "",
-        number: "",
-        complement: "",
-        neighborhood: "",
-        city: "",
-        state: "",
+        logradouro: "",
+        numero: "",
+        complemento: "",
+        bairro: "",
+        cidade: "",
+        estado: "",
       }
     },
   });
@@ -74,11 +75,17 @@ export default function EscolaLoginPage() {
   const handleRegister = async (values: z.infer<typeof SchoolRegistrationSchema>) => {
     setLoading(true);
     try {
-      // 1. Create the School
+      // 1. Create Address
+      const newAddress = await addAddress(values.address);
+      if (!newAddress || !newAddress.id) {
+        throw new Error("Falha ao criar o endereço.");
+      }
+
+      // 2. Create the School
       const schoolPayload = {
-        name: values.schoolName,
+        nome: values.schoolName,
         cnpj: values.cnpj,
-        address: `${values.address.street}, ${values.address.number}`, // Simplified address for now
+        id_endereco: newAddress.id,
         status: 'active',
         qtd_alunos: 0, // Default value
       };
@@ -89,13 +96,13 @@ export default function EscolaLoginPage() {
         throw new Error("Falha ao criar a escola. O ID não foi retornado.");
       }
 
-      // 2. Register the Admin User for that School
+      // 3. Register the Admin User for that School
       const userPayload = {
         name: values.adminName,
         email: values.adminEmail,
         password: values.adminPassword,
         id_escola: newSchool.id,
-        role: "EscolaAdmin" // Backend should handle assigning role based on logic
+        role: "EscolaAdmin"
       };
       
       await register(userPayload);
@@ -159,11 +166,11 @@ export default function EscolaLoginPage() {
         toast({ title: "CEP não encontrado", variant: "destructive" });
         return;
       }
-      form.setValue("address.street", data.logradouro);
-      form.setValue("address.neighborhood", data.bairro);
-      form.setValue("address.city", data.localidade);
-      form.setValue("address.state", data.uf);
-      form.setFocus("address.number");
+      form.setValue("address.logradouro", data.logradouro);
+      form.setValue("address.bairro", data.bairro);
+      form.setValue("address.cidade", data.localidade);
+      form.setValue("address.estado", data.uf);
+      form.setFocus("address.numero");
 
     } catch (error) {
       toast({ title: "Erro ao buscar CEP", description: "Não foi possível encontrar o endereço. Verifique o CEP.", variant: "destructive" });
@@ -279,25 +286,25 @@ export default function EscolaLoginPage() {
                                         <FormMessage />
                                     </FormItem>
                                 )} />
-                                <FormField control={form.control} name="address.street" render={({ field }) => (
+                                <FormField control={form.control} name="address.logradouro" render={({ field }) => (
                                     <FormItem><FormLabel>Rua</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
                                 <div className="grid grid-cols-2 gap-4">
-                                    <FormField control={form.control} name="address.number" render={({ field }) => (
+                                    <FormField control={form.control} name="address.numero" render={({ field }) => (
                                         <FormItem><FormLabel>Número</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
-                                    <FormField control={form.control} name="address.complement" render={({ field }) => (
+                                    <FormField control={form.control} name="address.complemento" render={({ field }) => (
                                         <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                 </div>
-                                <FormField control={form.control} name="address.neighborhood" render={({ field }) => (
+                                <FormField control={form.control} name="address.bairro" render={({ field }) => (
                                     <FormItem><FormLabel>Bairro</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
                                 <div className="grid grid-cols-3 gap-4">
-                                     <FormField control={form.control} name="address.city" render={({ field }) => (
+                                     <FormField control={form.control} name="address.cidade" render={({ field }) => (
                                         <FormItem className="col-span-2"><FormLabel>Cidade</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
-                                    <FormField control={form.control} name="address.state" render={({ field }) => (
+                                    <FormField control={form.control} name="address.estado" render={({ field }) => (
                                         <FormItem><FormLabel>Estado</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                 </div>
