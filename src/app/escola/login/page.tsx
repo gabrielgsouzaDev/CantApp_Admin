@@ -102,7 +102,7 @@ export default function EscolaLoginPage() {
         email: values.adminEmail,
         senha: values.adminPassword,
         id_escola: newSchool.id_escola,
-        role: "EscolaAdmin" // Assigning the role
+        role: "Escola" // Assigning the role name for backend
       };
       
       await register(userPayload);

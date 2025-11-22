@@ -84,10 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         senha: data.senha,
         id_escola: data.id_escola,
         ativo: true, // Field required by the database
-        // Your backend needs to handle assigning the role based on context
-        // For now, we are just creating the user.
-        // You might need to create another endpoint or logic in the backend
-        // to assign a role, e.g. using the id_role from tb_role.
+        role: data.role // Pass the role name to the backend
       };
       await api.post('/api/users', registerPayload);
     } catch (error) {
