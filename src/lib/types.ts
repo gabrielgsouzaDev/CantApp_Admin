@@ -35,13 +35,13 @@ export type Address = {
 
 export type School = {
   id: number;
-  id_escola: number; // PK from backend
+  id_escola?: number; // PK from backend
   name: string;
   nome: string; // from laravel
   address?: string; // This is a display-only field now
   endereco?: string; // from laravel
   cnpj: string;
-  status: "ativa" | "inativa" | "pendente" | string;
+  status: string; // "ativa" | "inativa" | "pendente"; - Relaxing for now
   id_endereco?: number;
   id_plano?: number;
   qtd_alunos?: number;

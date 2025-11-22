@@ -7,12 +7,14 @@ type SchoolResponse = School & {
 }
 
 // Helper to map backend data to frontend data
-const mapSchoolData = (school: any): SchoolResponse => ({
+const mapSchoolData = (school: any): School => ({
   ...school,
   id: school.id_escola,
   name: school.nome, // map 'nome' to 'name'
   address: school.endereco, // map 'endereco' to 'address'
   qtd_alunos: school.qtd_alunos,
+  status: school.status,
+  id_escola: school.id_escola,
 });
 
 export const getSchools = async (): Promise<School[]> => {
@@ -30,7 +32,7 @@ export const addSchool = async (school: Partial<Omit<School, 'id' | 'name'>> & {
       qtd_alunos: school.qtd_alunos,
   };
   const response = await api.post<{ data: any }>('/api/escolas', payload);
-  return mapSchoolData(response.data);
+  return response.data; // Return raw response as it contains id_escola
 };
 
 export const updateSchool = async (id: number, school: Partial<Omit<School, 'id'>>): Promise<School> => {

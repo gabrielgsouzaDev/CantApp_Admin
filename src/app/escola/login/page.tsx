@@ -80,7 +80,7 @@ export default function EscolaLoginPage() {
     try {
       // 1. Create Address
       const newAddress = await addAddress(values.address);
-      if (!newAddress || !newAddress.id) {
+      if (!newAddress || !newAddress.id_endereco) {
         throw new Error("Falha ao criar o endereço. A resposta da API não contém um ID.");
       }
 
@@ -88,7 +88,7 @@ export default function EscolaLoginPage() {
       const schoolPayload = {
         nome: values.schoolName,
         cnpj: values.cnpj,
-        id_endereco: newAddress.id,
+        id_endereco: newAddress.id_endereco,
         status: 'ativa',
         qtd_alunos: values.schoolQtdAlunos,
       };
@@ -268,7 +268,7 @@ export default function EscolaLoginPage() {
                               <FormItem><FormLabel>CNPJ</FormLabel><FormControl><Input required disabled={currentLoading} {...field} onChange={handleCnpjChange} /></FormControl><FormMessage /></FormItem>
                             )} />
                             <FormField control={form.control} name="schoolQtdAlunos" render={({ field }) => (
-                              <FormItem><FormLabel>Quantidade de Alunos</FormLabel><FormControl><Input type="number" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                              <FormItem><FormLabel>Quantidade de Alunos</FormLabel><FormControl><Input type="number" required disabled={currentLoading} {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} /></FormControl><FormMessage /></FormItem>
                             )} />
                           </div>
 
