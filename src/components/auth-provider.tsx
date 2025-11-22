@@ -56,6 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await api.post<{ token: string; user: any }>('/api/login', loginPayload);
       const { token, user: loggedInUser } = response;
       
+      if (!loggedInUser) {
+        throw new Error("Resposta de login inválida: usuário não encontrado.");
+      }
+
       sessionToken = token;
       if (typeof window !== 'undefined') {
         localStorage.setItem('sessionToken', token);
@@ -63,8 +67,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       api.setToken(token);
       
-      // The backend returns roles as an array, get the first one.
-      const userRole = loggedInUser.roles?.[0]?.nome as Role || 'Cantineiro';
+      // Securely access the user role
+      const userRole = (loggedInUser.roles && Array.isArray(loggedInUser.roles) && loggedInUser.roles.length > 0)
+        ? loggedInUser.roles[0]?.nome as Role
+        : 'Cantineiro'; // Fallback role
 
       const finalUser: CtnAppUser = {
         id: loggedInUser.id,
