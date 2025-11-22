@@ -14,7 +14,6 @@ interface AuthContextType {
   user: CtnAppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: any) => Promise<void>;
   logout: () => void;
 }
 
@@ -46,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const response = await api.post<{ data: { token: string; user: CtnAppUser } }>('/api/login', loginPayload);
+      const response = await api.post<{ data: { token: string; user: any } }>('/api/login', loginPayload);
       const { token, user: loggedInUser } = response.data;
       
       sessionToken = token;
@@ -56,12 +55,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       api.setToken(token);
       
-      // The role comes from the API as `nome_role`, let's map it to `role`
-      const finalUser = {
-        ...loggedInUser,
-        role: loggedInUser.role || (loggedInUser as any).nome_role,
-        name: loggedInUser.name || loggedInUser.nome
-      }
+      const finalUser: CtnAppUser = {
+        id: loggedInUser.id,
+        name: loggedInUser.nome,
+        nome: loggedInUser.nome,
+        email: loggedInUser.email,
+        role: loggedInUser.role as Role,
+        id_escola: loggedInUser.id_escola,
+        id_cantina: loggedInUser.id_cantina,
+      };
       setUser(finalUser);
       
       const dashboardRoute = finalUser.role === 'Admin' ? '/dashboard/admin' : 
@@ -72,26 +74,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Login Error:", error);
       setLoading(false);
       throw error; 
-    }
-  };
-
-  const register = async (data: any) => {
-    setLoading(true);
-    try {
-      const registerPayload = {
-        nome: data.nome,
-        email: data.email,
-        senha: data.senha,
-        id_escola: data.id_escola,
-        ativo: true, // Field required by the database
-        role: data.role // Pass the role name to the backend
-      };
-      await api.post('/api/users', registerPayload);
-    } catch (error) {
-      console.error("Registration Error:", error);
-      throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -126,7 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (!isAuthenticated && !isAuthPage) {
       router.push('/');
-    } else if (isAuthenticated && isAuthPage) {
+    } else if (isAuthenticated && isAuthPage && user) {
       const dashboardRoute = user.role === 'Admin' ? '/dashboard/admin' : 
                              user.role === 'Escola' ? '/dashboard/escola' :
                              '/orders';
@@ -135,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, loading, pathname, router]);
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

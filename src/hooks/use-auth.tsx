@@ -8,7 +8,6 @@ interface AuthHook {
   user: CtnAppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: any) => Promise<void>;
   logout: () => void;
 }
 

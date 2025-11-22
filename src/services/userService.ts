@@ -4,16 +4,35 @@
 import { api } from "@/lib/api";
 import { CtnAppUser } from "@/lib/types"; 
 
-export const getUsers = async (): Promise<CtnAppUser[]> => {
-  return api.get<CtnAppUser[]>('/api/users');
+type UserResponse = CtnAppUser & {
+    senha_hash: string;
 };
 
-export const addUser = async (user: Omit<CtnAppUser, 'id'>): Promise<CtnAppUser> => {
-  return api.post<CtnAppUser>('/api/users', user);
+const mapUserData = (user: any): CtnAppUser => ({
+  id: user.id,
+  name: user.nome,
+  nome: user.nome,
+  email: user.email,
+  role: user.role,
+  id_escola: user.id_escola,
+  id_cantina: user.id_cantina,
+  ativo: user.ativo,
+});
+
+
+export const getUsers = async (): Promise<CtnAppUser[]> => {
+  const response = await api.get<{ data: any[] }>('/api/users');
+  return response.data.map(mapUserData);
+};
+
+export const addUser = async (user: Partial<CtnAppUser & { senha?: string }>): Promise<CtnAppUser> => {
+  const response = await api.post<{ data: any }>('/api/users', user);
+  return mapUserData(response.data);
 };
 
 export const updateUser = async (id: number, user: Partial<Omit<CtnAppUser, 'id'>>): Promise<CtnAppUser> => {
-  return api.put<CtnAppUser>(`/api/users/${id}`, user);
+  const response = await api.put<{ data: any }>(`/api/users/${id}`, user);
+  return mapUserData(response.data);
 };
 
 export const deleteUser = async (id: number): Promise<void> => {
