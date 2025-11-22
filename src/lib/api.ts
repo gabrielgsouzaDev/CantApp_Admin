@@ -55,19 +55,20 @@ class ApiClient {
         console.error('API Error:', errorMessage, 'Details:', errorData.errors);
         throw { message: errorMessage, errors: errorData.errors };
       }
-
-      // The login endpoint response is not nested under 'data', so we handle it here.
-      if (endpoint.includes('/api/login')) {
-         return await response.json() as T;
-      }
       
       if (response.status === 204 || response.headers.get('Content-Length') === '0') {
         return {} as T;
       }
 
-      // For all other endpoints, the data is nested.
       const responseData = await response.json();
-      return responseData.data as T;
+      
+      // If the response has a 'data' key, return that. Otherwise, return the whole response.
+      // This handles both login (no 'data' key) and other CRUD endpoints (with 'data' key).
+      if (responseData && typeof responseData === 'object' && 'data' in responseData && endpoint !== '/api/login') {
+          return responseData.data as T;
+      }
+      
+      return responseData as T;
 
     } catch (error) {
       console.error('API Client Error:', error);
