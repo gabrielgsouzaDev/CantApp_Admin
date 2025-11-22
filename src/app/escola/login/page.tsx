@@ -124,16 +124,12 @@ export default function EscolaLoginPage() {
       setLoginEmail(values.adminEmail);
       setLoginPassword("");
 
-    } catch (error: any)
-     {
-      // Improved error handling to show detailed messages from API
+    } catch (error: any) {
       let errorMessage = "Não foi possível completar o cadastro.";
       if (error.errors) {
-        // Laravel validation errors
         const firstErrorKey = Object.keys(error.errors)[0];
         errorMessage = error.errors[firstErrorKey][0];
       } else if (error.message) {
-        // General API errors or client-side errors
         errorMessage = error.message;
       }
       
@@ -312,7 +308,7 @@ export default function EscolaLoginPage() {
                                     )} />
                                 </div>
                                 <FormField control={form.control} name="address.bairro" render={({ field }) => (
-                                    <FormItem><FormLabel>Bairro</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                    <FormItem><FormLabel>Bairro</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
                                 <div className="grid grid-cols-3 gap-4">
                                      <FormField control={form.control} name="address.cidade" render={({ field }) => (
