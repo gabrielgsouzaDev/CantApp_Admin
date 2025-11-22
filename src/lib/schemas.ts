@@ -5,7 +5,7 @@ export const AddressSchema = z.object({
     logradouro: z.string().min(3, "A rua é obrigatória."),
     numero: z.string().optional(),
     complemento: z.string().optional(),
-    bairro: z.string().min(3, "O bairro é obrigatório."),
+    bairro: z.string().optional(),
     cidade: z.string().min(3, "A cidade é obrigatória."),
     estado: z.string().min(2, "O estado é obrigatório."),
 });
@@ -14,6 +14,7 @@ export const AddressSchema = z.object({
 export const SchoolRegistrationSchema = z.object({
   schoolName: z.string().min(3, "O nome da escola é obrigatório."),
   cnpj: z.string().length(18, "O CNPJ deve ter 14 dígitos."),
+  schoolQtdAlunos: z.coerce.number().int().min(0, "A quantidade de alunos deve ser um número positivo."),
   adminName: z.string().min(3, "O nome do administrador é obrigatório."),
   adminEmail: z.string().email("Email do administrador inválido."),
   adminPassword: z.string().min(6, "A senha do administrador deve ter no mínimo 6 caracteres."),

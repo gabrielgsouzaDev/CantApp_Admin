@@ -43,6 +43,7 @@ export default function EscolaLoginPage() {
     defaultValues: {
       schoolName: "",
       cnpj: "",
+      schoolQtdAlunos: 0,
       adminName: "",
       adminEmail: "",
       adminPassword: "",
@@ -74,7 +75,7 @@ export default function EscolaLoginPage() {
     }
   };
 
-  const handleRegister = async (values: z.infer<typeof SchoolRegistrationSchema>) => {
+ const handleRegister = async (values: z.infer<typeof SchoolRegistrationSchema>) => {
     setLoading(true);
     try {
       // 1. Create Address
@@ -89,7 +90,7 @@ export default function EscolaLoginPage() {
         cnpj: values.cnpj,
         id_endereco: newAddress.id,
         status: 'ativa',
-        qtd_alunos: 0,
+        qtd_alunos: values.schoolQtdAlunos,
       };
       
       const newSchool = await addSchool(schoolPayload);
@@ -266,6 +267,9 @@ export default function EscolaLoginPage() {
                             <FormField control={form.control} name="cnpj" render={({ field }) => (
                               <FormItem><FormLabel>CNPJ</FormLabel><FormControl><Input required disabled={currentLoading} {...field} onChange={handleCnpjChange} /></FormControl><FormMessage /></FormItem>
                             )} />
+                            <FormField control={form.control} name="schoolQtdAlunos" render={({ field }) => (
+                              <FormItem><FormLabel>Quantidade de Alunos</FormLabel><FormControl><Input type="number" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
                           </div>
 
                           {/* Admin User Details */}
@@ -306,7 +310,8 @@ export default function EscolaLoginPage() {
                                         <FormItem><FormLabel>Número</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={form.control} name="address.complemento" render={({ field }) => (
-                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage />
+                                        </FormItem>
                                     )} />
                                 </div>
                                 <FormField control={form.control} name="address.bairro" render={({ field }) => (
