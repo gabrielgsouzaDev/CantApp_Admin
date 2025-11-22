@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
-import { Loader2, School } from "lucide-react";
+import { Loader2, School as SchoolIcon } from "lucide-react";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
@@ -21,7 +21,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { SchoolSchema } from "@/lib/schemas";
+import { SchoolRegistrationSchema } from "@/lib/schemas";
+import { addSchool } from "@/services/schoolService";
 
 
 export default function EscolaLoginPage() {
@@ -34,13 +35,14 @@ export default function EscolaLoginPage() {
   const [loginEmail, setLoginEmail] = useState("escola@ctn.com");
   const [loginPassword, setLoginPassword] = useState("password");
 
-  const form = useForm<z.infer<typeof SchoolSchema>>({
-    resolver: zodResolver(SchoolSchema),
+  const form = useForm<z.infer<typeof SchoolRegistrationSchema>>({
+    resolver: zodResolver(SchoolRegistrationSchema),
     defaultValues: {
-      name: "",
+      schoolName: "",
       cnpj: "",
-      email: "",
-      password: "",
+      adminName: "",
+      adminEmail: "",
+      adminPassword: "",
       address: {
         cep: "",
         street: "",
@@ -69,32 +71,41 @@ export default function EscolaLoginPage() {
     }
   };
 
-  const handleRegister = async (values: z.infer<typeof SchoolSchema>) => {
+  const handleRegister = async (values: z.infer<typeof SchoolRegistrationSchema>) => {
     setLoading(true);
     try {
-      
-      const { street, number, complement, neighborhood, city, state, cep } = values.address;
-      const fullAddress = `${street}, ${number}${complement ? ` - ${complement}` : ''} - ${neighborhood}, ${city} - ${state}, CEP: ${cep}`;
-
-      // This is a simplified registration. The backend will handle creating the school
-      // and assigning the user. For the frontend, we just register a user with a specific role.
-      const userData = {
-        name: values.name, // The user's name, not the school's name here. Let's assume they are the same for now.
-        email: values.email,
-        password: values.password,
-        role: "EscolaAdmin" // This role needs to be handled by the backend
+      // 1. Create the School
+      const schoolPayload = {
+        name: values.schoolName,
+        cnpj: values.cnpj,
+        address: `${values.address.street}, ${values.address.number}`, // Simplified address for now
+        status: 'active',
+        qtd_alunos: 0, // Default value
       };
       
-      // We might need a separate step to create the school itself.
-      // For now, we just register the user.
-      await register(userData);
+      const newSchool = await addSchool(schoolPayload);
+
+      if (!newSchool || !newSchool.id) {
+        throw new Error("Falha ao criar a escola. O ID não foi retornado.");
+      }
+
+      // 2. Register the Admin User for that School
+      const userPayload = {
+        name: values.adminName,
+        email: values.adminEmail,
+        password: values.adminPassword,
+        id_escola: newSchool.id,
+        role: "EscolaAdmin" // Backend should handle assigning role based on logic
+      };
+      
+      await register(userPayload);
       
       toast({
-        title: "Cadastro de usuário realizado!",
-        description: "Agora você pode fazer o login."
+        title: "Cadastro realizado com sucesso!",
+        description: "Sua escola e seu usuário admin foram criados. Agora você pode fazer o login."
       })
       setActiveTab("login");
-      setLoginEmail(values.email);
+      setLoginEmail(values.adminEmail);
       setLoginPassword("");
 
     } catch (error: any)
@@ -102,6 +113,8 @@ export default function EscolaLoginPage() {
       let errorMessage = "Não foi possível completar o cadastro.";
       if (error.code === 'auth/email-already-in-use' || (error.message && error.message.includes('unique'))) {
         errorMessage = "Este email já está em uso. Tente outro.";
+      } else if (error.message) {
+        errorMessage = error.message;
       }
       toast({
         title: "Erro no Cadastro",
@@ -170,7 +183,7 @@ export default function EscolaLoginPage() {
                     <Logo />
                 </Link>
                 <div className="flex justify-center items-center gap-2">
-                    <School className="h-6 w-6 text-primary" />
+                    <SchoolIcon className="h-6 w-6 text-primary" />
                     <CardTitle className="text-2xl font-headline">Portal da Escola</CardTitle>
                 </div>
                  <CardDescription>
@@ -225,21 +238,34 @@ export default function EscolaLoginPage() {
                 <FormProvider {...form}>
                   <form onSubmit={form.handleSubmit(handleRegister)}>
                       <CardContent className="space-y-4 pt-6 max-h-[60vh] overflow-y-auto pr-4">
-                          <FormField control={form.control} name="name" render={({ field }) => (
-                            <FormItem><FormLabel>Nome da Escola</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
-                          )} />
-                          <FormField control={form.control} name="cnpj" render={({ field }) => (
-                            <FormItem><FormLabel>CNPJ</FormLabel><FormControl><Input required disabled={currentLoading} {...field} onChange={handleCnpjChange} /></FormControl><FormMessage /></FormItem>
-                          )} />
-                          <FormField control={form.control} name="email" render={({ field }) => (
-                            <FormItem><FormLabel>Email de Contato</FormLabel><FormControl><Input type="email" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
-                          )} />
-                          <FormField control={form.control} name="password" render={({ field }) => (
-                            <FormItem><FormLabel>Crie uma Senha</FormLabel><FormControl><Input type="password" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
-                          )} />
+                          {/* School Details */}
+                          <div className="space-y-2">
+                            <h3 className="text-sm font-medium">Dados da Escola</h3>
+                            <FormField control={form.control} name="schoolName" render={({ field }) => (
+                              <FormItem><FormLabel>Nome da Escola</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                            <FormField control={form.control} name="cnpj" render={({ field }) => (
+                              <FormItem><FormLabel>CNPJ</FormLabel><FormControl><Input required disabled={currentLoading} {...field} onChange={handleCnpjChange} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                          </div>
 
+                          {/* Admin User Details */}
                            <div className="space-y-2 pt-4">
-                             <h3 className="text-sm font-medium">Endereço</h3>
+                             <h3 className="text-sm font-medium">Dados do Administrador da Escola</h3>
+                              <FormField control={form.control} name="adminName" render={({ field }) => (
+                                <FormItem><FormLabel>Nome Completo do Admin</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name="adminEmail" render={({ field }) => (
+                                <FormItem><FormLabel>Email do Admin</FormLabel><FormControl><Input type="email" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name="adminPassword" render={({ field }) => (
+                                <FormItem><FormLabel>Crie uma Senha para o Admin</FormLabel><FormControl><Input type="password" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                           </div>
+
+                           {/* Address Details */}
+                           <div className="space-y-2 pt-4">
+                             <h3 className="text-sm font-medium">Endereço da Escola</h3>
                               <div className="grid grid-cols-1 gap-4">
                                 <FormField control={form.control} name="address.cep" render={({ field }) => (
                                     <FormItem>

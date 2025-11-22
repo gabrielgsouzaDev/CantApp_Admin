@@ -41,6 +41,7 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
       address: defaultValues?.address || "",
       cnpj: defaultValues?.cnpj || "",
       status: defaultValues?.status || "active",
+      qtd_alunos: defaultValues?.qtd_alunos || 0,
     },
   });
 
@@ -50,6 +51,7 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
       address: defaultValues?.address || "",
       cnpj: defaultValues?.cnpj || "",
       status: defaultValues?.status || "active",
+      qtd_alunos: defaultValues?.qtd_alunos || 0,
     });
   }, [defaultValues, form]);
   
@@ -105,6 +107,19 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
               <FormLabel>Endereço</FormLabel>
               <FormControl>
                 <Input placeholder="Ex: Rua Principal, 123, São Paulo - SP" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="qtd_alunos"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Quantidade de Alunos</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="Ex: 500" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

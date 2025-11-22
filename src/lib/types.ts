@@ -31,7 +31,8 @@ export type School = {
   id: number;
   name: string;
   nome: string; // from laravel
-  address?: string; // from laravel
+  address?: string; 
+  endereco?: string; // from laravel
   cnpj: string;
   status: "active" | "inactive";
   id_endereco?: number;
