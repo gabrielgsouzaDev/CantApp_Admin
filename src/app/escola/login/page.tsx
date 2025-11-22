@@ -88,8 +88,8 @@ export default function EscolaLoginPage() {
         nome: values.schoolName,
         cnpj: values.cnpj,
         id_endereco: newAddress.id,
-        status: 'ativa', // 'ativa' instead of 'active' to match ENUM
-        qtd_alunos: 0, // Default value
+        status: 'ativa',
+        qtd_alunos: 0,
       };
       
       const newSchool = await addSchool(schoolPayload);
@@ -125,11 +125,13 @@ export default function EscolaLoginPage() {
       setLoginPassword("");
 
     } catch (error: any) {
-       let errorMessage = "Não foi possível completar o cadastro.";
-      if (error.errors) {
+      let errorMessage = "Não foi possível completar o cadastro.";
+      if (error && error.errors) {
+        // Se a API retornar um objeto de erros (validação do Laravel)
         const firstErrorKey = Object.keys(error.errors)[0];
         errorMessage = error.errors[firstErrorKey][0];
-      } else if (error.message) {
+      } else if (error && error.message) {
+        // Se for um erro lançado pelo nosso código ou uma mensagem genérica da API
         errorMessage = error.message;
       }
       
