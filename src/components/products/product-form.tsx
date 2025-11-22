@@ -41,8 +41,8 @@ export function ProductForm({ onSubmit, defaultValues, onCancel }: ProductFormPr
 
   useEffect(() => {
     form.reset({
-      name: defaultValues?.name || "",
-      price: defaultValues?.price || 0,
+      name: defaultValues?.name || defaultValues?.nome || "",
+      price: defaultValues?.price || defaultValues?.preco || 0,
     });
   }, [defaultValues, form]);
 

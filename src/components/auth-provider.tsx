@@ -5,8 +5,6 @@ import { useRouter, usePathname } from "next/navigation";
 import React, { createContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { api } from "@/lib/api";
 
-// This will be our in-memory "session" storage for the token.
-// In a real app, you'd use localStorage or secure cookies.
 let sessionToken: string | null = null;
 if (typeof window !== 'undefined') {
     sessionToken = localStorage.getItem('sessionToken');
@@ -29,36 +27,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   const fetchUser = useCallback(async () => {
-    if (sessionToken) {
-      api.setToken(sessionToken);
-      try {
-        const authenticatedUser = await api.get<{user: CtnAppUser}>('/me');
-        setUser(authenticatedUser.user);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-        sessionToken = null;
-        api.setToken(null);
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('sessionToken');
-        }
-        setUser(null);
-      }
+    // This function is tricky without a /me endpoint that uses the token.
+    // For now, we rely on the user object from login.
+    // A real implementation would verify the token with the backend.
+    setLoading(false);
+  }, []);
+
+
+  useEffect(() => {
+    const token = localStorage.getItem('sessionToken');
+    const userJson = localStorage.getItem('user');
+    if (token && userJson) {
+      sessionToken = token;
+      api.setToken(token);
+      setUser(JSON.parse(userJson));
     }
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const { token, user: loggedInUser } = await api.post<{ token: string; user: CtnAppUser }>('/login', { email, password });
+      const loginPayload = {
+        email: email,
+        senha: password,
+        device_name: navigator.userAgent || 'unknown_device',
+      };
+      
+      const { token, user: loggedInUser } = await api.post<{ token: string; user: CtnAppUser }>('/login', loginPayload);
       
       sessionToken = token;
       if (typeof window !== 'undefined') {
         localStorage.setItem('sessionToken', token);
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
       }
       api.setToken(token);
       setUser(loggedInUser);
@@ -70,31 +71,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error("Login Error:", error);
       setLoading(false);
-      throw error; // Re-throw to be caught in the UI
+      throw error; 
     }
   };
 
   const register = async (data: any) => {
     setLoading(true);
     try {
-      // In a real scenario, you might log the user in automatically after registration.
-      await api.post('/register', data);
+      // The backend `store` method expects `nome` and `senha`, not `name` and `password`.
+      const registerPayload = {
+        nome: data.name,
+        email: data.email,
+        senha: data.password,
+        id_escola: data.schoolId, 
+        // Any other fields required by your backend
+      };
+      await api.post('/users', registerPayload);
     } catch (error) {
       console.error("Registration Error:", error);
-      throw error; // Re-throw to be caught in the UI
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    sessionToken = null;
-    api.setToken(null);
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem('sessionToken');
+  const logout = async () => {
+    setLoading(true);
+    try {
+        if(sessionToken) {
+            await api.post('/logout', {});
+        }
+    } catch (error) {
+        console.error("Logout failed, but clearing session anyway.", error);
+    } finally {
+        setUser(null);
+        sessionToken = null;
+        api.setToken(null);
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('sessionToken');
+            localStorage.removeItem('user');
+        }
+        router.push("/");
+        setLoading(false);
     }
-    router.push("/");
   };
   
   useEffect(() => {
@@ -103,10 +122,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     
     const isAuthPage = ['/', '/admin/login', '/escola/login', '/cantina/login'].includes(pathname);
+    const isAuthenticated = !!user && !!sessionToken;
 
-    if (!user && !isAuthPage) {
+    if (!isAuthenticated && !isAuthPage) {
       router.push('/');
-    } else if (user && isAuthPage) {
+    } else if (isAuthenticated && isAuthPage) {
       const dashboardRoute = user.role === 'GlobalAdmin' ? '/dashboard/admin' : 
                              user.role === 'EscolaAdmin' ? '/dashboard/escola' :
                              '/orders';

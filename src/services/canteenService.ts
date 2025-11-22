@@ -1,25 +1,29 @@
-// This service is not fully implemented in the UI yet,
-// but here is the structure for it.
-
 import { api } from "@/lib/api";
 import { Canteen } from "@/lib/types";
 
+// Helper to map backend data to frontend data
+const mapCanteenData = (canteen: any): Canteen => ({
+  ...canteen,
+  name: canteen.nome,
+});
+
 export const getCanteens = async (schoolId: number): Promise<Canteen[]> => {
-  // return api.get<Canteen[]>(`/schools/${schoolId}/canteens`);
-  return Promise.resolve([
-    { id: 1, name: 'Cantina Principal', school_id: 1 },
-    { id: 2, name: 'Cantina Anexo', school_id: 1 },
-  ]);
+  const response = await api.get<{ data: any[] }>(`/escolas/${schoolId}/cantinas`);
+  return response.data.map(mapCanteenData);
 };
 
 export const addCanteen = async (canteen: Omit<Canteen, 'id'>): Promise<Canteen> => {
-  return api.post<Canteen>('/canteens', canteen);
+  const payload = { nome: canteen.name, id_escola: canteen.id_escola };
+  const response = await api.post<any>('/cantinas', payload);
+  return mapCanteenData(response.data);
 };
 
 export const updateCanteen = async (id: number, canteen: Partial<Omit<Canteen, 'id'>>): Promise<Canteen> => {
-  return api.put<Canteen>(`/canteens/${id}`, canteen);
+  const payload = { nome: canteen.name, id_escola: canteen.id_escola };
+  const response = await api.put<any>(`/cantinas/${id}`, payload);
+  return mapCanteenData(response.data);
 };
 
 export const deleteCanteen = async (id: number): Promise<void> => {
-  return api.delete<void>(`/canteens/${id}`);
+  await api.delete<void>(`/cantinas/${id}`);
 };

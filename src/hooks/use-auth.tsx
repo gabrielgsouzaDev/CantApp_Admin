@@ -1,10 +1,11 @@
 "use client";
 
 import { AuthContext } from "@/components/auth-provider";
+import { CtnAppUser } from "@/lib/types";
 import { useContext } from "react";
 
 interface AuthHook {
-  user: any;
+  user: CtnAppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (data: any) => Promise<void>;

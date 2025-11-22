@@ -46,7 +46,7 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
 
   useEffect(() => {
     form.reset({
-      name: defaultValues?.name || "",
+      name: defaultValues?.name || defaultValues?.nome || "",
       address: defaultValues?.address || "",
       cnpj: defaultValues?.cnpj || "",
       status: defaultValues?.status || "active",

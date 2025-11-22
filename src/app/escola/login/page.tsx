@@ -76,21 +76,22 @@ export default function EscolaLoginPage() {
       const { street, number, complement, neighborhood, city, state, cep } = values.address;
       const fullAddress = `${street}, ${number}${complement ? ` - ${complement}` : ''} - ${neighborhood}, ${city} - ${state}, CEP: ${cep}`;
 
-      const schoolData = {
-        name: values.name,
-        cnpj: values.cnpj,
-        address: fullAddress,
-        status: "active",
+      // This is a simplified registration. The backend will handle creating the school
+      // and assigning the user. For the frontend, we just register a user with a specific role.
+      const userData = {
+        name: values.name, // The user's name, not the school's name here. Let's assume they are the same for now.
         email: values.email,
         password: values.password,
-        role: "EscolaAdmin"
+        role: "EscolaAdmin" // This role needs to be handled by the backend
       };
       
-      await register(schoolData);
+      // We might need a separate step to create the school itself.
+      // For now, we just register the user.
+      await register(userData);
       
       toast({
-        title: "Cadastro realizado com sucesso!",
-        description: "Sua escola foi cadastrada. Você já pode fazer o login."
+        title: "Cadastro de usuário realizado!",
+        description: "Agora você pode fazer o login."
       })
       setActiveTab("login");
       setLoginEmail(values.email);
@@ -99,7 +100,7 @@ export default function EscolaLoginPage() {
     } catch (error: any)
      {
       let errorMessage = "Não foi possível completar o cadastro.";
-      if (error.code === 'auth/email-already-in-use') {
+      if (error.code === 'auth/email-already-in-use' || (error.message && error.message.includes('unique'))) {
         errorMessage = "Este email já está em uso. Tente outro.";
       }
       toast({

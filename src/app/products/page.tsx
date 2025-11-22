@@ -64,21 +64,19 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const handleFormSubmit = async (data: Omit<Product, 'id'>) => {
+  const handleFormSubmit = async (data: Omit<Product, 'id' | 'nome' | 'preco'>) => {
     try {
-      if (!user?.schoolId) {
-        // In a real app, you might not even allow this form to be shown
-        // if there's no schoolId.
+      if (!user?.id_escola) {
         throw new Error("ID da escola não encontrado. Não é possível adicionar o produto.");
       }
       
-      const productData = { ...data, school_id: user.schoolId };
+      const productData = { ...data, id_escola: user.id_escola };
 
       if (selectedProduct) {
         await updateProduct(selectedProduct.id, productData);
         toast({ title: "Produto atualizado!", description: "Os dados do produto foram atualizados com sucesso." });
       } else {
-        await addProduct(productData);
+        await addProduct(productData as Product);
         toast({ title: "Produto adicionado!", description: "O novo produto foi cadastrado com sucesso." });
       }
       setIsFormOpen(false);

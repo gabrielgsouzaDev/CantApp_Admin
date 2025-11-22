@@ -65,22 +65,22 @@ export default function SchoolsPage() {
     fetchSchools();
   }, []);
 
-  const handleFormSubmit = async (data: Omit<School, 'id' | 'ownerUid'>) => {
+  const handleFormSubmit = async (data: Omit<School, 'id' | 'nome'>) => {
     try {
       if (selectedSchool) {
         await updateSchool(selectedSchool.id, data);
         toast({ title: "Escola atualizada!", description: "Os dados da escola foram atualizados com sucesso." });
       } else {
-        await addSchool(data);
+        await addSchool(data as School);
         toast({ title: "Escola adicionada!", description: "A nova escola foi cadastrada com sucesso." });
       }
       setIsFormOpen(false);
       setSelectedSchool(null);
       fetchSchools(); // Refresh data
-    } catch (error) {
+    } catch (error: any) {
        toast({
         title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar os dados da escola.",
+        description: error.message || "Ocorreu um erro ao salvar os dados da escola.",
         variant: "destructive"
       });
     }

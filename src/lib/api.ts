@@ -12,7 +12,7 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
-    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app/api';
+    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app/api/';
   }
 
   setToken(token: string | null) {

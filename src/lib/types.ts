@@ -7,14 +7,16 @@ export const Role = {
 } as const;
 export type Role = (typeof Role)[keyof typeof Role];
 
-// Este é o nosso perfil de utilizador específico da aplicação, vindo da API Laravel
+// This is our app-specific user profile, coming from the Laravel API
 export type CtnAppUser = {
   id: number;
   name: string;
+  nome: string; // From laravel
   email: string;
-  avatar: string;
+  avatar?: string; // Avatar may not come from Laravel, so it's optional
   role: Role;
-  schoolId?: number; // ID da escola associada para EscolaAdmin e Cantineiro
+  id_escola?: number; 
+  id_cantina?: number;
 };
 
 export type NavItem = {
@@ -28,23 +30,29 @@ export type NavItem = {
 export type School = {
   id: number;
   name: string;
-  address: string;
+  nome: string; // from laravel
+  address?: string; // from laravel
   cnpj: string;
   status: "active" | "inactive";
-  ownerUid?: string; // Mantido por compatibilidade, pode ser o ID do utilizador dono
+  id_endereco?: number;
+  id_plano?: number;
+  qtd_alunos?: number;
 };
 
 export type Product = {
   id: number;
   name: string;
+  nome: string; // from laravel
   price: number;
-  school_id: number; 
+  preco: number; // from laravel
+  id_escola: number; 
 };
 
 export type Canteen = {
   id: number;
   name: string;
-  school_id: number;
+  nome: string; // from laravel
+  id_escola: number;
 };
 
 export type OrderStatus = "A Fazer" | "Em Preparo" | "Pronto";
@@ -53,13 +61,15 @@ export type PaymentStatus = "Pago" | "Pendente";
 export type OrderItem = {
   id: number;
   name: string;
+  nome: string; // from laravel
   price: number;
+  preco: number; // from laravel
 };
 
 export type Order = {
   id: number;
-  student_name: string;
-  time: string; // Armazenar como ISO string date
+  student_name: string; // from laravel
+  time: string; // Keep as ISO string date
   items: OrderItem[];
   status: OrderStatus;
   payment_status: PaymentStatus;
