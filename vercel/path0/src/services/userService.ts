@@ -4,9 +4,12 @@
 import { api } from "@/lib/api";
 import { CtnAppUser } from "@/lib/types"; 
 
-type UserResponse = CtnAppUser & {
-    senha_hash: string;
-};
+// ✅ Agora o payload aceita 'ativo' sem quebrar o TS
+type UserCreationPayload = Partial<CtnAppUser & { 
+  senha?: string; 
+  id_role?: number;
+  ativo?: boolean;
+}>;
 
 const mapUserData = (user: any): CtnAppUser => ({
   id: user.id,
@@ -19,18 +22,20 @@ const mapUserData = (user: any): CtnAppUser => ({
   ativo: user.ativo,
 });
 
-
 export const getUsers = async (): Promise<CtnAppUser[]> => {
   const response = await api.get<{ data: any[] }>('/api/users');
   return response.data.map(mapUserData);
 };
 
-export const addUser = async (user: Partial<CtnAppUser & { senha?: string; id_role?: number }>): Promise<CtnAppUser> => {
+export const addUser = async (user: UserCreationPayload): Promise<CtnAppUser> => {
   const response = await api.post<{ data: any }>('/api/users', user);
   return mapUserData(response.data);
 };
 
-export const updateUser = async (id: number, user: Partial<Omit<CtnAppUser, 'id'>>): Promise<CtnAppUser> => {
+export const updateUser = async (
+  id: number, 
+  user: Partial<Omit<CtnAppUser, 'id'>>
+): Promise<CtnAppUser> => {
   const response = await api.put<{ data: any }>(`/api/users/${id}`, user);
   return mapUserData(response.data);
 };

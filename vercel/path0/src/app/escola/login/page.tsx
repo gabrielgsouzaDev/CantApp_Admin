@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
 import { Loader2, School as SchoolIcon } from "lucide-react";
@@ -20,12 +21,11 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { SchoolRegistrationSchema } from "@/lib/schemas";
 import { addSchool } from "@/services/schoolService";
 import { addAddress } from "@/services/addressService";
 import { addUser } from "@/services/userService";
-
 
 export default function EscolaLoginPage() {
   const { login, loading: authLoading } = useAuth();
@@ -33,7 +33,6 @@ export default function EscolaLoginPage() {
   const [activeTab, setActiveTab] = useState("login");
   const { toast } = useToast();
 
-  // Login state
   const [loginEmail, setLoginEmail] = useState("escola@ctn.com");
   const [loginPassword, setLoginPassword] = useState("password");
 
@@ -54,9 +53,11 @@ export default function EscolaLoginPage() {
         bairro: "",
         cidade: "",
         estado: "",
-      }
+      },
     },
   });
+
+  const currentLoading = authLoading || loading;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,75 +68,53 @@ export default function EscolaLoginPage() {
       toast({
         title: "Erro de Login",
         description: error.message || "Email ou senha inválidos.",
-        variant: "destructive"
-      })
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
   };
 
- const handleRegister = async (values: z.infer<typeof SchoolRegistrationSchema>) => {
+  const handleRegister = async (values: z.infer<typeof SchoolRegistrationSchema>) => {
     setLoading(true);
     try {
-      // 1. Create Address
       const newAddress = await addAddress(values.address);
-      if (!newAddress || !newAddress.id_endereco) {
-        throw new Error("Falha ao criar o endereço. A resposta da API não contém um ID.");
-      }
+      if (!newAddress?.id_endereco) throw new Error("Endereço não criado.");
 
-      // 2. Create the School
-      const schoolPayload = {
+      const newSchool = await addSchool({
         nome: values.schoolName,
         cnpj: values.cnpj,
         id_endereco: newAddress.id_endereco,
-        status: 'ativa',
+        status: "ativa",
         qtd_alunos: values.schoolQtdAlunos,
-      };
-      
-      const newSchool = await addSchool(schoolPayload);
+      });
 
-      if (!newSchool || !newSchool.id_escola) {
-        throw new Error("Falha ao criar a escola. O ID não foi retornado.");
-      }
+      if (!newSchool?.id_escola) throw new Error("Escola não criada.");
 
-      // 3. Register the Admin User for that School and assign role
-      const userPayload = {
+      const newUser = await addUser({
         nome: values.adminName,
         email: values.adminEmail,
         senha: values.adminPassword,
         id_escola: newSchool.id_escola,
-        id_role: 5, // ID for "Escola" role
+        id_role: 5,
         ativo: true,
-      };
-      
-      const newUser = await addUser(userPayload);
-       if (!newUser || !newUser.id) {
-        throw new Error("Falha ao criar o usuário administrador.");
-      }
-      
+      });
+
+      if (!newUser?.id) throw new Error("Usuário admin não criado.");
+
       toast({
-        title: "Cadastro realizado com sucesso!",
-        description: "Sua escola e seu usuário admin foram criados. Agora você pode fazer o login."
-      })
+        title: "Cadastro concluído",
+        description: "Agora é só logar.",
+      });
+
       setActiveTab("login");
       setLoginEmail(values.adminEmail);
       setLoginPassword("");
-
     } catch (error: any) {
-      let errorMessage = "Não foi possível completar o cadastro.";
-      if (error && (error as any).errors) {
-        // If API returns a Laravel validation error object
-        const firstErrorKey = Object.keys((error as any).errors)[0];
-        errorMessage = (error as any).errors[firstErrorKey][0];
-      } else if (error && (error as any).message) {
-        // If it's an error thrown by our code or a generic API message
-        errorMessage = (error as any).message;
-      }
-      
       toast({
         title: "Erro no Cadastro",
-        description: errorMessage,
-        variant: "destructive"
+        description: error.message || "Falha geral no cadastro.",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -150,16 +129,14 @@ export default function EscolaLoginPage() {
     value = value.replace(/(\d{4})(\d)/, "$1-$2");
     form.setValue("cnpj", value.substring(0, 18));
   };
-  
+
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "");
-    if (value.length > 5) {
-      value = value.replace(/^(\d{5})(\d)/, "$1-$2");
-    }
+    if (value.length > 5) value = value.replace(/^(\d{5})(\d)/, "$1-$2");
     form.setValue("address.cep", value.substring(0, 9));
   };
-
-  const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+  
+    const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const cep = e.target.value.replace(/\D/g, "");
     if (cep.length !== 8) {
       return;
@@ -188,8 +165,6 @@ export default function EscolaLoginPage() {
     }
   };
 
-  const currentLoading = authLoading || loading;
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
       <Card className="w-full max-w-md shadow-2xl">
@@ -213,7 +188,6 @@ export default function EscolaLoginPage() {
                 </TabsList>
             </div>
             
-            {/* Login Tab */}
             <TabsContent value="login">
                 <form onSubmit={handleLogin}>
                     <CardContent className="space-y-4 pt-6">
@@ -249,12 +223,10 @@ export default function EscolaLoginPage() {
                 </form>
             </TabsContent>
 
-            {/* Register Tab */}
             <TabsContent value="register">
                 <FormProvider {...form}>
                   <form onSubmit={form.handleSubmit(handleRegister)}>
                       <CardContent className="space-y-4 pt-6 max-h-[60vh] overflow-y-auto pr-4">
-                          {/* School Details */}
                           <div className="space-y-2">
                             <h3 className="text-sm font-medium">Dados da Escola</h3>
                             <FormField control={form.control} name="schoolName" render={({ field }) => (
@@ -268,7 +240,6 @@ export default function EscolaLoginPage() {
                             )} />
                           </div>
 
-                          {/* Admin User Details */}
                            <div className="space-y-2 pt-4">
                              <h3 className="text-sm font-medium">Dados do Administrador da Escola</h3>
                               <FormField control={form.control} name="adminName" render={({ field }) => (
@@ -278,11 +249,10 @@ export default function EscolaLoginPage() {
                                 <FormItem><FormLabel>Email do Admin</FormLabel><FormControl><Input type="email" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                               )} />
                               <FormField control={form.control} name="adminPassword" render={({ field }) => (
-                                <FormItem><FormLabel>Crie uma Senha para o Admin</FormLabel><FormControl><Input type="password" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormMessage>
+                                <FormItem><FormLabel>Crie uma Senha para o Admin</FormLabel><FormControl><Input type="password" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                               )} />
                            </div>
 
-                           {/* Address Details */}
                            <div className="space-y-2 pt-4">
                              <h3 className="text-sm font-medium">Endereço da Escola</h3>
                               <div className="grid grid-cols-1 gap-4">
