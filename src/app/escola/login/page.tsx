@@ -25,7 +25,6 @@ import { SchoolRegistrationSchema } from "@/lib/schemas";
 import { addSchool } from "@/services/schoolService";
 import { addAddress } from "@/services/addressService";
 import { addUser } from "@/services/userService";
-import { assignRole } from "@/services/userRoleService";
 
 
 export default function EscolaLoginPage() {
@@ -112,10 +111,6 @@ export default function EscolaLoginPage() {
        if (!newUser || !newUser.id) {
         throw new Error("Falha ao criar o usuário administrador.");
       }
-
-      // 4. Assign role to the new user
-      const ESCOLA_ROLE_ID = 5; // As confirmed from the database screenshot
-      await assignRole({ id_user: newUser.id, id_role: ESCOLA_ROLE_ID });
       
       toast({
         title: "Cadastro realizado com sucesso!",
