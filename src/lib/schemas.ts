@@ -3,7 +3,7 @@ import * as z from "zod";
 export const AddressSchema = z.object({
     cep: z.string().min(8, "O CEP deve ter pelo menos 8 dígitos."),
     logradouro: z.string().min(3, "A rua é obrigatória."),
-    numero: z.string().min(1, "O número é obrigatório."),
+    numero: z.string().optional(),
     complemento: z.string().optional(),
     bairro: z.string().min(3, "O bairro é obrigatório."),
     cidade: z.string().min(3, "A cidade é obrigatória."),
