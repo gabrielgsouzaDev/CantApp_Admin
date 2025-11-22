@@ -78,7 +78,16 @@ export default function EscolaLoginPage() {
     setLoading(true);
     try {
       // 1. Create Address
-      const newAddress = await addAddress(values.address);
+      const newAddress = await addAddress({
+        cep: values.address.cep,
+        logradouro: values.address.logradouro,
+        numero: values.address.numero,
+        complemento: values.address.complemento,
+        bairro: values.address.bairro,
+        cidade: values.address.cidade,
+        estado: values.address.estado,
+      });
+
       if (!newAddress || !newAddress.id_endereco) {
         throw new Error("Falha ao criar o endereço. A resposta da API não contém um ID.");
       }
@@ -109,7 +118,7 @@ export default function EscolaLoginPage() {
       };
       
       const newUser = await addUser(userPayload);
-       if (!newUser || !newUser.id) {
+      if (!newUser || !newUser.id) {
         throw new Error("Falha ao criar o usuário administrador.");
       }
       
