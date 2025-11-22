@@ -79,7 +79,7 @@ export default function EscolaLoginPage() {
     try {
       // 1. Create Address
       const newAddress = await addAddress(values.address);
-      if (!newAddress || !newAddress.id_endereco) {
+      if (!newAddress || !newAddress.id) {
         throw new Error("Falha ao criar o endereço. A resposta da API não contém um ID.");
       }
 
@@ -87,7 +87,7 @@ export default function EscolaLoginPage() {
       const schoolPayload = {
         nome: values.schoolName,
         cnpj: values.cnpj,
-        id_endereco: newAddress.id_endereco,
+        id_endereco: newAddress.id,
         status: 'ativa', // 'ativa' instead of 'active' to match ENUM
         qtd_alunos: 0, // Default value
       };
@@ -125,7 +125,7 @@ export default function EscolaLoginPage() {
       setLoginPassword("");
 
     } catch (error: any) {
-      let errorMessage = "Não foi possível completar o cadastro.";
+       let errorMessage = "Não foi possível completar o cadastro.";
       if (error.errors) {
         const firstErrorKey = Object.keys(error.errors)[0];
         errorMessage = error.errors[firstErrorKey][0];
