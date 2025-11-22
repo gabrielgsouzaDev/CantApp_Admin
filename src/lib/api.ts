@@ -12,7 +12,7 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
-    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app/api';
+    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app';
   }
 
   setToken(token: string | null) {
@@ -31,8 +31,10 @@ class ApiClient {
     };
 
     if (options.headers) {
-      // Manually merge headers to avoid type issues
-      Object.assign(headers, options.headers);
+      const customHeaders = new Headers(options.headers);
+      customHeaders.forEach((value, key) => {
+        headers[key] = value;
+      });
     }
 
     if (this.token) {
@@ -47,7 +49,6 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
 
-      // Handle Laravel validation errors (422) or other errors
       if (!response.ok) {
         const errorData = await response.json();
         const errorMessage = errorData.message || 'Ocorreu um erro na requisição.';
@@ -55,8 +56,7 @@ class ApiClient {
         throw { message: errorMessage, errors: errorData.errors };
       }
 
-      // For DELETE or other methods that might not return a body
-      if (response.status === 204) {
+      if (response.status === 204 || response.headers.get('Content-Length') === '0') {
         return {} as T;
       }
 

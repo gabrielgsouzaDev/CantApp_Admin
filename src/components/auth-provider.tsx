@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const response = await api.post<{ data: { token: string; user: CtnAppUser } }>('/login', loginPayload);
+      const response = await api.post<{ data: { token: string; user: CtnAppUser } }>('/api/login', loginPayload);
       const { token, user: loggedInUser } = response.data;
       
       sessionToken = token;
@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id_escola: data.id_escola,
         ativo: true
       };
-      await api.post('/users', registerPayload);
+      await api.post('/api/users', registerPayload);
     } catch (error) {
       console.error("Registration Error:", error);
       throw error;
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
         if(sessionToken) {
-            await api.post('/logout', {});
+            await api.post('/api/logout', {});
         }
     } catch (error) {
         console.error("Logout failed, but clearing session anyway.", error);

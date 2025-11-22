@@ -11,7 +11,7 @@ const mapSchoolData = (school: any): School => ({
 });
 
 export const getSchools = async (): Promise<School[]> => {
-  const response = await api.get<{ data: any[] }>('/escolas');
+  const response = await api.get<{ data: any[] }>('/api/escolas');
   return response.data.map(mapSchoolData);
 };
 
@@ -24,16 +24,16 @@ export const addSchool = async (school: Partial<Omit<School, 'id' | 'name'>> & {
       status: school.status,
       qtd_alunos: school.qtd_alunos,
   };
-  const response = await api.post<{ data: any }>('/escolas', payload);
+  const response = await api.post<{ data: any }>('/api/escolas', payload);
   return mapSchoolData(response.data);
 };
 
 export const updateSchool = async (id: number, school: Partial<Omit<School, 'id'>>): Promise<School> => {
   const payload = { ...school, nome: school.name };
-  const response = await api.put<{ data: any }>(`/escolas/${id}`, payload);
+  const response = await api.put<{ data: any }>(`/api/escolas/${id}`, payload);
   return mapSchoolData(response.data);
 };
 
 export const deleteSchool = async (id: number): Promise<void> => {
-  await api.delete<void>(`/escolas/${id}`);
+  await api.delete<void>(`/api/escolas/${id}`);
 };
