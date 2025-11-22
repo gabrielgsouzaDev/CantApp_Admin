@@ -19,6 +19,7 @@ export type CtnAppUser = {
   role: Role;
   id_escola?: number; 
   id_cantina?: number;
+  ativo?: boolean;
 };
 
 export type Address = {
@@ -88,3 +89,10 @@ export type Order = {
   payment_status: PaymentStatus;
   total: number;
 };
+
+export interface NavItem {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+  roles: Role[];
+}
