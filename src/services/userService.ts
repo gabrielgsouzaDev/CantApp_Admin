@@ -1,11 +1,7 @@
-// This service is not fully implemented in the UI yet,
-// but here is the structure for it.
-
 import { api } from "@/lib/api";
-import { CtnAppUser } from "@/lib/types"; 
+import { CtnAppUser, UserRole } from "@/lib/types"; 
 
-// ✅ Agora o payload aceita 'ativo' sem quebrar o TS
-type UserCreationPayload = Partial<CtnAppUser & { 
+export type UserCreationPayload = Partial<CtnAppUser & { 
   senha?: string; 
   id_role?: number;
   ativo?: boolean;
@@ -16,7 +12,8 @@ const mapUserData = (user: any): CtnAppUser => ({
   name: user.nome,
   nome: user.nome,
   email: user.email,
-  role: user.role,
+  // The backend might return the full role object or just the name. Handle both.
+  role: user.roles?.[0]?.nome || user.role,
   id_escola: user.id_escola,
   id_cantina: user.id_cantina,
   ativo: user.ativo,
@@ -42,4 +39,12 @@ export const updateUser = async (
 
 export const deleteUser = async (id: number): Promise<void> => {
   return api.delete<void>(`/api/users/${id}`);
+};
+
+
+export const getUserRoles = async (): Promise<UserRole[]> => {
+    const response = await api.get<{ data: any[] }>('/api/roles');
+    // Filter out roles that are not relevant for a school admin to assign
+    const relevantRoles = response.data.filter(role => ['Escola', 'Cantina'].includes(role.nome));
+    return relevantRoles;
 };

@@ -98,3 +98,8 @@ export interface NavItem {
   icon: LucideIcon;
   roles: Role[];
 }
+
+export interface UserRole {
+  id_role: number;
+  nome: Role;
+}
