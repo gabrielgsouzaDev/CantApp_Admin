@@ -126,13 +126,13 @@ export default function EscolaLoginPage() {
 
     } catch (error: any) {
       let errorMessage = "Não foi possível completar o cadastro.";
-      if (error && error.errors) {
-        // Se a API retornar um objeto de erros (validação do Laravel)
-        const firstErrorKey = Object.keys(error.errors)[0];
-        errorMessage = error.errors[firstErrorKey][0];
-      } else if (error && error.message) {
-        // Se for um erro lançado pelo nosso código ou uma mensagem genérica da API
-        errorMessage = error.message;
+      if (error && (error as any).errors) {
+        // If API returns a Laravel validation error object
+        const firstErrorKey = Object.keys((error as any).errors)[0];
+        errorMessage = (error as any).errors[firstErrorKey][0];
+      } else if (error && (error as any).message) {
+        // If it's an error thrown by our code or a generic API message
+        errorMessage = (error as any).message;
       }
       
       toast({
@@ -306,7 +306,7 @@ export default function EscolaLoginPage() {
                                         <FormItem><FormLabel>Número</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={form.control} name="address.complemento" render={({ field }) => (
-                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormMessage>
+                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                 </div>
                                 <FormField control={form.control} name="address.bairro" render={({ field }) => (
