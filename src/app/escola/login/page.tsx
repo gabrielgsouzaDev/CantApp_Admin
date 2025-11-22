@@ -85,7 +85,7 @@ export default function EscolaLoginPage() {
         nome: values.schoolName,
         cnpj: values.cnpj,
         id_endereco: newAddress.id_endereco,
-        status: "ativa",
+        status: "pendente",
         qtd_alunos: values.schoolQtdAlunos,
       });
 
@@ -104,12 +104,13 @@ export default function EscolaLoginPage() {
 
       toast({
         title: "Cadastro concluído",
-        description: "Agora é só logar.",
+        description: "Seu cadastro foi recebido e está pendente de aprovação. Você será notificado.",
       });
 
       setActiveTab("login");
       setLoginEmail(values.adminEmail);
       setLoginPassword("");
+      form.reset();
     } catch (error: any) {
       toast({
         title: "Erro no Cadastro",
@@ -135,58 +136,179 @@ export default function EscolaLoginPage() {
     if (value.length > 5) value = value.replace(/^(\d{5})(\d)/, "$1-$2");
     form.setValue("address.cep", value.substring(0, 9));
   };
+  
+    const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const cep = e.target.value.replace(/\D/g, "");
+    if (cep.length !== 8) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      if (!response.ok) {
+        throw new Error("CEP não encontrado");
+      }
+      const data = await response.json();
+      if (data.erro) {
+        toast({ title: "CEP não encontrado", variant: "destructive" });
+        return;
+      }
+      form.setValue("address.logradouro", data.logradouro);
+      form.setValue("address.bairro", data.bairro);
+      form.setValue("address.cidade", data.localidade);
+      form.setValue("address.estado", data.uf);
+      form.setFocus("address.numero");
+
+    } catch (error) {
+      toast({ title: "Erro ao buscar CEP", description: "Não foi possível encontrar o endereço. Verifique o CEP.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
       <Card className="w-full max-w-md shadow-2xl">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <CardHeader className="text-center pb-4">
+                <Link href="/" className="mx-auto mb-4">
+                    <Logo />
+                </Link>
+                <div className="flex justify-center items-center gap-2">
+                    <SchoolIcon className="h-6 w-6 text-primary" />
+                    <CardTitle className="text-2xl font-headline">Portal da Escola</CardTitle>
+                </div>
+                 <CardDescription>
+                    Acesse sua conta ou cadastre sua instituição.
+                </CardDescription>
+            </CardHeader>
+            <div className="px-6">
+                 <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="login">Entrar</TabsTrigger>
+                    <TabsTrigger value="register">Cadastrar</TabsTrigger>
+                </TabsList>
+            </div>
+            
+            <TabsContent value="login">
+                <form onSubmit={handleLogin}>
+                    <CardContent className="space-y-4 pt-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="login-email">Email</Label>
+                            <Input
+                                id="login-email"
+                                type="email"
+                                placeholder="diretor@escola.com"
+                                required
+                                value={loginEmail}
+                                onChange={(e) => setLoginEmail(e.target.value)}
+                                disabled={currentLoading}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="login-password">Senha</Label>
+                            <Input 
+                                id="login-password" 
+                                type="password" 
+                                required 
+                                value={loginPassword}
+                                onChange={(e) => setLoginPassword(e.target.value)}
+                                disabled={currentLoading}
+                            />
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex flex-col gap-4">
+                        <Button type="submit" className="w-full" disabled={currentLoading}>
+                            {currentLoading ? <Loader2 className="animate-spin" /> : "Entrar"}
+                        </Button>
+                    </CardFooter>
+                </form>
+            </TabsContent>
 
-          <CardHeader className="text-center">
-            <Logo />
-            <CardTitle className="text-2xl">Portal da Escola</CardTitle>
-            <CardDescription>Login ou cadastro</CardDescription>
-            <TabsList className="grid grid-cols-2 mt-4">
-              <TabsTrigger value="login">Entrar</TabsTrigger>
-              <TabsTrigger value="register">Cadastrar</TabsTrigger>
-            </TabsList>
-          </CardHeader>
+            <TabsContent value="register">
+                <FormProvider {...form}>
+                  <form onSubmit={form.handleSubmit(handleRegister)}>
+                      <CardContent className="space-y-4 pt-6 max-h-[60vh] overflow-y-auto pr-4">
+                          <div className="space-y-2">
+                            <h3 className="text-sm font-medium">Dados da Escola</h3>
+                            <FormField control={form.control} name="schoolName" render={({ field }) => (
+                              <FormItem><FormLabel>Nome da Escola</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                            <FormField control={form.control} name="cnpj" render={({ field }) => (
+                              <FormItem><FormLabel>CNPJ</FormLabel><FormControl><Input required disabled={currentLoading} {...field} onChange={handleCnpjChange} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                            <FormField control={form.control} name="schoolQtdAlunos" render={({ field }) => (
+                              <FormItem><FormLabel>Quantidade de Alunos</FormLabel><FormControl><Input type="number" required disabled={currentLoading} {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                          </div>
 
-          <TabsContent value="login">
-            <form onSubmit={handleLogin}>
-              <CardContent className="space-y-4">
-                <Label>Email</Label>
-                <Input value={loginEmail} onChange={e => setLoginEmail(e.target.value)} />
-                <Label>Senha</Label>
-                <Input type="password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} />
-              </CardContent>
-              <CardFooter>
-                <Button className="w-full" disabled={currentLoading}>
-                  {currentLoading ? <Loader2 className="animate-spin" /> : "Entrar"}
-                </Button>
-              </CardFooter>
-            </form>
-          </TabsContent>
+                           <div className="space-y-2 pt-4">
+                             <h3 className="text-sm font-medium">Dados do Administrador da Escola</h3>
+                              <FormField control={form.control} name="adminName" render={({ field }) => (
+                                <FormItem><FormLabel>Nome Completo do Admin</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name="adminEmail" render={({ field }) => (
+                                <FormItem><FormLabel>Email do Admin</FormLabel><FormControl><Input type="email" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name="adminPassword" render={({ field }) => (
+                                <FormItem><FormLabel>Crie uma Senha para o Admin</FormLabel><FormControl><Input type="password" required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                           </div>
 
-          <TabsContent value="register">
-            <FormProvider {...form}>
-              <form onSubmit={form.handleSubmit(handleRegister)}>
-                <CardContent className="space-y-4">
-                  <FormField control={form.control} name="schoolName" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome da Escola</FormLabel>
-                      <FormControl><Input {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                </CardContent>
-                <CardFooter>
-                  <Button className="w-full">Cadastrar Escola</Button>
-                </CardFooter>
-              </form>
-            </FormProvider>
-          </TabsContent>
-
+                           <div className="space-y-2 pt-4">
+                             <h3 className="text-sm font-medium">Endereço da Escola</h3>
+                              <div className="grid grid-cols-1 gap-4">
+                                <FormField control={form.control} name="address.cep" render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>CEP</FormLabel>
+                                        <FormControl>
+                                            <div className="relative">
+                                                <Input required disabled={currentLoading} {...field} onChange={handleCepChange} onBlur={handleCepBlur} />
+                                                {loading && !authLoading && <Loader2 className="animate-spin h-4 w-4 absolute right-2 top-1/2 -translate-y-1/2" />}
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )} />
+                                <FormField control={form.control} name="address.logradouro" render={({ field }) => (
+                                    <FormItem><FormLabel>Rua</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <div className="grid grid-cols-2 gap-4">
+                                    <FormField control={form.control} name="address.numero" render={({ field }) => (
+                                        <FormItem><FormLabel>Número</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                    <FormField control={form.control} name="address.complemento" render={({ field }) => (
+                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage />
+                                        </FormItem>
+                                    )} />
+                                </div>
+                                <FormField control={form.control} name="address.bairro" render={({ field }) => (
+                                    <FormItem><FormLabel>Bairro</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <div className="grid grid-cols-3 gap-4">
+                                     <FormField control={form.control} name="address.cidade" render={({ field }) => (
+                                        <FormItem className="col-span-2"><FormLabel>Cidade</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                    <FormField control={form.control} name="address.estado" render={({ field }) => (
+                                        <FormItem><FormLabel>Estado</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                </div>
+                            </div>
+                           </div>
+                      </CardContent>
+                       <CardFooter>
+                          <Button type="submit" className="w-full" disabled={currentLoading}>
+                              {currentLoading ? <Loader2 className="animate-spin" /> : "Cadastrar minha Escola"}
+                          </Button>
+                      </CardFooter>
+                  </form>
+                </FormProvider>
+            </TabsContent>
         </Tabs>
+        <div className="text-center pb-6">
+            <Link href="/" className="text-xs text-muted-foreground hover:text-primary">
+                Voltar à página inicial
+            </Link>
+        </div>
       </Card>
     </div>
   );

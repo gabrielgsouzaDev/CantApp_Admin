@@ -27,7 +27,7 @@ export const SchoolFormSchema = z.object({
   nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
   endereco: z.string().min(10, "O endereço deve ter pelo menos 10 caracteres.").optional(), // Optional since we might handle address separately
   cnpj: z.string().length(18, "O CNPJ deve ter 14 dígitos (XX.XXX.XXX/XXXX-XX)."),
-  status: z.enum(["active", "inactive"]),
+  status: z.enum(["ativa", "inativa", "pendente"]),
   qtd_alunos: z.coerce.number().int().min(0, "A quantidade de alunos deve ser um número positivo.").optional(),
   id_endereco: z.number().optional(),
 });

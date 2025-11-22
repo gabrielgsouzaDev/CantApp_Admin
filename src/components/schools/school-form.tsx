@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { School } from "@/lib/types";
+import { School, SchoolStatus } from "@/lib/types";
 import {
   Select,
   SelectContent,
@@ -40,17 +40,17 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
       name: defaultValues?.name || "",
       address: defaultValues?.address || "",
       cnpj: defaultValues?.cnpj || "",
-      status: defaultValues?.status || "active",
+      status: defaultValues?.status || "pendente",
       qtd_alunos: defaultValues?.qtd_alunos || 0,
     },
   });
 
   useEffect(() => {
     form.reset({
-      name: defaultValues?.name || defaultValues?.nome || "",
-      address: defaultValues?.address || "",
+      nome: defaultValues?.name || defaultValues?.nome || "",
+      endereco: defaultValues?.address || "",
       cnpj: defaultValues?.cnpj || "",
-      status: defaultValues?.status || "active",
+      status: defaultValues?.status || "pendente",
       qtd_alunos: defaultValues?.qtd_alunos || 0,
     });
   }, [defaultValues, form]);
@@ -70,7 +70,7 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name="nome"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nome da Escola</FormLabel>
@@ -101,7 +101,7 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
         />
         <FormField
           control={form.control}
-          name="address"
+          name="endereco"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Endereço</FormLabel>
@@ -138,8 +138,9 @@ export function SchoolForm({ onSubmit, defaultValues, onCancel }: SchoolFormProp
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="active">Ativa</SelectItem>
-                  <SelectItem value="inactive">Inativa</SelectItem>
+                  <SelectItem value="ativa">Ativa</SelectItem>
+                  <SelectItem value="inativa">Inativa</SelectItem>
+                  <SelectItem value="pendente">Pendente</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

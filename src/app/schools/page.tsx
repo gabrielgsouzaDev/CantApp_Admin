@@ -163,8 +163,8 @@ export default function SchoolsPage() {
                   <TableCell>{school.cnpj}</TableCell>
                   <TableCell>{school.address}</TableCell>
                   <TableCell>
-                    <Badge variant={school.status === 'inactive' ? 'destructive' : 'default'} className={cn(school.status === 'active' && 'bg-green-600')}>
-                      {school.status === 'active' ? 'Ativa' : 'Inativa'}
+                    <Badge variant={school.status === 'inativa' ? 'destructive' : (school.status === 'pendente' ? 'secondary' : 'default')} className={cn(school.status === 'ativa' && 'bg-green-600')}>
+                      {school.status.charAt(0).toUpperCase() + school.status.slice(1)}
                     </Badge>
                   </TableCell>
                   <TableCell>

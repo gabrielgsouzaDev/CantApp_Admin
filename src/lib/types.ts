@@ -34,6 +34,8 @@ export type Address = {
   estado: string;
 }
 
+export type SchoolStatus = 'ativa' | 'inativa' | 'pendente';
+
 export type School = {
   id: number;
   id_escola?: number; // PK from backend
@@ -42,7 +44,7 @@ export type School = {
   address?: string; // This is a display-only field now
   endereco?: string; // from laravel
   cnpj: string;
-  status: string; // "ativa" | "inativa" | "pendente"; - Relaxing for now
+  status: SchoolStatus; 
   id_endereco?: number;
   id_plano?: number;
   qtd_alunos?: number;
