@@ -2,7 +2,7 @@
 
 import { Role, CtnAppUser } from "@/lib/types";
 import { useRouter, usePathname } from "next/navigation";
-import React, { createContext, useState, ReactNode, useEffect, useCallback } from "react";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { api } from "@/lib/api";
 
 let sessionToken: string | null = null;
@@ -26,14 +26,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const token = localStorage.getItem('sessionToken');
-    const userJson = localStorage.getItem('user');
-    if (token && userJson) {
-      sessionToken = token;
-      api.setToken(token);
-      setUser(JSON.parse(userJson));
+    try {
+      const token = localStorage.getItem('sessionToken');
+      const userJson = localStorage.getItem('user');
+      if (token && userJson) {
+        sessionToken = token;
+        api.setToken(token);
+        setUser(JSON.parse(userJson));
+      }
+    } catch (error) {
+      console.error("Failed to parse user from localStorage", error);
+      // Clear corrupted data
+      localStorage.removeItem('sessionToken');
+      localStorage.removeItem('user');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -45,8 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const response = await api.post<{ data: { token: string; user: any } }>('/api/login', loginPayload);
-      const { token, user: loggedInUser } = response.data;
+      const response = await api.post<{ token: string; user: any }>('/api/login', loginPayload);
+      const { token, user: loggedInUser } = response;
       
       sessionToken = token;
       if (typeof window !== 'undefined') {
@@ -55,25 +63,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       api.setToken(token);
       
+      // The backend returns roles as an array, get the first one.
+      const userRole = loggedInUser.roles?.[0]?.nome as Role || 'Cantineiro';
+
       const finalUser: CtnAppUser = {
         id: loggedInUser.id,
         name: loggedInUser.nome,
         nome: loggedInUser.nome,
         email: loggedInUser.email,
-        role: loggedInUser.role as Role,
+        role: userRole,
         id_escola: loggedInUser.id_escola,
         id_cantina: loggedInUser.id_cantina,
       };
       setUser(finalUser);
       
-      const dashboardRoute = finalUser.role === 'Admin' ? '/dashboard/admin' : 
-                             finalUser.role === 'Escola' ? '/dashboard/escola' :
+      const dashboardRoute = finalUser.role === Role.GlobalAdmin ? '/dashboard/admin' : 
+                             finalUser.role === Role.EscolaAdmin ? '/dashboard/escola' :
                              '/orders'; // Cantineiro goes to orders
       router.push(dashboardRoute);
     } catch (error) {
       console.error("Login Error:", error);
-      setLoading(false);
       throw error; 
+    } finally {
+       setLoading(false);
     }
   };
 
@@ -103,17 +115,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     
-    const isAuthPage = ['/', '/admin/login', '/escola/login', '/cantina/login'].includes(pathname);
+    const publicPaths = ['/', '/admin/login', '/escola/login', '/cantina/login'];
+    const isPublicPage = publicPaths.some(p => pathname === p);
     const isAuthenticated = !!user && !!sessionToken;
 
-    if (!isAuthenticated && !isAuthPage) {
+    if (!isAuthenticated && !isPublicPage) {
       router.push('/');
-    } else if (isAuthenticated && isAuthPage && user) {
-      const dashboardRoute = user.role === 'Admin' ? '/dashboard/admin' : 
-                             user.role === 'Escola' ? '/dashboard/escola' :
-                             '/orders';
-      router.push(dashboardRoute);
     }
+    
   }, [user, loading, pathname, router]);
 
   return (

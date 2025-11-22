@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -11,6 +11,20 @@ import { Loader2 } from "lucide-react";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Redirect logic now at the top, before other checks.
+  if (!loading && user && (pathname === '/dashboard' || pathname === '/dashboard/')) {
+    const dashboardRoute = user.role === 'GlobalAdmin' ? '/dashboard/admin' : 
+                           user.role === 'EscolaAdmin' ? '/dashboard/escola' :
+                           '/orders'; // Cantineiro goes to orders
+    router.replace(dashboardRoute);
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   useEffect(() => {
     if (!loading && !user) {
@@ -24,19 +38,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
-  }
-
-  // If the user lands on the root of the authenticated area, redirect based on role.
-  if (typeof window !== 'undefined' && (window.location.pathname === '/dashboard' || window.location.pathname === '/dashboard/')) {
-     const dashboardRoute = user.role === 'GlobalAdmin' ? '/dashboard/admin' : 
-                            user.role === 'EscolaAdmin' ? '/dashboard/escola' :
-                            '/orders'; // Cantineiro goes to orders
-     router.replace(dashboardRoute);
-     return (
-       <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-     );
   }
 
   return (

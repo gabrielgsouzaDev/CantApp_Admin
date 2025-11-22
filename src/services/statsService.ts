@@ -23,8 +23,8 @@ export const getSchoolDashboardStats = async (schoolId: number): Promise<SchoolD
   try {
     // IMPORTANT: The backend needs to implement this endpoint: `/api/escolas/{schoolId}/dashboard-stats`
     // It should aggregate the data and return it in the `SchoolDashboardStats` shape.
-    const response = await api.get<{ data: SchoolDashboardStats }>(`/api/escolas/${schoolId}/dashboard-stats`);
-    return response.data;
+    const response = await api.get<SchoolDashboardStats>(`/api/escolas/${schoolId}/dashboard-stats`);
+    return response;
   } catch (error) {
     console.error(`Failed to fetch dashboard stats for school ${schoolId}`, error);
     // For now, return a zeroed-out object in case of an error to prevent the UI from crashing.

@@ -13,6 +13,6 @@ const mapAddressData = (address: any): AddressResponse => ({
 });
 
 export const addAddress = async (address: Omit<Address, 'id'>): Promise<AddressResponse> => {
-  const response = await api.post<{ data: any }>('/api/enderecos', address);
-  return mapAddressData(response.data);
+  const response = await api.post<any>('/api/enderecos', address);
+  return mapAddressData(response);
 };

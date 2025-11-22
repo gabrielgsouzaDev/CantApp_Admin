@@ -20,21 +20,21 @@ const mapUserData = (user: any): CtnAppUser => ({
 });
 
 export const getUsers = async (): Promise<CtnAppUser[]> => {
-  const response = await api.get<{ data: any[] }>('/api/users');
-  return response.data.map(mapUserData);
+  const response = await api.get<any[]>('/api/users');
+  return response.map(mapUserData);
 };
 
 export const addUser = async (user: UserCreationPayload): Promise<CtnAppUser> => {
-  const response = await api.post<{ data: any }>('/api/users', user);
-  return mapUserData(response.data);
+  const response = await api.post<any>('/api/users', user);
+  return mapUserData(response);
 };
 
 export const updateUser = async (
   id: number, 
   user: Partial<Omit<CtnAppUser, 'id'>>
 ): Promise<CtnAppUser> => {
-  const response = await api.put<{ data: any }>(`/api/users/${id}`, user);
-  return mapUserData(response.data);
+  const response = await api.put<any>(`/api/users/${id}`, user);
+  return mapUserData(response);
 };
 
 export const deleteUser = async (id: number): Promise<void> => {
@@ -43,8 +43,8 @@ export const deleteUser = async (id: number): Promise<void> => {
 
 
 export const getUserRoles = async (): Promise<UserRole[]> => {
-    const response = await api.get<{ data: any[] }>('/api/roles');
+    const response = await api.get<any[]>('/api/roles');
     // Filter out roles that are not relevant for a school admin to assign
-    const relevantRoles = response.data.filter(role => ['Escola', 'Cantina'].includes(role.nome));
+    const relevantRoles = response.filter(role => ['EscolaAdmin', 'Cantineiro'].includes(role.nome));
     return relevantRoles;
 };

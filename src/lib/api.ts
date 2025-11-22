@@ -56,11 +56,19 @@ class ApiClient {
         throw { message: errorMessage, errors: errorData.errors };
       }
 
+      // The login endpoint response is not nested under 'data', so we handle it here.
+      if (endpoint.includes('/api/login')) {
+         return await response.json() as T;
+      }
+      
       if (response.status === 204 || response.headers.get('Content-Length') === '0') {
         return {} as T;
       }
 
-      return await response.json() as T;
+      // For all other endpoints, the data is nested.
+      const responseData = await response.json();
+      return responseData.data as T;
+
     } catch (error) {
       console.error('API Client Error:', error);
       throw error;

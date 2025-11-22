@@ -23,7 +23,7 @@ import { UserCreationPayload } from "@/services/userService";
 const formSchema = z.object({
   nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres."),
   email: z.string().email("Por favor, insira um email válido."),
-  senha: z.string().min(6, "A senha deve ter pelo menos 6 caracteres.").optional(),
+  senha: z.string().min(6, "A senha deve ter pelo menos 6 caracteres.").optional().or(z.literal('')),
   id_role: z.coerce.number().int().positive("Selecione uma função."),
 });
 
@@ -63,7 +63,6 @@ export function UserForm({ onSubmit, defaultValues, onCancel }: UserFormProps) {
         form.reset({
             nome: defaultValues.nome || "",
             email: defaultValues.email || "",
-            // Find the role id based on the role name
             id_role: roles.find(r => r.nome === defaultValues.role)?.id_role,
         });
     }
@@ -99,7 +98,7 @@ export function UserForm({ onSubmit, defaultValues, onCancel }: UserFormProps) {
             </FormItem>
           )}
         />
-        {!defaultValues && ( // Only show password field for new users
+        {!defaultValues?.id && ( // Only show password field for new users
              <FormField
                 control={form.control}
                 name="senha"
@@ -107,7 +106,7 @@ export function UserForm({ onSubmit, defaultValues, onCancel }: UserFormProps) {
                     <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                        <Input type="password" {...field} />
+                        <Input type="password" {...field} required />
                     </FormControl>
                     <FormMessage />
                     </FormItem>

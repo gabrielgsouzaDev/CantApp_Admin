@@ -10,8 +10,8 @@ const mapProductData = (product: any): Product => ({
 
 
 export const getProducts = async (): Promise<Product[]> => {
-  const response = await api.get<{ data: any[] }>('/api/produtos');
-  return response.data.map(mapProductData);
+  const response = await api.get<any[]>('/api/produtos');
+  return response.map(mapProductData);
 };
 
 export const addProduct = async (product: Omit<Product, 'id'>): Promise<Product> => {
@@ -21,8 +21,8 @@ export const addProduct = async (product: Omit<Product, 'id'>): Promise<Product>
     id_cantina: product.id_cantina,
     ativo: product.ativo,
   };
-  const response = await api.post<{ data: any }>('/api/produtos', payload);
-  return mapProductData(response.data);
+  const response = await api.post<any>('/api/produtos', payload);
+  return mapProductData(response);
 };
 
 export const updateProduct = async (id: number, product: Partial<Omit<Product, 'id'>>): Promise<Product> => {
@@ -32,8 +32,8 @@ export const updateProduct = async (id: number, product: Partial<Omit<Product, '
     id_cantina: product.id_cantina,
     ativo: product.ativo
   };
-  const response = await api.put<{ data: any }>(`/api/produtos/${id}`, payload);
-  return mapProductData(response.data);
+  const response = await api.put<any>(`/api/produtos/${id}`, payload);
+  return mapProductData(response);
 };
 
 export const deleteProduct = async (id: number): Promise<void> => {
