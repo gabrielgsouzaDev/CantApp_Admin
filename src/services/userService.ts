@@ -1,11 +1,15 @@
 import { api } from "@/lib/api";
 import { CtnAppUser, UserRole } from "@/lib/types"; 
 
-export type UserCreationPayload = Partial<CtnAppUser & { 
-  senha?: string; 
-  id_role?: number;
-  ativo?: boolean;
-}>;
+export type UserCreationPayload = {
+  nome: string;
+  email: string;
+  senha?: string;
+  id_escola?: number;
+  id_role: number;
+  ativo: boolean;
+};
+
 
 const mapUserData = (user: any): CtnAppUser => ({
   id: user.id,
@@ -45,6 +49,6 @@ export const deleteUser = async (id: number): Promise<void> => {
 export const getUserRoles = async (): Promise<UserRole[]> => {
     const response = await api.get<any[]>('/api/roles');
     // Filter out roles that are not relevant for a school admin to assign
-    const relevantRoles = response.filter(role => ['EscolaAdmin', 'Cantineiro', 'Aluno', 'Responsavel', 'Funcionario'].includes(role.nome));
+    const relevantRoles = response.filter(role => ['Escola', 'Cantina', 'Aluno', 'Responsavel', 'Funcionario'].includes(role.nome));
     return relevantRoles;
 };

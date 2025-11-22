@@ -45,13 +45,19 @@ export default function UsersPage() {
   const { toast } = useToast();
 
   const fetchUsers = async () => {
-    if (!authUser?.id_escola) return;
+    if (!authUser) return;
     setLoading(true);
     try {
-      // We will filter users by schoolId here once the service supports it
+      // Admin global vê todos, EscolaAdmin vê apenas os da sua escola.
       const allUsers = await getUsers();
-      const schoolUsers = allUsers.filter(u => u.id_escola === authUser.id_escola);
-      setUsers(schoolUsers);
+      if (authUser.role === 'GlobalAdmin') {
+        setUsers(allUsers);
+      } else if (authUser.role === 'EscolaAdmin' && authUser.id_escola) {
+        const schoolUsers = allUsers.filter(u => u.id_escola === authUser.id_escola);
+        setUsers(schoolUsers);
+      } else {
+        setUsers([]);
+      }
     } catch (error) {
       console.error("Error fetching users:", error);
       toast({
@@ -65,15 +71,27 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    if (authUser) {
+      fetchUsers();
+    }
   }, [authUser]);
 
-  const handleFormSubmit = async (data: UserCreationPayload) => {
+  const handleFormSubmit = async (data: Omit<UserCreationPayload, 'ativo'>) => {
     try {
-      const payload: UserCreationPayload = { ...data, id_escola: authUser?.id_escola, ativo: true };
+      const payload: UserCreationPayload = { 
+        ...data, 
+        id_escola: authUser?.id_escola,
+        ativo: true 
+      };
 
       if (selectedUser) {
-        await updateUser(selectedUser.id, payload);
+        // Para edição, não enviamos a senha se não for alterada
+        const updatePayload: Partial<CtnAppUser> & { id_role?: number } = {
+          nome: payload.nome,
+          email: payload.email,
+          id_role: payload.id_role,
+        };
+        await updateUser(selectedUser.id, updatePayload);
         toast({ title: "Usuário atualizado!", description: "Os dados foram atualizados." });
       } else {
         if (!payload.senha) {
@@ -134,7 +152,7 @@ export default function UsersPage() {
 
   return (
     <>
-      <PageHeader title="Usuários" description="Gerencie os usuários da sua escola.">
+      <PageHeader title="Usuários" description="Gerencie os usuários do sistema.">
         <Dialog open={isFormOpen} onOpenChange={(open) => {
           setIsFormOpen(open);
           if (!open) setSelectedUser(null);
