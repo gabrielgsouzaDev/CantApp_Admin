@@ -24,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const API_BASE_URL = 'https://cantappbackendlaravel-production.up.railway.app/api';
 
   useEffect(() => {
     try {
@@ -52,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const response = await fetch('https://cantappbackendlaravel-production.up.railway.app/api/login', {
+      const response = await fetch(`${API_BASE_URL}/login`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -70,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { token, usuario: loggedInUser } = responseData;
       
       if (!token || !loggedInUser) {
+        console.error("Resposta da API de Login Incompleta:", responseData);
         throw new Error("Resposta de login inválida: token ou usuário não encontrado.");
       }
       
@@ -112,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
         if(sessionToken) {
-            await api.post('/api/logout', {});
+            await api.post('/logout', {});
         }
     } catch (error) {
         console.error("Logout failed, but clearing session anyway.", error);
