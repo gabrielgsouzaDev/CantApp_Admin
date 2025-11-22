@@ -291,7 +291,7 @@ export default function EscolaLoginPage() {
                                 )} />
                                 <div className="grid grid-cols-2 gap-4">
                                     <FormField control={form.control} name="address.numero" render={({ field }) => (
-                                        <FormItem><FormLabel>Número</FormLabel><FormControl><Input required disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem><FormLabel>Número</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={form.control} name="address.complemento" render={({ field }) => (
                                         <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
