@@ -313,8 +313,7 @@ export default function EscolaLoginPage() {
                                         <FormItem><FormLabel>Número</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={form.control} name="address.complemento" render={({ field }) => (
-                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage />
-                                        </FormItem>
+                                        <FormItem><FormLabel>Complemento</FormLabel><FormControl><Input disabled={currentLoading} {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                 </div>
                                 <FormField control={form.control} name="address.bairro" render={({ field }) => (
