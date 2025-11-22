@@ -19,8 +19,8 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function CantinaLoginPage() {
   const { login, loading } = useAuth();
-  const [email, setEmail] = useState("cantineiro@ctn.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -71,6 +71,7 @@ export default function CantinaLoginPage() {
                 id="password" 
                 type="password" 
                 required 
+                placeholder="Sua senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}

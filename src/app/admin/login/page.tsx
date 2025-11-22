@@ -19,8 +19,8 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function AdminLoginPage() {
   const { login, loading } = useAuth();
-  const [email, setEmail] = useState("admin@ctn.com"); // default for demo
-  const [password, setPassword] = useState("password"); // default for demo
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -71,6 +71,7 @@ export default function AdminLoginPage() {
                 id="password" 
                 type="password" 
                 required 
+                placeholder="Sua senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}

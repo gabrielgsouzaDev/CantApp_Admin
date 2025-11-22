@@ -33,8 +33,8 @@ export default function EscolaLoginPage() {
   const [activeTab, setActiveTab] = useState("login");
   const { toast } = useToast();
 
-  const [loginEmail, setLoginEmail] = useState("escola@ctn.com");
-  const [loginPassword, setLoginPassword] = useState("password");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
 
   const form = useForm<z.infer<typeof SchoolRegistrationSchema>>({
     resolver: zodResolver(SchoolRegistrationSchema),
@@ -96,7 +96,7 @@ export default function EscolaLoginPage() {
         email: values.adminEmail,
         senha: values.adminPassword,
         id_escola: newSchool.id_escola,
-        id_role: 5,
+        id_role: 2, // 2 = EscolaAdmin
         ativo: true,
       });
 
@@ -210,6 +210,7 @@ export default function EscolaLoginPage() {
                                 id="login-password" 
                                 type="password" 
                                 required 
+                                placeholder="Sua senha"
                                 value={loginPassword}
                                 onChange={(e) => setLoginPassword(e.target.value)}
                                 disabled={currentLoading}
