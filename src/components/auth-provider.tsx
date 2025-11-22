@@ -53,8 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const response = await api.post<{ token: string; user: any }>('/api/login', loginPayload);
-      const { token, user: loggedInUser } = response;
+      const response = await api.post<{ token: string; usuario: any }>('/api/login', loginPayload);
+      const { token, usuario: loggedInUser } = response;
       
       if (!loggedInUser) {
         throw new Error("Resposta de login inválida: usuário não encontrado.");
@@ -67,7 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       api.setToken(token);
       
-      // Securely access the user role
       const userRole = (loggedInUser.roles && Array.isArray(loggedInUser.roles) && loggedInUser.roles.length > 0)
         ? loggedInUser.roles[0]?.nome as Role
         : 'Cantineiro'; // Fallback role
@@ -80,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: userRole,
         id_escola: loggedInUser.id_escola,
         id_cantina: loggedInUser.id_cantina,
+        ativo: loggedInUser.ativo,
       };
       setUser(finalUser);
       
