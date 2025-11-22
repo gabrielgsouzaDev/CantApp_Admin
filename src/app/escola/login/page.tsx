@@ -220,7 +220,6 @@ export default function EscolaLoginPage() {
                 </TabsList>
             </div>
             
-            {/* Login Tab */}
             <TabsContent value="login">
                 <form onSubmit={handleLogin}>
                     <CardContent className="space-y-4 pt-6">
@@ -256,12 +255,11 @@ export default function EscolaLoginPage() {
                 </form>
             </TabsContent>
 
-            {/* Register Tab */}
             <TabsContent value="register">
                 <FormProvider {...form}>
                   <form onSubmit={form.handleSubmit(handleRegister)}>
                       <CardContent className="space-y-4 pt-6 max-h-[60vh] overflow-y-auto pr-4">
-                          {/* School Details */}
+                          
                           <div className="space-y-2">
                             <h3 className="text-sm font-medium">Dados da Escola</h3>
                             <FormField control={form.control} name="schoolName" render={({ field }) => (
@@ -275,7 +273,6 @@ export default function EscolaLoginPage() {
                             )} />
                           </div>
 
-                          {/* Admin User Details */}
                            <div className="space-y-2 pt-4">
                              <h3 className="text-sm font-medium">Dados do Administrador da Escola</h3>
                               <FormField control={form.control} name="adminName" render={({ field }) => (
@@ -289,7 +286,6 @@ export default function EscolaLoginPage() {
                               )} />
                            </div>
 
-                           {/* Address Details */}
                            <div className="space-y-2 pt-4">
                              <h3 className="text-sm font-medium">Endereço da Escola</h3>
                               <div className="grid grid-cols-1 gap-4">
