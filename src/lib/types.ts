@@ -75,18 +75,16 @@ export type PaymentStatus = "Pago" | "Pendente";
 
 export type OrderItem = {
   id: number;
-  id_item: number; // PK from backend
   name: string;
-  nome: string; // from laravel
   price: number;
-  preco: number; // from laravel
 };
 
 export type Order = {
-  id: number;
-  id_pedido: number; // PK from backend
-  student_name: string; // from laravel
-  time: string; // Keep as ISO string date
+  id: string; // id_pedido from backend
+  student_name: string; 
+  id_comprador: string;
+  canteenId: string;
+  time: string; // Keep as ISO string date from created_at
   items: OrderItem[];
   status: OrderStatus;
   payment_status: PaymentStatus;

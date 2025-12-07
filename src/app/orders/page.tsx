@@ -15,7 +15,9 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Order, OrderStatus } from "@/lib/types";
-import { getOrders, updateOrderStatus } from "@/services/orderService";
+import { getOrdersByCanteen, updateOrderStatus } from "@/lib/data-api";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
 const OrderCard = ({ order }: { order: Order }) => {
   return (
@@ -23,7 +25,7 @@ const OrderCard = ({ order }: { order: Order }) => {
       <DialogTrigger asChild>
         <Card
           draggable
-          onDragStart={(e) => e.dataTransfer.setData("orderId", String(order.id))}
+          onDragStart={(e) => e.dataTransfer.setData("orderId", order.id)}
           className="mb-4 cursor-grab active:cursor-grabbing bg-card hover:bg-accent transition-colors"
         >
           <CardHeader className="p-4">
@@ -138,20 +140,28 @@ const KanbanColumn = ({
 };
 
 export default function OrdersPage() {
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [dragOverColumn, setDragOverColumn] = useState<OrderStatus | null>(null);
-  const [originalOrders, setOriginalOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
+        if (!user?.id_cantina) {
+            setLoading(false);
+            return;
+        }
         try {
-            const ordersData = await getOrders();
+            const ordersData = await getOrdersByCanteen(String(user.id_cantina));
             setOrders(ordersData);
-            setOriginalOrders(ordersData); // Keep a copy of the original state
         } catch (error) {
             console.error("Failed to fetch orders", error);
-            // Here you would show a toast to the user
+            toast({
+              title: "Erro ao buscar pedidos",
+              description: "Não foi possível carregar os dados dos pedidos.",
+              variant: "destructive"
+            })
         } finally {
             setLoading(false);
         }
@@ -159,13 +169,15 @@ export default function OrdersPage() {
     fetchOrders();
     // In a real REST API scenario, you might use polling or WebSockets to get live updates.
     // For this demo, we just fetch once.
-  }, []);
+  }, [user, toast]);
 
   const handleDrop = async (e: DragEvent<HTMLDivElement>, status: OrderStatus) => {
     e.preventDefault();
-    const orderId = Number(e.dataTransfer.getData("orderId"));
+    const orderId = e.dataTransfer.getData("orderId");
     
-    setOriginalOrders(orders); // Save current state before optimistic update
+    // Find the original order to revert to on failure
+    const originalOrder = orders.find(o => o.id === orderId);
+    if (!originalOrder) return;
 
     // Optimistic update
     setOrders((prevOrders) =>
@@ -176,10 +188,16 @@ export default function OrdersPage() {
     
     try {
       await updateOrderStatus(orderId, status);
+      // Success, no need to do anything as UI is already updated
     } catch (err) {
        console.error("Failed to update order status", err);
+       toast({
+        title: "Erro ao atualizar pedido",
+        description: "Não foi possível mover o pedido. Revertendo.",
+        variant: "destructive"
+       });
        // Revert UI on error
-       setOrders(originalOrders);
+       setOrders((prev) => prev.map(o => o.id === orderId ? originalOrder : o));
     }
 
     setDragOverColumn(null);
