@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { apiGet, apiPost, apiPut, apiDelete } from "@/lib/api";
 import { School } from "@/lib/types";
 
 
@@ -18,7 +18,7 @@ const mapSchoolData = (school: any): School => ({
 });
 
 export const getSchools = async (): Promise<School[]> => {
-  const response = await api.get<any[]>('/api/escolas');
+  const response = await apiGet<any[]>('escolas');
   return response.map(mapSchoolData);
 };
 
@@ -31,16 +31,16 @@ export const addSchool = async (school: Partial<Omit<School, 'id' | 'name'>> & {
       status: school.status,
       qtd_alunos: school.qtd_alunos,
   };
-  const response = await api.post<any>('/api/escolas', payload);
+  const response = await apiPost<any>('escolas', payload);
   return response; // Return raw response as it contains id_escola
 };
 
 export const updateSchool = async (id: number, school: Partial<Omit<School, 'id'>>): Promise<School> => {
   const payload = { ...school, nome: school.name };
-  const response = await api.put<any>(`/api/escolas/${id}`, payload);
+  const response = await apiPut<any>(`escolas/${id}`, payload);
   return mapSchoolData(response);
 };
 
 export const deleteSchool = async (id: number): Promise<void> => {
-  await api.delete<void>(`/api/escolas/${id}`);
+  await apiDelete<void>(`escolas/${id}`);
 };

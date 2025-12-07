@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { apiGet } from "@/lib/api";
 import { Order, OrderStatus } from "@/lib/types";
 
 const mapOrderData = (order: any): Order => ({
@@ -21,7 +21,7 @@ const mapOrderData = (order: any): Order => ({
 
 export const getRecentSales = async (): Promise<Order[]> => {
   // Assuming the API returns the most recent ones if we add a limit
-  const response = await api.get<any[]>('/api/pedidos?limit=5&sort=desc'); 
+  const response = await apiGet<any[]>('pedidos?limit=5&sort=desc'); 
   const sortedSales = response.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   return sortedSales.slice(0, 5).map(mapOrderData);
 }

@@ -1,7 +1,7 @@
 // src/lib/data-api.ts
 // Este arquivo atua como a camada de serviço (services.ts)
 
-import { api } from "./api";
+import { apiGet, apiPatch } from "./api";
 import { 
     type Order, 
 } from "@/lib/types"; 
@@ -41,10 +41,10 @@ export const getOrdersByCanteen = async (canteenId: string): Promise<Order[]> =>
     if (!canteenId) return [];
     try {
         // A rota no Backend (PedidoController) é correta.
-        const endpoint = `/api/pedidos/cantina/${canteenId}`; 
+        const endpoint = `pedidos/cantina/${canteenId}`; 
         
         // Usamos api.get que já lida com o wrapper 'data' ou o objeto direto (conforme seu api.ts)
-        const response = await api.get<any[]>(endpoint); 
+        const response = await apiGet<any[]>(endpoint); 
         
         return response.map(mapOrder);
     } catch (e) {
@@ -60,10 +60,10 @@ export const getOrdersByCanteen = async (canteenId: string): Promise<Order[]> =>
 export const updateOrderStatus = async (orderId: string, newStatus: string): Promise<Order> => {
     try {
         const payload = { status: newStatus };
-        const endpoint = `/api/pedidos/${orderId}/status`;
+        const endpoint = `pedidos/${orderId}/status`;
 
         // Usa api.patch que lida com o token e serialização
-        const response = await api.patch<any>(endpoint, payload);
+        const response = await apiPatch<any>(endpoint, payload);
         
         return mapOrder(response);
     } catch (e) {

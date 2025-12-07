@@ -100,5 +100,5 @@ export interface NavItem {
 
 export interface UserRole {
   id_role: number;
-  nome: Role;
+  nome: Role | string;
 }

@@ -1,92 +1,110 @@
 // src/lib/api.ts
 
-export interface ApiError {
-  message: string;
-  errors?: Record<string, string[]>;
-}
+// This would be in something like src/lib/config.ts
+export const API_BASE_URL = 'https://cantappbackendlaravel-production.up.railway.app';
 
-class ApiClient {
-  private baseURL: string;
-  private token: string | null = null;
+// This is a simplified error type, you might want to expand it
+export type ApiError = {
+    message: string;
+    errors?: Record<string, string[]>;
+};
 
-  constructor() {
-    this.baseURL = 'https://cantappbackendlaravel-production.up.railway.app';
-  }
-
-  setToken(token: string | null) {
-    this.token = token;
-  }
-
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    };
-
-    if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
-    }
-
-    const config: RequestInit = {
-      ...options,
-      headers,
-    };
-
+async function handleResponse<T>(response: Response): Promise<T> {
+  const text = await response.text();
+  
+  if (!response.ok) {
+    let errorData;
     try {
-      const response = await fetch(url, config);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage = errorData.message || 'Ocorreu um erro na requisição.';
-        console.error('API Error:', errorMessage, 'Details:', errorData.errors);
-        throw { message: errorMessage, errors: errorData.errors };
-      }
-      
-      // Handle empty responses for DELETE, etc.
-      if (response.status === 204 || response.headers.get('Content-Length') === '0') {
-        return {} as T;
-      }
-
-      const responseData = await response.json();
-      
-      // For all standard CRUD endpoints, data is expected inside a 'data' wrapper.
-      if (responseData && typeof responseData === 'object' && 'data' in responseData) {
-          return responseData.data as T;
-      }
-      
-      // This path handles special cases like logout that return a message object directly
-      return responseData as T;
-
-    } catch (error) {
-      console.error('API Client Error:', error);
-      throw error;
+      errorData = JSON.parse(text);
+    } catch (e) {
+      errorData = { message: text || 'Ocorreu um erro na API.' };
     }
+    const error: Error & { data?: any } = new Error(errorData.message || 'Ocorreu um erro na API.');
+    error.data = errorData;
+    throw error;
   }
 
-  get<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: 'GET' });
+  // Handle empty successful responses (e.g., 200 OK or 204 No Content with no body)
+  if (!text) {
+    return { success: true } as unknown as T;
   }
 
-  post<T>(endpoint: string, body: any, options?: RequestInit): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(body) });
-  }
-
-  put<T>(endpoint: string, body: any, options?: RequestInit): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: 'PUT', body: JSON.stringify(body) });
-  }
-
-  patch<T>(endpoint: string, body: any, options?: RequestInit): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: 'PATCH', body: JSON.stringify(body) });
-  }
-
-  delete<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: 'DELETE' });
+  try {
+    const data = JSON.parse(text);
+    // Flexible data extraction: if response has a `data` key, use it. Otherwise, use the whole object.
+    return data.data !== undefined ? data.data : data;
+  } catch (e) {
+    console.error("JSON parsing error:", e);
+    throw new Error("Falha ao analisar a resposta do servidor.");
   }
 }
 
-export const api = new ApiClient();
+// ✅ CORREÇÃO: Adicionada política de cache 'no-store' para sempre buscar dados frescos.
+export async function apiGet<T>(path: string): Promise<T> {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`${API_BASE_URL}/api/${path}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        cache: 'no-store', // <<< ADICIONADO
+    });
+    return handleResponse<T>(response);
+}
+
+export async function apiPost<T>(path: string, body: any): Promise<T> {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`${API_BASE_URL}/api/${path}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        body: JSON.stringify(body),
+    });
+    return handleResponse<T>(response);
+}
+
+export async function apiPut<T>(path: string, body: any): Promise<T> {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`${API_BASE_URL}/api/${path}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        body: JSON.stringify(body),
+    });
+    return handleResponse<T>(response);
+}
+
+export async function apiPatch<T>(path: string, body: any): Promise<T> {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`${API_BASE_URL}/api/${path}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        body: JSON.stringify(body),
+    });
+    return handleResponse<T>(response);
+}
+
+export async function apiDelete<T>(path: string): Promise<T> {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`${API_BASE_URL}/api/${path}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+    });
+    return handleResponse<T>(response);
+}

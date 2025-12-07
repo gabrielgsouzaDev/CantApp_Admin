@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { apiPost } from "@/lib/api";
 import { Address } from "@/lib/types";
 
 // The backend returns an object with the primary key id_endereco
@@ -13,6 +13,6 @@ const mapAddressData = (address: any): AddressResponse => ({
 });
 
 export const addAddress = async (address: Omit<Address, 'id'>): Promise<AddressResponse> => {
-  const response = await api.post<any>('/api/enderecos', address);
+  const response = await apiPost<any>('enderecos', address);
   return mapAddressData(response);
 };

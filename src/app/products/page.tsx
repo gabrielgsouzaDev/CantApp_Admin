@@ -64,16 +64,30 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const handleFormSubmit = async (data: Omit<Product, 'id' | 'nome' | 'preco'> & { id_cantina: number }) => {
+  const handleFormSubmit = async (data: { name: string; price: number; id_cantina: number; id?: number }) => {
     try {
-      // id_cantina is now passed in the data object from the form
-      const productData = { ...data, ativo: true };
+      const productData = { 
+        ...data, 
+        ativo: true,
+        // Remove id from the base object to avoid sending it in the payload for creation
+        id: undefined 
+      };
 
-      if (selectedProduct) {
-        await updateProduct(selectedProduct.id, productData);
+      if (data.id) {
+        await updateProduct(data.id, {
+          name: data.name,
+          price: data.price,
+          id_cantina: data.id_cantina,
+          ativo: true,
+        });
         toast({ title: "Produto atualizado!", description: "Os dados do produto foram atualizados com sucesso." });
       } else {
-        await addProduct(productData as Product);
+        await addProduct({
+          name: data.name,
+          price: data.price,
+          id_cantina: data.id_cantina,
+          ativo: true,
+        });
         toast({ title: "Produto adicionado!", description: "O novo produto foi cadastrado com sucesso." });
       }
       setIsFormOpen(false);

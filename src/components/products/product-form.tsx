@@ -28,7 +28,7 @@ const formSchema = z.object({
 type ProductFormData = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
-  onSubmit: (data: ProductFormData) => void;
+  onSubmit: (data: ProductFormData & { id?: number }) => void;
   defaultValues?: Partial<Product> | null;
   onCancel: () => void;
   schoolId?: number | null;
@@ -68,10 +68,14 @@ export function ProductForm({ onSubmit, defaultValues, onCancel, schoolId }: Pro
     });
   }, [defaultValues, form]);
 
+  const handleFormSubmit = (data: ProductFormData) => {
+    onSubmit({ ...data, id: defaultValues?.id });
+  };
+
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
          <FormField
           control={form.control}
           name="id_cantina"

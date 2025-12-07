@@ -3,11 +3,11 @@
 import { Role, CtnAppUser } from "@/lib/types";
 import { useRouter, usePathname } from "next/navigation";
 import React, { createContext, useState, ReactNode, useEffect } from "react";
-import { api } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/api";
 
 let sessionToken: string | null = null;
 if (typeof window !== 'undefined') {
-    sessionToken = localStorage.getItem('sessionToken');
+    sessionToken = localStorage.getItem('authToken');
 }
 
 interface AuthContextType {
@@ -24,20 +24,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
-  const API_BASE_URL = 'https://cantappbackendlaravel-production.up.railway.app/api';
 
   useEffect(() => {
     try {
-      const token = localStorage.getItem('sessionToken');
+      const token = localStorage.getItem('authToken');
       const userJson = localStorage.getItem('user');
       if (token && userJson) {
         sessionToken = token;
-        api.setToken(token);
         setUser(JSON.parse(userJson));
       }
     } catch (error) {
       console.error("Failed to parse user from localStorage", error);
-      localStorage.removeItem('sessionToken');
+      localStorage.removeItem('authToken');
       localStorage.removeItem('user');
     } finally {
       setLoading(false);
@@ -49,11 +47,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const loginPayload = {
         email: email,
-        password: password, // CRITICAL CHANGE: from 'senha' to 'password'
+        password: password, 
         device_name: navigator.userAgent || 'unknown_device',
       };
       
-      const response = await fetch(`${API_BASE_URL}/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -68,7 +66,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(responseData.message || "Erro de login");
       }
 
-      // CRITICAL CHANGE: Destructuring from the new 'data' wrapper object
       const { token, user: apiUser } = responseData.data;
       
       if (!token || !apiUser) {
@@ -78,10 +75,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       sessionToken = token;
       if (typeof window !== 'undefined') {
-        localStorage.setItem('sessionToken', token);
+        localStorage.setItem('authToken', token);
         localStorage.setItem('user', JSON.stringify(apiUser));
       }
-      api.setToken(token);
       
       const userRole = apiUser.role as Role;
 
@@ -113,16 +109,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
         if(sessionToken) {
-            await api.post('/logout', {});
+             await fetch(`${API_BASE_URL}/api/logout`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${sessionToken}`,
+                    'Accept': 'application/json',
+                }
+             });
         }
     } catch (error) {
         console.error("Logout failed, but clearing session anyway.", error);
     } finally {
         setUser(null);
         sessionToken = null;
-        api.setToken(null);
         if (typeof window !== 'undefined') {
-            localStorage.removeItem('sessionToken');
+            localStorage.removeItem('authToken');
             localStorage.removeItem('user');
         }
         router.push("/");
