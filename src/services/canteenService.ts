@@ -14,7 +14,9 @@ export const getCanteens = async (schoolId: number): Promise<Canteen[]> => {
 };
 
 export const getAllCanteens = async (): Promise<Canteen[]> => {
-  const response = await api.get<any[]>(`/api/cantinas`);
+  // CRÍTICO: Alterado para uma rota pública que não exige autenticação.
+  // O backend precisa de ter esta rota definida fora do middleware 'auth:sanctum'.
+  const response = await api.get<any[]>('/api/cantinas');
   return response.map(mapCanteenData);
 };
 

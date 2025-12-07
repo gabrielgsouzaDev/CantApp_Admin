@@ -60,7 +60,7 @@ export default function CantinaLoginPage() {
       } catch (error) {
         toast({
           title: "Erro ao carregar cantinas",
-          description: "Não foi possível buscar a lista de cantinas.",
+          description: "Não foi possível buscar a lista de cantinas. Verifique se a rota pública está configurada no backend.",
           variant: "destructive",
         });
       }
