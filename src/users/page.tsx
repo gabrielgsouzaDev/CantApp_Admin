@@ -129,6 +129,7 @@ export default function UsersPage() {
     [Role.Cantineiro]: "Cantina",
     [Role.Responsavel]: "Responsável",
     [Role.Aluno]: "Aluno",
+    [Role.Funcionario]: "Funcionário",
   }
 
   return (

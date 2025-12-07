@@ -50,9 +50,9 @@ export default function UsersPage() {
     try {
       // Admin global vê todos, EscolaAdmin vê apenas os da sua escola.
       const allUsers = await getUsers();
-      if (authUser.role === 'GlobalAdmin') {
+      if (authUser.role === 'Admin') {
         setUsers(allUsers);
-      } else if (authUser.role === 'EscolaAdmin' && authUser.id_escola) {
+      } else if (authUser.role === 'Escola' && authUser.id_escola) {
         const schoolUsers = allUsers.filter(u => u.id_escola === authUser.id_escola);
         setUsers(schoolUsers);
       } else {
@@ -142,12 +142,12 @@ export default function UsersPage() {
   
   // A map to show friendly role names
   const roleNames: Record<string, string> = {
-    Admin: "Admin Global",
-    Escola: "Admin da Escola",
-    Cantina: "Cantina",
-    Responsavel: "Responsável",
-    Aluno: "Aluno",
-    Funcionario: "Funcionário",
+    [Role.GlobalAdmin]: "Admin Global",
+    [Role.EscolaAdmin]: "Admin da Escola",
+    [Role.Cantineiro]: "Cantina",
+    [Role.Responsavel]: "Responsável",
+    [Role.Aluno]: "Aluno",
+    [Role.Funcionario]: "Funcionário",
   }
 
   return (

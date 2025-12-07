@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 export const Role = {
   GlobalAdmin: "Admin",
   EscolaAdmin: "Escola",
-  Cantineiro: "Cantina",
+  Cantineiro: "Cantina", // Mantém o valor "Cantina" consistente com o backend
   Responsavel: "Responsavel",
   Aluno: "Aluno",
   Funcionario: "Funcionario",
