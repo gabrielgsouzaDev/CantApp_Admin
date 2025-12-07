@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const loginPayload = {
         email: email,
-        senha: password,
+        password: password, // CRITICAL CHANGE: from 'senha' to 'password'
         device_name: navigator.userAgent || 'unknown_device',
       };
       
@@ -64,13 +64,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const responseData = await response.json();
 
-      if (!response.ok) {
+      if (!response.ok || !responseData.success) {
         throw new Error(responseData.message || "Erro de login");
       }
 
-      const { token, usuario: loggedInUser } = responseData;
+      // CRITICAL CHANGE: Destructuring from the new 'data' wrapper object
+      const { token, user: apiUser } = responseData.data;
       
-      if (!token || !loggedInUser) {
+      if (!token || !apiUser) {
         console.error("Resposta da API de Login Incompleta:", responseData);
         throw new Error("Resposta de login inválida: token ou usuário não encontrado.");
       }
@@ -78,23 +79,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sessionToken = token;
       if (typeof window !== 'undefined') {
         localStorage.setItem('sessionToken', token);
-        localStorage.setItem('user', JSON.stringify(loggedInUser));
+        localStorage.setItem('user', JSON.stringify(apiUser));
       }
       api.setToken(token);
       
-      const userRole = (loggedInUser.roles && Array.isArray(loggedInUser.roles) && loggedInUser.roles.length > 0)
-        ? loggedInUser.roles[0]?.nome as Role
-        : 'Cantineiro';
+      const userRole = apiUser.role as Role;
 
       const finalUser: CtnAppUser = {
-        id: loggedInUser.id,
-        name: loggedInUser.nome,
-        nome: loggedInUser.nome,
-        email: loggedInUser.email,
+        id: apiUser.id,
+        name: apiUser.nome,
+        nome: apiUser.nome,
+        email: apiUser.email,
         role: userRole,
-        id_escola: loggedInUser.id_escola,
-        id_cantina: loggedInUser.id_cantina,
-        ativo: loggedInUser.ativo,
+        id_escola: apiUser.id_escola,
+        id_cantina: apiUser.id_cantina,
+        ativo: apiUser.ativo,
       };
       setUser(finalUser);
       
