@@ -162,8 +162,10 @@ export default function LandingPage() {
                         <CardDescription>Faça pedidos, recargas e acompanhe o consumo.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                       <Button variant="outline" className="w-full justify-center border-2 border-input hover:border-primary">
-                            Acessar como Aluno ou Responsável
+                        <Button asChild variant="outline" className="w-full justify-center border-2 border-input hover:border-primary">
+                            <a href="https://cantapp-client.vercel.app/" target="_blank" rel="noopener noreferrer">
+                                Acessar como Aluno ou Responsável
+                            </a>
                         </Button>
                     </CardContent>
                 </Card>
